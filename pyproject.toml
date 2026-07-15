@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-mining = ["pm4py==2.7.23.1"]
+mining = ["pm4py==2.7.23.2"]
 
 [dependency-groups]
 dev = [
