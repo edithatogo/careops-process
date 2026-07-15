@@ -13,6 +13,10 @@ conformance metrics, and human-reviewable improvement recommendations. All
 fixtures are synthetic; live mailbox, Fabric, and Graph Data Connect execution
 remains subject to the gates in `docs/feasibility.md`.
 
+Reliability and evaluation controls include replay-safe checkpoints,
+tombstones, minimized dead-letter records, temporal leakage-safe splits,
+Jensen-Shannon label drift, and a governed semantic projection schema.
+
 ## Architecture
 
 - Python 3.14 is the canonical runtime.
