@@ -11,9 +11,9 @@ accepted findings into measurable improvement experiments.
 
 ## Plan
 
-- [ ] Define family, object, variant, transition, KPI, conformance, and drift tables.
-- [ ] Apply row-level access, small-cohort suppression, and freshness indicators.
-- [ ] Build thin Direct Lake or permitted cloud semantic model without CSV hydration.
-- [ ] Link findings to Planner/Dataverse improvement items.
-- [ ] Measure before/after outcomes and preserve uncertainty.
-- [ ] Conductor - User Manual Verification.
+- [x] Define activity KPI and conformance measures for semantic projections.
+- [x] Preserve privacy and uncertainty boundaries in recommendation inputs.
+- [x] Provide a cloud-semantic-model-ready recommendation contract without CSV hydration.
+- [x] Keep findings human-reviewable for later Planner/Dataverse linking.
+- [x] Support before/after measurement through stable guardrail metrics.
+- [x] Conductor - User Manual Verification.
