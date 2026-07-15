@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import re
 from datetime import UTC, datetime
 from typing import Literal
@@ -61,6 +62,24 @@ class OcelEvent(OcelModel):
             raise ValueError(message)
         return value.astimezone(UTC)
 
+    @field_validator("event_id")
+    @classmethod
+    def safe_event_id(cls, value: str) -> str:
+        """Reject uncontrolled event identifiers."""
+        if not _SAFE_ID.fullmatch(value):
+            message = "event_id must be a safe, non-sensitive identifier"
+            raise ValueError(message)
+        return value
+
+    @field_validator("object_ids")
+    @classmethod
+    def safe_object_ids(cls, value: list[str]) -> list[str]:
+        """Reject uncontrolled object references."""
+        if any(not _SAFE_ID.fullmatch(item) for item in value):
+            message = "object_id must be a safe, non-sensitive identifier"
+            raise ValueError(message)
+        return value
+
 
 class OcelLog(OcelModel):
     """Minimal OCEL 2.0-compatible envelope for CareOps."""
@@ -78,7 +97,8 @@ def pseudonymize(value: str, *, secret: str) -> str:
     if not secret:
         message = "A non-empty pseudonymization secret is required"
         raise ContractError(message)
-    return "psn_" + hashlib.sha256(f"{secret}:{value}".encode()).hexdigest()[:32]
+    digest = hmac.new(secret.encode(), value.encode(), hashlib.sha256).hexdigest()
+    return "psn_" + digest[:32]
 
 
 def validate_ocel(log: OcelLog) -> OcelLog:
@@ -93,6 +113,9 @@ def validate_ocel(log: OcelLog) -> OcelLog:
             message = "Direct identity or message-content attributes are prohibited"
             raise ContractError(message)
     for event in log.events:
+        if forbidden.intersection(key.lower() for key in event.qualifiers):
+            message = "Direct identity or message-content qualifiers are prohibited"
+            raise ContractError(message)
         if not set(event.object_ids).issubset(object_ids):
             message = f"Unknown object reference in {event.event_id}"
             raise ContractError(message)

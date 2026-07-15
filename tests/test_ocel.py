@@ -71,6 +71,38 @@ def test_direct_identity_attribute_fails_closed() -> None:
         validate_ocel(log)
 
 
+def test_direct_identity_qualifier_fails_closed() -> None:
+    """Event qualifiers cannot reintroduce direct identity fields."""
+    event = sample_log().events[0].model_copy(update={"qualifiers": {"email": "redacted"}})
+    log = sample_log().model_copy(update={"events": [event]})
+    with pytest.raises(ContractError, match="qualifiers"):
+        validate_ocel(log)
+
+
+def test_event_and_object_ids_are_safe() -> None:
+    """Event and referenced object IDs share the safe-ID contract."""
+    with pytest.raises(ValueError, match="event_id"):
+        OcelEvent(
+            event_id="unsafe id",
+            event_type="received",
+            timestamp_utc=datetime(2026, 1, 1, tzinfo=UTC),
+            source_system="synthetic",
+            observed_or_inferred="observed",
+            confidence=1.0,
+            object_ids=["req-1"],
+        )
+    with pytest.raises(ValueError, match="object_id"):
+        OcelEvent(
+            event_id="evt-1",
+            event_type="received",
+            timestamp_utc=datetime(2026, 1, 1, tzinfo=UTC),
+            source_system="synthetic",
+            observed_or_inferred="observed",
+            confidence=1.0,
+            object_ids=["unsafe id"],
+        )
+
+
 def test_pseudonymization_is_deterministic_and_secret_required() -> None:
     """Pseudonyms are stable with a secret and reject empty secrets."""
     secret_key = "contract-test-key"  # noqa: S105
