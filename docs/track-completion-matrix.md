@@ -13,6 +13,7 @@ execution is deliberately not represented as a repository-side success.
 | PM4Py and conformance | `src/careops_process/mine.py`, optional `mining` extra | deterministic variants and conformance tests | PM4Py licence review; Mojo requires Linux/WSL |
 | Semantic projection and improvement | `src/careops_process/projection.py`, `src/careops_process/improve.py`, `schemas/semantic-projection.schema.json` | projection privacy and recommendation guardrail tests | Fabric/Power BI capacity and workspace access |
 | Process model representations | `docs/process-models/careops-process-mining.bpmn`, `docs/process-models/careops-process-mining.mmd` | secure BPMN parse and structural test | none |
+| End-to-end execution seam | `src/careops_process/pipeline.py` | 49-test suite exercises ingestion through projection | live connector execution remains tenant-gated |
 
 ## Common verification
 
