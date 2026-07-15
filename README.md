@@ -21,6 +21,11 @@ The connector-neutral [live pilot runbook](docs/live-pilot.md) defines the
 Power Automate/Dataverse handoff, checkpoint semantics, and tenant-gated
 acceptance evidence.
 
+The [track completion matrix](docs/track-completion-matrix.md) distinguishes
+verified repository capabilities from remaining tenant permissions. The
+governed pipeline also has a [BPMN 2.0 model](docs/process-models/careops-process-mining.bpmn)
+and matching [Mermaid visual](docs/process-models/careops-process-mining.mmd).
+
 ## Architecture
 
 - Python 3.14 is the canonical runtime.
