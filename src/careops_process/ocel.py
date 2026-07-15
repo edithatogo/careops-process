@@ -107,6 +107,10 @@ def validate_ocel(log: OcelLog) -> OcelLog:
     if len(object_ids) != len(log.objects):
         message = "object_id must be unique"
         raise ContractError(message)
+    event_ids = {item.event_id for item in log.events}
+    if len(event_ids) != len(log.events):
+        message = "event_id must be unique"
+        raise ContractError(message)
     forbidden = {"email", "email_address", "display_name", "subject", "body", "phone"}
     for item in log.objects:
         if forbidden.intersection(key.lower() for key in item.attributes):
