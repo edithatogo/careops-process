@@ -19,6 +19,7 @@ mining = ["pm4py==2.7.23.1"]
 [dependency-groups]
 dev = [
   "bandit>=1.8",
+  "defusedxml>=0.7.1",
   "hypothesis>=6.135",
   "pip-audit>=2.9",
   "pyright>=1.1.403",

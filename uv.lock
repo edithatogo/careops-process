@@ -76,6 +76,7 @@ mining = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
+    { name = "defusedxml" },
     { name = "hypothesis" },
     { name = "pip-audit" },
     { name = "pyright" },
@@ -96,6 +97,7 @@ provides-extras = ["mining"]
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit", specifier = ">=1.8" },
+    { name = "defusedxml", specifier = ">=0.7.1" },
     { name = "hypothesis", specifier = ">=6.135" },
     { name = "pip-audit", specifier = ">=2.9" },
     { name = "pyright", specifier = ">=1.1.403" },
