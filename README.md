@@ -7,6 +7,12 @@ deployment automation. It must never contain mailbox exports, message content,
 personal information, credentials, tenant identifiers, or production event
 logs.
 
+The implemented baseline includes a versioned OCEL 2.0 contract, low-privilege
+M365/Dataverse fact projection, deterministic process-family discovery,
+conformance metrics, and human-reviewable improvement recommendations. All
+fixtures are synthetic; live mailbox, Fabric, and Graph Data Connect execution
+remains subject to the gates in `docs/feasibility.md`.
+
 ## Architecture
 
 - Python 3.14 is the canonical runtime.
@@ -29,4 +35,3 @@ uv run pyright
 
 See [Conductor](conductor/index.md) for the executable roadmap and
 [feasibility evidence](docs/feasibility.md) for current platform gates.
-

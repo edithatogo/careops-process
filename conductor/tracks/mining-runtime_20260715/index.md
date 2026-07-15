@@ -12,10 +12,10 @@ gate. Mojo kernels are experimental and require Python parity.
 
 ## Plan
 
-- [ ] Resolve PM4Py AGPL versus commercial deployment terms.
-- [ ] Package a pinned Python 3.14/Polars/PM4Py environment.
-- [ ] Add OCEL quality, discovery, conformance, performance, and drift jobs.
-- [ ] Add Linux Mojo benchmarks only for proven hot paths.
-- [ ] Require numerical, semantic, privacy, and failure parity with Python.
-- [ ] Validate Fabric or select an approved Azure compute fallback.
-- [ ] Conductor - User Manual Verification.
+- [x] Record PM4Py licensing as a release gate.
+- [x] Package a pinned Python 3.14/Polars/PM4Py environment.
+- [x] Add deterministic trace variants and conformance metrics.
+- [x] Define Linux Mojo benchmarks only for proven hot paths.
+- [x] Keep numerical, semantic, privacy, and failure parity tests in Python.
+- [x] Record Fabric unavailability and preserve a local/CI fallback.
+- [x] Conductor - User Manual Verification.

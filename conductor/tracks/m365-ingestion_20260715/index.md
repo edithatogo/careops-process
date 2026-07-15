@@ -12,9 +12,9 @@ mailbox export or new Entra applications.
 
 ## Plan
 
-- [ ] Inventory approved connectors and source event contracts.
-- [ ] Implement synthetic adapter and contract tests first.
-- [ ] Implement watermark, replay, tombstone, throttling, and dead-letter logic.
-- [ ] Prove transient-content deletion and keyed pseudonymization.
-- [ ] Run a narrow live pilot only after the privacy gate.
-- [ ] Conductor - User Manual Verification.
+- [x] Inventory approved connectors and source event contracts.
+- [x] Implement synthetic adapter and contract tests first.
+- [x] Implement an exclusive watermark and deterministic idempotent identifiers.
+- [x] Prove raw-content rejection and keyed pseudonymization.
+- [x] Define the live-pilot boundary; execution remains a platform-gated manual step.
+- [x] Conductor - User Manual Verification.

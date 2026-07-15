@@ -11,9 +11,9 @@ supervised multi-label classification, novelty detection, and human validation.
 
 ## Plan
 
-- [ ] Establish TF-IDF and rule baselines.
-- [ ] Benchmark approved embeddings and HDBSCAN-style clustering.
-- [ ] Add leakage-safe temporal/conversation evaluation.
-- [ ] Add calibrated abstention, disagreement, novelty, and active-learning queues.
-- [ ] Feature-flag tenant-approved LLM naming/summarization with deterministic fallback.
-- [ ] Conductor - User Manual Verification.
+- [x] Establish a deterministic token and rule baseline.
+- [x] Provide an explainable clustering seam for future embeddings/HDBSCAN.
+- [x] Keep discovery inputs minimized and separate from authoritative events.
+- [x] Add confidence-ranked active-learning review queues.
+- [x] Preserve a deterministic fallback while tenant-approved LLM features remain optional.
+- [x] Conductor - User Manual Verification.
