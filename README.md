@@ -17,6 +17,10 @@ Reliability and evaluation controls include replay-safe checkpoints,
 tombstones, minimized dead-letter records, temporal leakage-safe splits,
 Jensen-Shannon label drift, and a governed semantic projection schema.
 
+The connector-neutral [live pilot runbook](docs/live-pilot.md) defines the
+Power Automate/Dataverse handoff, checkpoint semantics, and tenant-gated
+acceptance evidence.
+
 ## Architecture
 
 - Python 3.14 is the canonical runtime.
