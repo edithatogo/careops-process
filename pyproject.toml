@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "careops-process"
+version = "0.1.0"
+description = "Privacy-preserving object-centric process intelligence for CareOps"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+  "polars>=1.33",
+  "pyarrow>=21",
+  "pydantic>=2.11",
+]
+
+[project.optional-dependencies]
+mining = ["pm4py==2.7.23.1"]
+
+[dependency-groups]
+dev = [
+  "bandit>=1.8",
+  "hypothesis>=6.135",
+  "pip-audit>=2.9",
+  "pyright>=1.1.403",
+  "pytest>=8.4",
+  "pytest-cov>=6.2",
+  "ruff>=0.12",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/careops_process"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers --cov=careops_process --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pyright]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+include = ["src", "tests"]
+reportUnknownMemberType = false
+
+[tool.coverage.run]
+branch = true
+source = ["careops_process"]
