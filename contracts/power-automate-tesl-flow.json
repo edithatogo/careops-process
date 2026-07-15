@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/contracts/power-automate-tesl-flow.json",
+  "title": "CareOps TESL low-privilege Power Automate flow contract",
+  "contract_version": "1.0.0",
+  "privacy_mode": "minimized-facts-only",
+  "trigger": {
+    "connector": "Office 365 Outlook",
+    "scope": "user-owned TESL source",
+    "select": ["id", "receivedDateTime", "internetMessageId"]
+  },
+  "actions": [
+    {"id": "read_checkpoint", "connector": "Microsoft Dataverse", "operation": "get-row", "table": "careops_process_checkpoint"},
+    {"id": "project_fact", "connector": "Compose", "operation": "m365-fact-projection", "forbidden_inputs": ["body", "bodyPreview", "subject", "from", "to", "cc", "bcc"]},
+    {"id": "validate_watermark", "connector": "Condition", "operation": "strictly-after-watermark"},
+    {"id": "write_projection", "connector": "Microsoft Dataverse", "operation": "create-row", "table": "careops_process_event"},
+    {"id": "advance_checkpoint", "connector": "Microsoft Dataverse", "operation": "update-row", "table": "careops_process_checkpoint", "after": "write_projection"},
+    {"id": "dead_letter", "connector": "Microsoft Dataverse", "operation": "create-row", "table": "careops_process_dead_letter", "stores": ["fact_id", "reason", "retryable", "recorded_at_utc"]}
+  ],
+  "failure_policy": {
+    "retryable": ["429", "408", "5xx", "timeout"],
+    "non_retryable": ["schema", "privacy", "duplicate", "tombstoned"],
+    "never_advance_checkpoint_on_failure": true,
+    "never_store_raw_payload": true
+  },
+  "approval_handoff": {
+    "connector": "Microsoft Teams Approvals",
+    "audience": "configured submitter and approver only",
+    "human_decision_required": true,
+    "ai_decision_authority": false
+  }
+}

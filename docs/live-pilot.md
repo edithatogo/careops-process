@@ -7,6 +7,10 @@ mailbox export, Fabric workspace, or administrator role.
 
 ## Flow contract
 
+The machine-readable source of truth is
+`contracts/power-automate-tesl-flow.json`; the validator is
+`careops_process.flow_contract.validate_flow_contract`.
+
 1. Trigger on a narrow, user-owned source (for example, a TESL approval email
    or Dataverse approval row).
 2. Select only `id`, activity classification, timestamp, source system, and
