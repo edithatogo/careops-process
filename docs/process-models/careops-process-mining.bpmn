@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" id="CareOpsProcessMining" targetNamespace="https://careops.example/ns/process-mining">
+  <process id="careops_process_mining" name="CareOps process mining" isExecutable="false">
+    <startEvent id="start" name="Approved source event available" />
+    <task id="minimize" name="Minimize and pseudonymize source facts" />
+    <task id="checkpoint" name="Apply watermark and idempotency checkpoint" />
+    <task id="discover" name="Discover process families and variants" />
+    <task id="review" name="Human review of uncertain classifications" />
+    <task id="conformance" name="Measure conformance, performance, and drift" />
+    <task id="project" name="Publish governed semantic projection" />
+    <task id="improve" name="Review and accept improvement experiment" />
+    <endEvent id="end" name="Evidence ready for approved improvement" />
+    <sequenceFlow id="flow-1" sourceRef="start" targetRef="minimize" />
+    <sequenceFlow id="flow-2" sourceRef="minimize" targetRef="checkpoint" />
+    <sequenceFlow id="flow-3" sourceRef="checkpoint" targetRef="discover" />
+    <sequenceFlow id="flow-4" sourceRef="discover" targetRef="review" />
+    <sequenceFlow id="flow-5" sourceRef="review" targetRef="conformance" />
+    <sequenceFlow id="flow-6" sourceRef="conformance" targetRef="project" />
+    <sequenceFlow id="flow-7" sourceRef="project" targetRef="improve" />
+    <sequenceFlow id="flow-8" sourceRef="improve" targetRef="end" />
+  </process>
+</definitions>
