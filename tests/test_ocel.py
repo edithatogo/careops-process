@@ -9,6 +9,7 @@ from careops_process.ocel import (
     OcelEvent,
     OcelLog,
     OcelObject,
+    OcelRelation,
     pseudonymize,
     validate_ocel,
 )
@@ -101,6 +102,23 @@ def test_event_and_object_ids_are_safe() -> None:
             confidence=1.0,
             object_ids=["unsafe id"],
         )
+
+
+def test_object_relations_validate_references_and_self_links() -> None:
+    """Object-object links are explicit and cannot self-reference."""
+    relation = OcelRelation(
+        relation_id="rel-1",
+        relation_type="concerns",
+        source_object_id="req-1",
+        target_object_id="person-1",
+        observed_or_inferred="inferred",
+        confidence=0.7,
+    )
+    log = sample_log().model_copy(update={"relations": [relation]})
+    assert validate_ocel(log).relations[0].relation_type == "concerns"
+    self_link = relation.model_copy(update={"target_object_id": "req-1"})
+    with pytest.raises(ContractError, match="self-reference"):
+        validate_ocel(sample_log().model_copy(update={"relations": [self_link]}))
 
 
 def test_pseudonymization_is_deterministic_and_secret_required() -> None:
