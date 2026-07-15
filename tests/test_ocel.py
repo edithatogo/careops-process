@@ -64,7 +64,7 @@ def test_direct_identity_attribute_fails_closed() -> None:
     object_ = OcelObject(
         object_id="req-1",
         object_type="approval_request",
-        attributes={"email": "secret"},
+        attributes={"email": "redacted"},
     )
     log = sample_log().model_copy(update={"objects": [object_]})
     with pytest.raises(ContractError, match="Direct identity"):
@@ -73,7 +73,7 @@ def test_direct_identity_attribute_fails_closed() -> None:
 
 def test_pseudonymization_is_deterministic_and_secret_required() -> None:
     """Pseudonyms are stable with a secret and reject empty secrets."""
-    secret_key = "fixture"  # noqa: S105
+    secret_key = "contract-test-key"  # noqa: S105
     first = pseudonymize("person@example.invalid", secret=secret_key)
     second = pseudonymize("person@example.invalid", secret=secret_key)
     assert first == second
