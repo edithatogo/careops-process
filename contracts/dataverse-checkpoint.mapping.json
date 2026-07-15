@@ -1,0 +1,17 @@
+{
+  "table": "careops_process_checkpoint",
+  "ownership": "user-scoped Dataverse connection",
+  "columns": {
+    "careops_name": "single line text, required",
+    "watermark_utc": "date and time, nullable",
+    "accepted_fact_ids": "multiline text containing bounded JSON array",
+    "tombstoned_fact_ids": "multiline text containing bounded JSON array",
+    "last_success_utc": "date and time, nullable",
+    "last_error_code": "single line text, nullable"
+  },
+  "privacy": {
+    "raw_message_content": "prohibited",
+    "direct_identity_fields": "prohibited",
+    "retention": "minimum required for replay and audit"
+  }
+}
