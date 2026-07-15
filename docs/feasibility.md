@@ -15,21 +15,33 @@
 
 ## Gated or degraded
 
-- Fabric redirected to interactive sign-in in both available browser surfaces;
-  Fabric capacity/workspace permissions are therefore unverified.
+- Azure CLI 2.88 can authenticate as the NSW Health user and acquire a Power BI
+  API token, but the API returns zero accessible workspaces and zero dedicated
+  capacities. Fabric is therefore unavailable under current permissions.
 - Graph Data Connect remains Entra application and Global Administrator gated.
 - Mojo requires Linux or WSL and is not a native-Windows runtime. It is suitable
   only for experimental Linux CI kernels with Python parity tests.
-- PACX is installed but cannot currently start because the x64 .NET 8 runtime
-  is missing; only x64 .NET 10 and x86 .NET 8 are present.
-- The existing Azure CLI installation is obsolete/broken and is not required
-  for the initial Power Platform pilot.
-- Microsoft 365 CLI is not installed.
+- PACX starts after installing the user-scoped x64 .NET 8.0.29 runtime. Its
+  previous encrypted credential store was corrupt and has been preserved in a
+  timestamped local backup; creating a replacement PACX OAuth profile still
+  requires interactive authentication. PAC CLI remains connected and usable.
+- Azure CLI 2.88 is installed through `uv` on Python 3.13 and is tenant-level
+  authenticated. No Azure subscription is exposed to the account.
+- Microsoft 365 CLI 11.9.0 can be installed under Node 24, but the global Node
+  26/npm installation produces incomplete dependency trees and the isolated
+  CLI does not complete startup. Azure CLI, Microsoft Graph REST, PAC CLI, and
+  Power Platform connectors are the supported automation surfaces until the
+  upstream Node/tool interaction is resolved.
+- GHE Actions jobs fail before the first step, indicating that no compatible
+  `ubuntu-latest` runner is available to this repository. GitHub.com Actions is
+  the execution mirror until an enterprise runner is assigned.
+- GitHub Advanced Security is not purchased for the private personal repo.
+  Secret scanning is unavailable there and is enterprise-policy-blocked on
+  GHE. Repository-local secret scanning and fail-closed CI are required.
 
 ## Decision
 
-Proceed with the repository, schemas, synthetic harness, Dataverse/Power
-Automate adapter design, and GitHub/GHE automation. Do not claim Fabric,
-Graph Data Connect, Azure deployment, Mojo production parity, or live mailbox
-ingestion until their dedicated track gates pass.
-
+Proceed with repository, schemas, synthetic harness, Dataverse/Power Automate
+adapter design, and GitHub.com CI mirrored to GHE. Do not claim Fabric, Graph
+Data Connect, Azure resource deployment, Mojo production parity, GHE runner
+execution, or live mailbox ingestion until their dedicated gates pass.

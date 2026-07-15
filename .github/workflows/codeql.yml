@@ -17,6 +17,7 @@ concurrency:
 jobs:
   analyze:
     name: CodeQL Python analysis
+    if: ${{ vars.ENABLE_CODEQL == 'true' }}
     permissions:
       contents: read
       security-events: write # Required to upload CodeQL SARIF results.

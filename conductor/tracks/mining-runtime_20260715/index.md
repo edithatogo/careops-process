@@ -1,5 +1,9 @@
 # Managed PM4Py, Mojo experiments, and conformance analytics
 
+- GitHub issue: https://github.com/edithatogo/careops-process/issues/5
+- GHE issue: https://nswhealth.ghe.com/60217257/careops-process/issues/5
+- GitHub Project: https://github.com/users/edithatogo/projects/26
+
 ## Specification
 
 Run reproducible object-centric discovery, variants, conformance, performance,
@@ -15,4 +19,3 @@ gate. Mojo kernels are experimental and require Python parity.
 - [ ] Require numerical, semantic, privacy, and failure parity with Python.
 - [ ] Validate Fabric or select an approved Azure compute fallback.
 - [ ] Conductor - User Manual Verification.
-
