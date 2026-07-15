@@ -3,7 +3,7 @@
 ## [x] Track: Platform feasibility and secure repository bootstrap
 *Link: [./tracks/platform-feasibility_20260715/](./tracks/platform-feasibility_20260715/)*
 
-## [ ] Track: Canonical OCEL 2.0 contract and process ontology
+## [x] Track: Canonical OCEL 2.0 contract and process ontology
 *Link: [./tracks/ocel-contract_20260715/](./tracks/ocel-contract_20260715/)*
 
 ## [ ] Track: Low-privilege Microsoft 365 and Dataverse ingestion
@@ -17,4 +17,3 @@
 
 ## [ ] Track: Process intelligence semantic model and improvement loop
 *Link: [./tracks/process-intelligence_20260715/](./tracks/process-intelligence_20260715/)*
-
