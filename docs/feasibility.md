@@ -23,8 +23,9 @@
   only for experimental Linux CI kernels with Python parity tests.
 - PACX starts after installing the user-scoped x64 .NET 8.0.29 runtime. Its
   previous encrypted credential store was corrupt and has been preserved in a
-  timestamped local backup; creating a replacement PACX OAuth profile still
-  requires interactive authentication. PAC CLI remains connected and usable.
+  timestamped local backup. A replacement `careops-owner` OAuth profile is now
+  connected and `pacx auth ping` succeeds against Dataverse 9.2. PAC CLI also
+  remains connected and usable.
 - Azure CLI 2.88 is installed through `uv` on Python 3.13 and is tenant-level
   authenticated. No Azure subscription is exposed to the account.
 - Microsoft 365 CLI 11.9.0 can be installed under Node 24, but the global Node
@@ -32,6 +33,9 @@
   CLI does not complete startup. Azure CLI, Microsoft Graph REST, PAC CLI, and
   Power Platform connectors are the supported automation surfaces until the
   upstream Node/tool interaction is resolved.
+- WSL is not installed and its installation requires a Windows feature change;
+  Mojo therefore remains a Linux GitHub Actions experiment rather than a local
+  runtime requirement.
 - GHE Actions jobs fail before the first step, indicating that no compatible
   `ubuntu-latest` runner is available to this repository. GitHub.com Actions is
   the execution mirror until an enterprise runner is assigned.
