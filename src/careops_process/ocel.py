@@ -72,6 +72,7 @@ class OcelLog(OcelModel):
     lineage: str = Field(min_length=1, max_length=500)
     schema_version: str = Field(pattern=r"^\d+\.\d+\.\d+$")
 
+
 def pseudonymize(value: str, *, secret: str) -> str:
     """Return a deterministic, non-reversible identifier from a local secret."""
     if not secret:
