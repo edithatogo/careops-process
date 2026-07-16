@@ -1,5 +1,9 @@
 """Human review and improvement experiment tests."""
 
+from typing import Any
+
+import pytest
+
 from careops_process.experiments import create_experiment, record_review
 
 
@@ -33,3 +37,36 @@ def test_rejected_review_cancels_experiment() -> None:
         experiment, status="rejected", reviewer="reviewer", note="Not representative"
     )
     assert reviewed.status == "cancelled"
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"experiment_id": "", "hypothesis": "x"}, "required"),
+        ({"experiment_id": "x", "hypothesis": ""}, "required"),
+        ({"experiment_id": "x", "hypothesis": "x", "guardrails": {}}, "non-negative"),
+        ({"experiment_id": "x", "hypothesis": "x", "guardrails": {"x": -1}}, "non-negative"),
+        (
+            {"experiment_id": "x", "hypothesis": "x", "guardrails": {"x": 1}, "baseline": {}},
+            "baseline",
+        ),
+    ],
+)
+def test_invalid_experiment_inputs_fail_closed(kwargs: dict[str, object], message: str) -> None:
+    """Invalid experiment definitions cannot enter the review queue."""
+    defaults: dict[str, Any] = {"guardrails": {"x": 1.0}, "baseline": {"metric": 1.0}}
+    defaults.update(kwargs)
+    with pytest.raises(ValueError, match=message):
+        create_experiment(**defaults)  # type: ignore[arg-type]
+
+
+def test_review_requires_reviewer_and_note() -> None:
+    """A status without accountable review metadata is rejected."""
+    experiment = create_experiment(
+        experiment_id="baseline-3",
+        hypothesis="Test",
+        guardrails={"duration_hours": 48.0},
+        baseline={"mean_duration_hours": 0.01},
+    )
+    with pytest.raises(ValueError, match="required"):
+        record_review(experiment, status="accepted", reviewer="", note="note")
