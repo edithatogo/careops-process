@@ -1,12 +1,10 @@
 """Synthetic CLI smoke tests."""
 
 import json
-from typing import TYPE_CHECKING
+
+import pytest
 
 from careops_process.cli import main
-
-if TYPE_CHECKING:
-    import pytest
 
 EVENT_COUNT = 2
 
@@ -20,3 +18,10 @@ def test_cli_emits_projection(
     assert main(["--log-id", "cli-test"]) == 0
     output = json.loads(capsys.readouterr().out)
     assert output["quality"]["event_count"] == EVENT_COUNT
+
+
+def test_cli_requires_secret(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The CLI never invents a pseudonymization secret."""
+    monkeypatch.delenv("CAREOPS_PSEUDONYM_SECRET", raising=False)
+    with pytest.raises(SystemExit):
+        main([])
