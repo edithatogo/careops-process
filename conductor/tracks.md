@@ -17,3 +17,8 @@
 
 ## [x] Track: Process intelligence semantic model and improvement loop
 *Link: [./tracks/process-intelligence_20260715/](./tracks/process-intelligence_20260715/)*
+
+---
+
+- [ ] **Track: Implement multi-user Teams clinical-governance workflows without Entra or tenant-admin access**
+*Link: [./tracks/teams-governance-workflows_20260717/](./tracks/teams-governance-workflows_20260717/)*

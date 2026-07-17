@@ -1,0 +1,8 @@
+{
+  "track_id": "teams-governance-workflows_20260717",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-07-17T09:33:27Z",
+  "updated_at": "2026-07-17T09:33:27Z",
+  "description": "Implement reusable clinical-governance workflows in Microsoft Teams using user-scoped Power Platform capabilities, without requiring Entra or tenant-administrator access."
+}
