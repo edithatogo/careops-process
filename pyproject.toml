@@ -37,6 +37,7 @@ packages = ["src/careops_process"]
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers --cov=careops_process --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
 testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.ruff]
 target-version = "py314"
