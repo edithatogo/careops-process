@@ -3,6 +3,6 @@
   "type": "feature",
   "status": "new",
   "created_at": "2026-07-17T09:33:27Z",
-  "updated_at": "2026-07-17T09:33:27Z",
-  "description": "Implement reusable clinical-governance workflows in Microsoft Teams using user-scoped Power Platform capabilities, without requiring Entra or tenant-administrator access."
+  "updated_at": "2026-07-17T09:44:49Z",
+  "description": "Implement the multi-user IHG Governance and Executive Action Hub in Microsoft Teams using configurable governance pathways and user-scoped Power Platform capabilities, without requiring Entra or tenant-administrator access."
 }

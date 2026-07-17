@@ -20,5 +20,5 @@
 
 ---
 
-- [ ] **Track: Implement multi-user Teams clinical-governance workflows without Entra or tenant-admin access**
+- [ ] **Track: Implement the multi-user IHG Governance and Executive Action Hub without Entra or tenant-admin access**
 *Link: [./tracks/teams-governance-workflows_20260717/](./tracks/teams-governance-workflows_20260717/)*
