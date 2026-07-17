@@ -25,7 +25,15 @@ administrator access.
   field `cop_checkpointkey`. It currently has no rows.
 - Dedicated event/dead-letter tables were not created yet. Dataverse returned a
   customization-lock response while another customization operation was in
-  progress. Creation must be retried sequentially after the lock clears.
+  progress. On 2026-07-17, PACX was used successfully after the lock cleared:
+  the unmanaged `careops_process` solution now contains `cop_ProcessEvent` and
+  `cop_ProcessDeadLetter`, with only minimized fields:
+  - event: `cop_eventkey`, `cop_activity`, `cop_timestamputc`,
+    `cop_sourcesystem`, `cop_objectids`
+  - dead letter: `cop_deadletterkey`, `cop_factid`, `cop_reason`,
+    `cop_retryable`, `cop_recordedatutc`
+- The tables were published through PACX. A final metadata export remains a
+  verification step before the first write pilot.
 - Power BI/Fabric remains unavailable: the authenticated Power BI API returned
   zero accessible workspaces. No Fabric deployment is claimed.
 
