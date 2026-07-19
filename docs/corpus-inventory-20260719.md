@@ -18,7 +18,7 @@ an explicit blind spot and must never be interpreted as zero activity.
 | Outlook mail folders | denied (`HTTP 403`) | unknown | mailbox population unknown |
 | Teams joined-team discovery | inconclusive (`HTTP 400`) | unknown | Team population unknown; endpoint or permission requires diagnosis |
 | OneDrive root | unavailable (`HTTP 404`) | unknown | drive population unknown |
-| Planner assigned tasks | accessible | 28 tasks returned | accessible assigned-task population at probe time; pagination and retention still require proof |
+| Planner assigned tasks | accessible | 28 tasks and 38 lifecycle events; one page exhausted | complete delegated endpoint response at probe time; not all IHG or tenant Planner activity |
 | SharePoint site search | denied (`HTTP 403`) | unknown | site and list populations unknown |
 | Dataverse environments | previously verified; current PAC enumeration inconclusive | 4 environments in the 2026-07-16 audit | re-enumeration and per-table denominators required |
 | Dataverse Approvals | accessible smoke-test source | 4 records in the 2026-07-16 run | connectivity evidence only; not representative |
@@ -27,8 +27,10 @@ an explicit blind spot and must never be interpreted as zero activity.
 
 ## Immediate acquisition implications
 
-1. Planner is the first currently proven Graph acquisition lane, but the 28-task
-   response needs pagination, plan/container coverage and retention verification.
+1. Planner is the first proven complete delegated-endpoint acquisition lane. Its
+   28 tasks produced 28 creation and 10 completion events, spanning 2025-08-11 to
+   2026-02-26. Plan/container reach and service retention remain unknown, so this
+   is not a tenant or IHG denominator.
 2. Outlook and SharePoint require an approved delegated connector/export or a
    resource-owner action; repeated calls with the current token will not broaden access.
 3. Teams requires diagnosis of the `HTTP 400` response without treating it as an
@@ -42,6 +44,8 @@ an explicit blind spot and must never be interpreted as zero activity.
 
 - Evidence class: capability inventory and smoke test.
 - Complete accessible-population extraction: not yet demonstrated.
+- Complete delegated Planner endpoint response: demonstrated for the 2026-07-19
+  validation run; repeatable pilot evidence still requires a governed stable key.
 - Cross-source corpus: not yet assembled.
 - Main process families: not yet discovered.
 - Organisational or tenant-wide completeness: not claimed.

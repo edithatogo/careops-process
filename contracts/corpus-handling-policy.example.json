@@ -1,0 +1,19 @@
+{
+  "policy_version": "1.0.0",
+  "classification": "sensitive_operational_metadata",
+  "access_boundary": "ihg_authorised_operators",
+  "approved_destination_types": [
+    "local_encrypted",
+    "approved_dataverse"
+  ],
+  "retention_days": 30,
+  "approved_transient_features": [],
+  "prohibited_destinations": [
+    "git_repository",
+    "public_ci_artifact",
+    "personal_cloud_storage"
+  ],
+  "raw_narrative_persistence": "prohibited",
+  "direct_identity_persistence": "prohibited",
+  "stable_key_storage": "approved_secret_store_or_operator_session_only"
+}

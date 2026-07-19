@@ -48,3 +48,29 @@ def test_corpus_coverage_contract_separates_evidence_classes() -> None:
     )
     classes = contract["properties"]["evidence_class"]["enum"]
     assert classes == ["synthetic", "smoke_test", "live_corpus"]
+
+
+def test_planner_export_is_paginated_pseudonymized_and_content_minimized() -> None:
+    """The delegated Planner lane is exhaustive and persists no narrative."""
+    script = Path("scripts/export-planner-corpus.ps1").read_text(encoding="utf-8")
+    assert "@odata.nextLink" in script
+    assert "HMACSHA256" in script
+    assert "SHA256" in script
+    assert "CAREOPS_PSEUDONYM_KEY" in script
+    assert "$select=id,planId,bucketId,createdDateTime,completedDateTime,percentComplete" in script
+    unsafe_selection = (
+        "$select=id,planId,bucketId,createdDateTime,completedDateTime,percentComplete,title"
+    )
+    assert unsafe_selection not in script
+    assert "tenant_wide_coverage = $null" in script
+
+
+def test_handling_policy_template_is_fail_closed() -> None:
+    """The reusable policy template permits no live content by default."""
+    policy = json.loads(
+        Path("contracts/corpus-handling-policy.example.json").read_text(encoding="utf-8")
+    )
+    assert policy["approved_transient_features"] == []
+    assert policy["raw_narrative_persistence"] == "prohibited"
+    assert policy["direct_identity_persistence"] == "prohibited"
+    assert "git_repository" in policy["prohibited_destinations"]

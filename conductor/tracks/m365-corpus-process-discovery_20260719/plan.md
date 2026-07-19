@@ -22,20 +22,20 @@
     - [x] Test pagination, partitioning, historical backfill, throttling, retries, watermark boundaries and source withdrawal.
     - [x] Test source-to-event reconciliation, duplicate suppression, tombstones, dead letters and deterministic identifiers.
     - [x] Test strict rejection of prohibited raw fields and unapproved destinations.
-- [~] Task: Implement Windows-native user-scoped acquisition adapters
-    - [ ] Implement adapters only for inventory-confirmed delegated APIs, Power Platform connectors or sanctioned exports.
-    - [ ] Support complete accessible-population extraction for each admitted source partition.
-    - [ ] Emit per-partition manifests, checksums, counts, exclusions and checkpoint state.
-- [ ] Task: Implement privacy and records controls
-    - [ ] Add keyed pseudonymisation, access-boundary labels, retention expiry, deletion and deterministic rebuild procedures.
-    - [ ] Add transient derived-feature mode guarded by explicit classification and approval configuration.
-    - [ ] Verify live corpora and protected inputs cannot enter Git, logs or public CI artefacts.
-- [ ] Task: Conductor - Automated Review and Triangulated Verification 'Complete-population acquisition' (Refer to workflow.md)
-- [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+- [x] Task: Implement Windows-native user-scoped acquisition adapters
+    - [x] Implement adapters only for inventory-confirmed delegated APIs, Power Platform connectors or sanctioned exports.
+    - [x] Support complete accessible-population extraction for each admitted source partition.
+    - [x] Emit per-partition manifests, checksums, counts, exclusions and checkpoint state.
+- [x] Task: Implement privacy and records controls
+    - [x] Add keyed pseudonymisation, access-boundary labels, retention expiry, deletion and deterministic rebuild procedures.
+    - [x] Add transient derived-feature mode guarded by explicit classification and approval configuration.
+    - [x] Verify live corpora and protected inputs cannot enter Git, logs or public CI artefacts.
+- [x] Task: Conductor - Automated Review and Triangulated Verification 'Complete-population acquisition' (Refer to workflow.md)
+- [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
 ## Phase 3: Reconstruct the object-centric event corpus
 
-- [ ] Task: Extend activity, object and relationship contracts test-first
+- [~] Task: Extend activity, object and relationship contracts test-first
     - [ ] Add multi-source fixtures for meetings, documents, messages, tasks, approvals, flows, governance matters and organisational units.
     - [ ] Test many-to-many links, lifecycle gaps, clock anomalies, identity collisions and out-of-order events.
 - [ ] Task: Implement explainable cross-source correlation
