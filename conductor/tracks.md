@@ -25,5 +25,5 @@
 
 ---
 
-- [ ] **Track: Discover the main processes across the complete authorised M365 corpus**
+- [~] **Track: Discover the main processes across the complete authorised M365 corpus**
 *Link: [./tracks/m365-corpus-process-discovery_20260719/](./tracks/m365-corpus-process-discovery_20260719/)*
