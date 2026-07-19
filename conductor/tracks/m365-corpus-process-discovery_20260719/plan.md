@@ -51,24 +51,24 @@
 
 ## Phase 4: Discover the main process families empirically
 
-- [~] Task: Define discovery quality and anti-bias tests
-    - [ ] Test source exclusion, time-window, mapping and correlation-threshold sensitivity.
-    - [ ] Test that process ranking includes evidence volume, recurrence, organisational reach, confidence and source dependence.
-    - [ ] Test stable deterministic baselines and optional model-enrichment parity boundaries.
-- [ ] Task: Implement corpus-level process discovery
-    - [ ] Discover candidate activity vocabularies and process families without seeding predefined approval labels.
-    - [ ] Generate variants, directly-follows graphs, object-centric models, hand-offs, loops, ageing and incomplete-case patterns.
-    - [ ] Quantify assignment ambiguity, drift, temporal stability and process-family confidence.
-- [ ] Task: Build the human review queue
-    - [ ] Select representative provenance references without exposing protected narrative.
-    - [ ] Support family naming, validation, rejection, merge, split and correlation correction with rationale.
-    - [ ] Preserve reviewer identity, configuration version and decision history.
-- [ ] Task: Conductor - Automated Review and Triangulated Verification 'Empirical process discovery' (Refer to workflow.md)
-- [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+- [x] Task: Define discovery quality and anti-bias tests
+    - [x] Test source exclusion, time-window, mapping and correlation-threshold sensitivity.
+    - [x] Test that process ranking includes evidence volume, recurrence, organisational reach, confidence and source dependence.
+    - [x] Test stable deterministic baselines and optional model-enrichment parity boundaries.
+- [x] Task: Implement corpus-level process discovery
+    - [x] Discover candidate activity vocabularies and process families without seeding predefined approval labels.
+    - [x] Generate variants, directly-follows graphs, object-centric models, hand-offs, loops, ageing and incomplete-case patterns.
+    - [x] Quantify assignment ambiguity, drift, temporal stability and process-family confidence.
+- [x] Task: Build the human review queue
+    - [x] Select representative provenance references without exposing protected narrative.
+    - [x] Support family naming, validation, rejection, merge, split and correlation correction with rationale.
+    - [x] Preserve reviewer identity, configuration version and decision history.
+- [x] Task: Conductor - Automated Review and Triangulated Verification 'Empirical process discovery' (Refer to workflow.md)
+- [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
 ## Phase 5: Produce coverage-honest executive intelligence
 
-- [ ] Task: Define executive visual and metric contracts test-first
+- [~] Task: Define executive visual and metric contracts test-first
     - [ ] Require observation period, accessible denominator, included population, exclusions, confidence and freshness on every output.
     - [ ] Test suppression and aggregation for small cells, protected attributes and individual-level scoring risks.
 - [ ] Task: Implement process-landscape and drill-down outputs
