@@ -2,23 +2,23 @@
 
 ## Phase 1: Correct the baseline and define the evidence boundary
 
-- [ ] Task: Reclassify the four-record Dataverse run as a connectivity smoke test
-    - [ ] Update completion and pilot documentation so it is not described as representative process-mining evidence.
-    - [ ] Add automated checks preventing smoke-test or synthetic outputs from being labelled as corpus findings.
-- [ ] Task: Define corpus-inventory and coverage contracts test-first
-    - [ ] Add synthetic fixtures for accessible, inaccessible, empty, partial, paginated and withdrawn source partitions.
-    - [ ] Specify source, container, time-range, denominator, count, permission, provenance, retention and blind-spot fields.
-    - [ ] Test that inaccessible sources remain explicit unknowns and never become zero-activity claims.
-- [ ] Task: Execute the authorised M365 and Power Platform source inventory
-    - [ ] Probe Exchange/Outlook, Teams, SharePoint, Lists, Planner, Approvals, Power Automate and Dataverse through existing user-scoped interfaces.
-    - [ ] Record resource-owner actions and policy, licence, API, throttling and history-retention constraints.
-    - [ ] Produce a privacy-safe coverage ledger and proposed pilot observation period.
-- [ ] Task: Conductor - Automated Review and Triangulated Verification 'Baseline and corpus boundary' (Refer to workflow.md)
-- [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+- [x] Task: Reclassify the four-record Dataverse run as a connectivity smoke test
+    - [x] Update completion and pilot documentation so it is not described as representative process-mining evidence.
+    - [x] Add automated checks preventing smoke-test or synthetic outputs from being labelled as corpus findings.
+- [x] Task: Define corpus-inventory and coverage contracts test-first
+    - [x] Add synthetic fixtures for accessible, inaccessible, empty, partial, paginated and withdrawn source partitions.
+    - [x] Specify source, container, time-range, denominator, count, permission, provenance, retention and blind-spot fields.
+    - [x] Test that inaccessible sources remain explicit unknowns and never become zero-activity claims.
+- [x] Task: Execute the authorised M365 and Power Platform source inventory
+    - [x] Probe Exchange/Outlook, Teams, SharePoint, Lists, Planner, Approvals, Power Automate and Dataverse through existing user-scoped interfaces.
+    - [x] Record resource-owner actions and policy, licence, API, throttling and history-retention constraints.
+    - [x] Produce a privacy-safe coverage ledger and proposed pilot observation period.
+- [x] Task: Conductor - Automated Review and Triangulated Verification 'Baseline and corpus boundary' (Refer to workflow.md)
+- [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
 ## Phase 2: Build complete-population acquisition lanes
 
-- [ ] Task: Define acquisition adapter contracts and reconciliation tests
+- [~] Task: Define acquisition adapter contracts and reconciliation tests
     - [ ] Test pagination, partitioning, historical backfill, throttling, retries, watermark boundaries and source withdrawal.
     - [ ] Test source-to-event reconciliation, duplicate suppression, tombstones, dead letters and deterministic identifiers.
     - [ ] Test strict rejection of prohibited raw fields and unapproved destinations.
@@ -111,4 +111,3 @@
     - [ ] Record production, expansion, pause or closure decisions without implying tenant-wide completeness.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Assurance and executive decision' (Refer to workflow.md)
 - [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
-
