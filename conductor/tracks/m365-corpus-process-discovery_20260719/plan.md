@@ -35,23 +35,23 @@
 
 ## Phase 3: Reconstruct the object-centric event corpus
 
-- [~] Task: Extend activity, object and relationship contracts test-first
-    - [ ] Add multi-source fixtures for meetings, documents, messages, tasks, approvals, flows, governance matters and organisational units.
-    - [ ] Test many-to-many links, lifecycle gaps, clock anomalies, identity collisions and out-of-order events.
-- [ ] Task: Implement explainable cross-source correlation
-    - [ ] Implement deterministic correlation rules with versioned provenance.
-    - [ ] Add confidence-scored hypothesis links for unresolved cases without overwriting observed facts.
-    - [ ] Produce ambiguity, orphan-event and incomplete-case reports.
-- [ ] Task: Validate corpus integrity and scalability
-    - [ ] Reconcile every normalized event and object to a source partition and run manifest.
-    - [ ] Benchmark partitioned processing against the inventoried corpus and record bounded-resource limits.
-    - [ ] Prove deterministic rebuild and incremental refresh equivalence.
-- [ ] Task: Conductor - Automated Review and Triangulated Verification 'Object-centric corpus reconstruction' (Refer to workflow.md)
-- [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+- [x] Task: Extend activity, object and relationship contracts test-first
+    - [x] Add multi-source fixtures for meetings, documents, messages, tasks, approvals, flows, governance matters and organisational units.
+    - [x] Test many-to-many links, lifecycle gaps, clock anomalies, identity collisions and out-of-order events.
+- [x] Task: Implement explainable cross-source correlation
+    - [x] Implement deterministic correlation rules with versioned provenance.
+    - [x] Add confidence-scored hypothesis links for unresolved cases without overwriting observed facts.
+    - [x] Produce ambiguity, orphan-event and incomplete-case reports.
+- [x] Task: Validate corpus integrity and scalability
+    - [x] Reconcile every normalized event and object to a source partition and run manifest.
+    - [x] Benchmark partitioned processing against the inventoried corpus and record bounded-resource limits.
+    - [x] Prove deterministic rebuild and incremental refresh equivalence.
+- [x] Task: Conductor - Automated Review and Triangulated Verification 'Object-centric corpus reconstruction' (Refer to workflow.md)
+- [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
 ## Phase 4: Discover the main process families empirically
 
-- [ ] Task: Define discovery quality and anti-bias tests
+- [~] Task: Define discovery quality and anti-bias tests
     - [ ] Test source exclusion, time-window, mapping and correlation-threshold sensitivity.
     - [ ] Test that process ranking includes evidence volume, recurrence, organisational reach, confidence and source dependence.
     - [ ] Test stable deterministic baselines and optional model-enrichment parity boundaries.
