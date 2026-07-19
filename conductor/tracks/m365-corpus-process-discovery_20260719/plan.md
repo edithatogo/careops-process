@@ -18,11 +18,11 @@
 
 ## Phase 2: Build complete-population acquisition lanes
 
-- [~] Task: Define acquisition adapter contracts and reconciliation tests
-    - [ ] Test pagination, partitioning, historical backfill, throttling, retries, watermark boundaries and source withdrawal.
-    - [ ] Test source-to-event reconciliation, duplicate suppression, tombstones, dead letters and deterministic identifiers.
-    - [ ] Test strict rejection of prohibited raw fields and unapproved destinations.
-- [ ] Task: Implement Windows-native user-scoped acquisition adapters
+- [x] Task: Define acquisition adapter contracts and reconciliation tests
+    - [x] Test pagination, partitioning, historical backfill, throttling, retries, watermark boundaries and source withdrawal.
+    - [x] Test source-to-event reconciliation, duplicate suppression, tombstones, dead letters and deterministic identifiers.
+    - [x] Test strict rejection of prohibited raw fields and unapproved destinations.
+- [~] Task: Implement Windows-native user-scoped acquisition adapters
     - [ ] Implement adapters only for inventory-confirmed delegated APIs, Power Platform connectors or sanctioned exports.
     - [ ] Support complete accessible-population extraction for each admitted source partition.
     - [ ] Emit per-partition manifests, checksums, counts, exclusions and checkpoint state.
