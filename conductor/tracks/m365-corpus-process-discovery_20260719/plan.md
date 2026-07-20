@@ -71,19 +71,19 @@
 - [x] Task: Define executive visual and metric contracts test-first
     - [x] Require observation period, accessible denominator, included population, exclusions, confidence and freshness on every output.
     - [x] Test suppression and aggregation for small cells, protected attributes and individual-level scoring risks.
-- [~] Task: Implement process-landscape and drill-down outputs
-    - [ ] Build the ranked process-family landscape and source/organisation coverage view.
-    - [ ] Build variant, hand-off, bottleneck, rework, escalation, ageing, incomplete-case and data-quality views.
-    - [ ] Separate observed facts, inferred hypotheses, owner-validated processes and proposed improvements visually.
-- [ ] Task: Implement governed improvement handoff
-    - [ ] Translate validated findings into candidate improvement experiments with guardrails and owners.
-    - [ ] Prevent analytics outputs from automatically changing workflows, authority rules or individual performance records.
-- [ ] Task: Conductor - Automated Review and Triangulated Verification 'Executive intelligence' (Refer to workflow.md)
-- [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+- [x] Task: Implement process-landscape and drill-down outputs
+    - [x] Build the ranked process-family landscape and source/organisation coverage view.
+    - [x] Build variant, hand-off, bottleneck, rework, escalation, ageing, incomplete-case and data-quality views.
+    - [x] Separate observed facts, inferred hypotheses, owner-validated processes and proposed improvements visually.
+- [x] Task: Implement governed improvement handoff
+    - [x] Translate validated findings into candidate improvement experiments with guardrails and owners.
+    - [x] Prevent analytics outputs from automatically changing workflows, authority rules or individual performance records.
+- [x] Task: Conductor - Automated Review and Triangulated Verification 'Executive intelligence' (Refer to workflow.md)
+- [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
 ## Phase 6: Run the corpus-scale pilot and validate findings
 
-- [ ] Task: Approve pilot entry and stop criteria
+- [~] Task: Approve pilot entry and stop criteria
     - [ ] Obtain source-owner and information-governance confirmation for each admitted source family and destination.
     - [ ] Freeze the observation period, configurations, authorised population and rollback procedure.
 - [ ] Task: Execute complete accessible-population extraction and discovery

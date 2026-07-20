@@ -13,7 +13,8 @@
     "exclusions",
     "generated_at",
     "tenant_wide_coverage",
-    "families"
+    "families",
+    "patterns"
   ],
   "properties": {
     "evidence_class": { "const": "live_corpus" },
@@ -24,6 +25,26 @@
     "exclusions": { "type": "array", "items": { "type": "string" } },
     "generated_at": { "type": "string", "format": "date-time" },
     "tenant_wide_coverage": { "type": "null" },
+    "patterns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "directly_follows",
+        "source_handoffs",
+        "repeated_activity_count",
+        "escalation_event_count",
+        "incomplete_object_count",
+        "maximum_duration_hours"
+      ],
+      "properties": {
+        "directly_follows": { "type": "array" },
+        "source_handoffs": { "type": "array" },
+        "repeated_activity_count": { "type": "integer", "minimum": 0 },
+        "escalation_event_count": { "type": "integer", "minimum": 0 },
+        "incomplete_object_count": { "type": "integer", "minimum": 0 },
+        "maximum_duration_hours": { "type": "number", "minimum": 0 }
+      }
+    },
     "families": {
       "type": "array",
       "items": {

@@ -100,6 +100,7 @@ def test_executive_visual_contract_requires_coverage_and_uncertainty() -> None:
         "suppressed",
     }
     assert "person_id" not in family["properties"]
+    assert "patterns" in required
 
 
 def test_standalone_renderer_preserves_boundary_and_no_automation_warning() -> None:
@@ -109,3 +110,9 @@ def test_standalone_renderer_preserves_boundary_and_no_automation_warning() -> N
     assert "not tenant-wide" in script
     assert "No individual productivity scoring" in script
     assert "No automated workflow changes" in script
+    assert "Directly-follows patterns" in script
+    assert "Cross-source hand-offs" in script
+    assert "Incomplete objects" in script
+    assert "Evidence and governance layers" in script
+    assert "Escalation events" in script
+    assert "Potential bottleneck indicator" in script
