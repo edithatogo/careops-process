@@ -74,3 +74,38 @@ def test_handling_policy_template_is_fail_closed() -> None:
     assert policy["raw_narrative_persistence"] == "prohibited"
     assert policy["direct_identity_persistence"] == "prohibited"
     assert "git_repository" in policy["prohibited_destinations"]
+
+
+def test_executive_visual_contract_requires_coverage_and_uncertainty() -> None:
+    """Executive outputs cannot omit their evidence boundary."""
+    contract = json.loads(
+        Path("contracts/executive-process-landscape.schema.json").read_text(encoding="utf-8")
+    )
+    required = set(contract["required"])
+    assert required >= {
+        "observation_start",
+        "observation_end",
+        "accessible_denominator",
+        "included_population",
+        "exclusions",
+        "generated_at",
+        "tenant_wide_coverage",
+    }
+    family = contract["properties"]["families"]["items"]
+    assert set(family["required"]) >= {
+        "confidence",
+        "temporal_stability",
+        "source_dependence",
+        "validation_status",
+        "suppressed",
+    }
+    assert "person_id" not in family["properties"]
+
+
+def test_standalone_renderer_preserves_boundary_and_no_automation_warning() -> None:
+    """The no-Fabric fallback remains coverage-honest and governance-safe."""
+    script = Path("scripts/build-executive-landscape.py").read_text(encoding="utf-8")
+    assert "Partial authorised corpus" in script
+    assert "not tenant-wide" in script
+    assert "No individual productivity scoring" in script
+    assert "No automated workflow changes" in script

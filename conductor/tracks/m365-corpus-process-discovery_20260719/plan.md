@@ -68,10 +68,10 @@
 
 ## Phase 5: Produce coverage-honest executive intelligence
 
-- [~] Task: Define executive visual and metric contracts test-first
-    - [ ] Require observation period, accessible denominator, included population, exclusions, confidence and freshness on every output.
-    - [ ] Test suppression and aggregation for small cells, protected attributes and individual-level scoring risks.
-- [ ] Task: Implement process-landscape and drill-down outputs
+- [x] Task: Define executive visual and metric contracts test-first
+    - [x] Require observation period, accessible denominator, included population, exclusions, confidence and freshness on every output.
+    - [x] Test suppression and aggregation for small cells, protected attributes and individual-level scoring risks.
+- [~] Task: Implement process-landscape and drill-down outputs
     - [ ] Build the ranked process-family landscape and source/organisation coverage view.
     - [ ] Build variant, hand-off, bottleneck, rework, escalation, ageing, incomplete-case and data-quality views.
     - [ ] Separate observed facts, inferred hypotheses, owner-validated processes and proposed improvements visually.
