@@ -36,12 +36,16 @@ def test_decision_requires_all_human_gates() -> None:
         validate_executive_record(value)
 
 
-def test_invalid_decision_and_counts_are_rejected() -> None:
-    """Enum and count violations fail closed."""
+def test_invalid_decision_is_rejected() -> None:
+    """Enum violations fail closed."""
     value = record()
     value["executive_decision"] = "approved"
     with pytest.raises(ValueError, match="unsupported Executive"):
         validate_executive_record(value)
+
+
+def test_invalid_counts_are_rejected() -> None:
+    """Negative counts fail closed."""
     value = record()
     value["owner_validation"]["validated_family_count"] = -1
     with pytest.raises(ValueError, match="non-negative"):

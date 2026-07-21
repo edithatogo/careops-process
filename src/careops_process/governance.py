@@ -40,11 +40,8 @@ def validate_executive_record(record: dict[str, Any]) -> None:  # noqa: C901
     if owner.get("status") not in {"pending", "complete"}:
         _fail("unsupported owner validation status")
     for count in ("validated_family_count", "unresolved_family_count"):
-        if (
-            not isinstance(owner.get(count), int)
-            or isinstance(owner.get(count), bool)
-            or owner[count] < 0
-        ):
+        count_value = owner.get(count)
+        if type(count_value) is not int or count_value < 0:
             _fail(f"{count} must be a non-negative integer")
     if record["executive_decision"] != "pending":
         if record["scope_approved"] is not True or record["ig_approved"] is not True:
