@@ -9,7 +9,7 @@ def _fail(message: str) -> None:
     raise ValueError(message)
 
 
-def validate_pilot_entry(record: Any) -> None:
+def validate_pilot_entry(record: Any) -> None:  # noqa: ANN401
     """Require explicit approvals and operational controls before extraction."""
     if not isinstance(record, dict):
         _fail("pilot entry record must be a dictionary")

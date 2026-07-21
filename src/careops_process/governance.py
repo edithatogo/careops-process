@@ -9,7 +9,7 @@ def _fail(message: str) -> None:
     raise ValueError(message)
 
 
-def validate_executive_record(record: Any) -> None:  # noqa: C901, PLR0912
+def validate_executive_record(record: Any) -> None:  # noqa: ANN401, C901, PLR0912
     """Fail closed unless a sanitized Executive decision record is valid."""
     if not isinstance(record, dict):
         _fail("executive record must be a dictionary")
