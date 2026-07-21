@@ -22,7 +22,7 @@ def run_closed_backfill(
 ) -> PipelineResult:
     """Run discovery only when a sanitized backfill evidence record is closed."""
     required = ("run_id", "status", "folder_count", "page_count", "candidate_count")
-    missing = [key for key in required if key not in evidence]
+    missing = [key for key in required if evidence.get(key) is None]
     if missing:
         _fail(f"closed-run evidence missing: {', '.join(missing)}")
     if evidence["status"] != "closed":
