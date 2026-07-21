@@ -19,8 +19,9 @@ completion criteria.
    Teams, SharePoint, Microsoft Lists, Planner, Approvals, Power Automate and
    Dataverse, including time range, accessible containers, record counts and
    known blind spots.
-2. Acquire all approved in-scope metadata through Windows-native, user-scoped
-   interfaces, sanctioned exports or existing resource-owner connections without
+2. Acquire all approved in-scope metadata through cloud-first, user-scoped
+   Power Automate connectors, delegated interfaces, sanctioned exports or
+   existing resource-owner connections without
    requiring Entra application registration or tenant-admin consent.
 3. Transform heterogeneous source facts into a provenance-bearing OCEL 2.0 event
    corpus with stable replay, deletion, uncertainty and access-boundary semantics.
@@ -45,11 +46,15 @@ completion criteria.
 - Calculate coverage against the discoverable authorised denominator and label
   tenant-wide or organisational coverage as unknown unless independently proven.
 - Support incremental checkpoints and repeatable historical backfill.
+- For Outlook, distinguish arrival triggers from historical acquisition and
+  require an all-authorised-folder, all-pages backfill manifest before claiming
+  mailbox completeness.
 
 ### 2. Privacy-preserving acquisition
 
-- Use Windows-native PowerShell, Azure CLI, PAC CLI, delegated Microsoft APIs,
-  Power Platform connectors and approved exports only.
+- Use Power Automate/Power Platform connectors, delegated Microsoft APIs and
+  approved exports as the preferred cloud route. Desktop/COM is fallback-only
+  and cannot satisfy the production cloud-only acceptance path.
 - Default the persistent event corpus to minimised metadata. Raw narrative,
   attachments, credentials, personal identifiers and clinical content must not be
   committed to Git or copied into unapproved stores.
@@ -161,4 +166,3 @@ completion criteria.
 - Automated changes to clinical, governance, delegation or approval workflows.
 - Production deployment or source expansion without information-governance and
   post-pilot approval.
-

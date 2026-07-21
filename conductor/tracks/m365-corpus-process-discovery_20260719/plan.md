@@ -33,6 +33,12 @@
 - [x] Task: Conductor - Automated Review and Triangulated Verification 'Complete-population acquisition' (Refer to workflow.md)
 - [x] Task: Conductor - User Manual Verification (Refer to workflow.md)
 
+- [x] Task: Define cloud-only Outlook historical backfill contract
+    - [x] Separate arrival-trigger ingestion from historical `Get emails (V3)` backfill.
+    - [x] Require folder inventory, nested-folder policy, all-page exhaustion and per-folder manifests.
+    - [x] Define minimized projection, Dataverse idempotency and fail-closed completeness gates.
+    - [x] Document Power Automate owner setup and the desktop/COM fallback boundary.
+
 ## Phase 3: Reconstruct the object-centric event corpus
 
 - [x] Task: Extend activity, object and relationship contracts test-first
