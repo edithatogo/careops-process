@@ -1,12 +1,13 @@
 """Closed backfill execution boundary tests."""
 
 from datetime import UTC, datetime
+from typing import Any
 
 import pytest
 
 from careops_process.backfill_run import run_closed_backfill
 
-FACTS = [
+FACTS: list[dict[str, Any]] = [
     {
         "id": "fact-1",
         "activity": "request_received",
