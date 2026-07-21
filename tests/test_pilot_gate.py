@@ -1,5 +1,7 @@
 """Corpus-scale pilot entry gate tests."""
 
+import json
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -22,6 +24,14 @@ def entry() -> dict[str, Any]:
 def test_approved_entry_passes() -> None:
     """All gates and one source partition permit pilot entry."""
     validate_pilot_entry(entry())
+
+
+def test_repository_template_is_structurally_pending() -> None:
+    """The checked-in template remains sanitized and non-authorising."""
+    template = json.loads(Path("config/pilot-entry.example.json").read_text())
+    assert template["source_owner_approved"] is False
+    assert template["ig_approved"] is False
+    assert template["authorised_source_partitions"] == []
 
 
 def test_missing_approval_fails_closed() -> None:
