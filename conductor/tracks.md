@@ -27,3 +27,8 @@
 
 - [~] **Track: Discover the main processes across the complete authorised M365 corpus**
 *Link: [./tracks/m365-corpus-process-discovery_20260719/](./tracks/m365-corpus-process-discovery_20260719/)*
+
+---
+
+- [ ] **Track: Cloud-only complete historical Outlook mailbox backfill**
+*Link: [./tracks/outlook-cloud-historical-backfill_20260721/](./tracks/outlook-cloud-historical-backfill_20260721/)*
