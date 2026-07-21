@@ -9,8 +9,11 @@ def _fail(message: str) -> None:
     raise ValueError(message)
 
 
-def validate_executive_record(record: dict[str, Any]) -> None:  # noqa: C901
+def validate_executive_record(record: Any) -> None:  # noqa: ANN401, C901, PLR0912
     """Fail closed unless a sanitized Executive decision record is valid."""
+    if not isinstance(record, dict):
+        _fail("executive record must be a dictionary")
+    record = cast("dict[str, Any]", record)
     required = (
         "run_id",
         "evidence_reference",
@@ -22,6 +25,10 @@ def validate_executive_record(record: dict[str, Any]) -> None:  # noqa: C901
     missing = [key for key in required if record.get(key) is None]
     if missing:
         _fail(f"missing governance fields: {', '.join(missing)}")
+    for field in ("run_id", "evidence_reference"):
+        value = record[field]
+        if not isinstance(value, str) or not value.strip():
+            _fail(f"{field} must be a non-empty string")
     if not isinstance(record["owner_validation"], dict):
         _fail("owner_validation must be an object")
     if not isinstance(record["scope_approved"], bool) or not isinstance(

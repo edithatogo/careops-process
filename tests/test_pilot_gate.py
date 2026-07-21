@@ -46,3 +46,11 @@ def test_blank_partition_label_fails_closed() -> None:
     value["authorised_source_partitions"] = [" "]
     with pytest.raises(ValueError, match="non-empty"):
         validate_pilot_entry(value)
+
+
+def test_blank_evidence_reference_fails_closed() -> None:
+    """An audit reference is required for pilot entry."""
+    value = entry()
+    value["evidence_reference"] = " "
+    with pytest.raises(ValueError, match="evidence_reference"):
+        validate_pilot_entry(value)

@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from careops_process.backfill_run import run_closed_backfill
+from careops_process.backfill_run import run_authorised_closed_backfill, run_closed_backfill
 
 FACTS: list[dict[str, Any]] = [
     {
@@ -27,6 +27,14 @@ EVIDENCE = {
     "idempotency_replay_verified": True,
     "no_raw_content_stored": True,
 }
+PILOT_ENTRY = {
+    "source_owner_approved": True,
+    "ig_approved": True,
+    "configuration_frozen": True,
+    "rollback_retention_approved": True,
+    "authorised_source_partitions": ["outlook-authorised-mailbox"],
+    "evidence_reference": "approved-ref",
+}
 
 
 def test_closed_backfill_runs_pipeline() -> None:
@@ -45,3 +53,21 @@ def test_open_backfill_cannot_reach_discovery() -> None:
     evidence = {**EVIDENCE, "status": "running"}
     with pytest.raises(ValueError, match="closed backfill"):
         run_closed_backfill(FACTS, evidence, pseudonym_secret="test-secret")  # noqa: S106
+
+
+def test_authorised_closed_backfill_requires_pilot_entry() -> None:
+    """The authorised wrapper enforces the pilot gate before discovery."""
+    result = run_authorised_closed_backfill(
+        FACTS,
+        EVIDENCE,
+        PILOT_ENTRY,
+        pseudonym_secret="test-secret",  # noqa: S106
+    )
+    assert result.log.log_id == "run-1"
+    with pytest.raises(ValueError, match="approval"):
+        run_authorised_closed_backfill(
+            FACTS,
+            EVIDENCE,
+            {**PILOT_ENTRY, "ig_approved": False},
+            pseudonym_secret="test-secret",  # noqa: S106
+        )
