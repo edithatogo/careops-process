@@ -2,18 +2,18 @@
 
 ## Phase 1: Contract and completeness gate — GitHub #31
 
-- [ ] Task: Add test-first schema for folder inventory, backfill run and per-folder manifest.
-- [ ] Task: Add tests for pagination exhaustion, folder exclusions, count reconciliation, privacy rejection and checkpoint regression.
-- [ ] Task: Align `contracts/power-automate-outlook-historical-backfill.json` with the executable validators.
+- [x] Task: Add test-first schema for folder inventory, backfill run and per-folder manifest.
+- [x] Task: Add tests for pagination exhaustion, folder exclusions, count reconciliation, privacy rejection and checkpoint regression.
+- [x] Task: Align `contracts/power-automate-outlook-historical-backfill.json` with the executable validators.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 2: Power Automate cloud backfill blueprint — GitHub #32
 
-- [ ] Task: Define the existing Office 365 Outlook connection and Dataverse destination bindings without tenant secrets.
-- [ ] Task: Define folder inventory, nested-folder traversal and frozen-scope handling.
-- [ ] Task: Define `Get emails (V3)` pagination, retry, timeout and continuation handling.
-- [ ] Task: Define minimized projection, idempotency, dead-letter and checkpoint actions.
-- [ ] Task: Produce operator setup and rollback instructions for the workflow owner.
+- [x] Task: Define the existing Office 365 Outlook connection and Dataverse destination bindings without tenant secrets.
+- [x] Task: Define folder inventory, nested-folder traversal and frozen-scope handling.
+- [x] Task: Define `Get emails (V3)` pagination, retry, timeout and continuation handling.
+- [x] Task: Define minimized projection, idempotency, dead-letter and checkpoint actions.
+- [x] Task: Produce operator setup and rollback instructions for the workflow owner.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 3: Full authorised mailbox reconciliation — GitHub #33
