@@ -58,3 +58,12 @@ operator access before the backfill is run.
 
 The machine-readable contract is
 `contracts/power-automate-outlook-historical-backfill.json`.
+
+## Command-line Graph alternative
+
+`scripts/Invoke-GraphMailboxBackfill.ps1` provides the equivalent metadata-only
+extraction through Microsoft Graph pagination. It uses the active Azure CLI
+token and writes `mail-events.jsonl` plus a manifest; message bodies and
+attachments are excluded. It requires delegated Microsoft Graph `Mail.Read`
+consent for the signed-in operator. The current profile does not have that
+permission, so execution remains fail-closed until tenant consent is granted.
