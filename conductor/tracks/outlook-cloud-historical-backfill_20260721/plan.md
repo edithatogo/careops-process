@@ -14,6 +14,8 @@
 - [x] Task: Define `Get emails (V3)` pagination, retry, timeout and continuation handling.
 - [x] Task: Define minimized projection, idempotency, dead-letter and checkpoint actions.
 - [x] Task: Produce operator setup and rollback instructions for the workflow owner.
+- [x] Task: Add command-line Microsoft Graph metadata backfill path (`scripts/Invoke-GraphMailboxBackfill.ps1`) with pagination and manifest output.
+- [ ] Task: Obtain delegated Microsoft Graph `Mail.Read` consent for the authorised operator and execute the full mailbox run.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 3: Full authorised mailbox reconciliation — GitHub #33
