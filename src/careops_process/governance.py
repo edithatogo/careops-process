@@ -9,10 +9,11 @@ def _fail(message: str) -> None:
     raise ValueError(message)
 
 
-def validate_executive_record(record: dict[str, Any]) -> None:  # noqa: C901
+def validate_executive_record(record: Any) -> None:  # noqa: C901, PLR0912
     """Fail closed unless a sanitized Executive decision record is valid."""
     if not isinstance(record, dict):
         _fail("executive record must be a dictionary")
+    record = cast("dict[str, Any]", record)
     required = (
         "run_id",
         "evidence_reference",

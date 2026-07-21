@@ -9,10 +9,11 @@ def _fail(message: str) -> None:
     raise ValueError(message)
 
 
-def validate_pilot_entry(record: dict[str, Any]) -> None:
+def validate_pilot_entry(record: Any) -> None:
     """Require explicit approvals and operational controls before extraction."""
     if not isinstance(record, dict):
         _fail("pilot entry record must be a dictionary")
+    record = cast("dict[str, Any]", record)
     required = (
         "source_owner_approved",
         "ig_approved",
