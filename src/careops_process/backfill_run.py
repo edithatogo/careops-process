@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Any
 
+from .pilot_gate import validate_pilot_entry
 from .pipeline import PipelineResult, run_pipeline
 
 
@@ -45,4 +46,24 @@ def run_closed_backfill(
         pseudonym_secret=pseudonym_secret,
         generated_at_utc=generated,
         minimum_cohort_size=5,
+    )
+
+
+def run_authorised_closed_backfill(  # noqa: PLR0913
+    facts: list[dict[str, object]],
+    evidence: dict[str, Any],
+    pilot_entry: dict[str, Any],
+    *,
+    pseudonym_secret: str,
+    schema_version: str = "1.0.0",
+    generated_at_utc: datetime | None = None,
+) -> PipelineResult:
+    """Run a closed backfill only after the corpus pilot-entry gate passes."""
+    validate_pilot_entry(pilot_entry)
+    return run_closed_backfill(
+        facts,
+        evidence,
+        pseudonym_secret=pseudonym_secret,
+        schema_version=schema_version,
+        generated_at_utc=generated_at_utc,
     )
