@@ -11,6 +11,8 @@ def _fail(message: str) -> None:
 
 def validate_pilot_entry(record: dict[str, Any]) -> None:
     """Require explicit approvals and operational controls before extraction."""
+    if not isinstance(record, dict):
+        _fail("pilot entry record must be a dictionary")
     required = (
         "source_owner_approved",
         "ig_approved",
@@ -22,6 +24,9 @@ def validate_pilot_entry(record: dict[str, Any]) -> None:
     missing = [key for key in required if record.get(key) is None]
     if missing:
         _fail(f"pilot entry fields missing: {', '.join(missing)}")
+    evidence_ref = record["evidence_reference"]
+    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+        _fail("evidence_reference must be a non-empty string")
     approval_fields = required[:4]
     if not all(record[field] is True for field in approval_fields):
         _fail("pilot entry requires all approval and freeze gates")

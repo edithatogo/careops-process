@@ -50,3 +50,11 @@ def test_invalid_counts_are_rejected() -> None:
     value["owner_validation"]["validated_family_count"] = -1
     with pytest.raises(ValueError, match="non-negative"):
         validate_executive_record(value)
+
+
+def test_blank_run_reference_fails_closed() -> None:
+    """A governance record requires a non-empty run reference."""
+    value = record()
+    value["run_id"] = ""
+    with pytest.raises(ValueError, match="run_id"):
+        validate_executive_record(value)
