@@ -63,7 +63,7 @@ def _timestamp(value: object) -> datetime:
     raise TypeError(message)
 
 
-def build_ocel_from_facts(
+def build_ocel_from_facts(  # noqa: C901
     facts: list[dict[str, object]],
     *,
     log_id: str,
@@ -72,7 +72,23 @@ def build_ocel_from_facts(
 ) -> OcelLog:
     """Reconstruct a deterministic OCEL log from minimized source facts."""
     object_types: dict[str, str] = {}
+    explicit_types: dict[str, str] = {}
     events: list[OcelEvent] = []
+    for fact in facts:
+        raw_overrides = fact.get("object_types", {})
+        if not isinstance(raw_overrides, dict):
+            message = "object_types must be a mapping"
+            raise TypeError(message)
+        typed_overrides = cast("dict[object, object]", raw_overrides)
+        for object_id, raw_type in typed_overrides.items():
+            if not isinstance(object_id, str) or not isinstance(raw_type, str):
+                message = "object type overrides must contain string keys and values"
+                raise TypeError(message)
+            existing = explicit_types.get(object_id)
+            if existing is not None and existing != raw_type:
+                message = f"conflicting explicit object type for {object_id}"
+                raise ValueError(message)
+            explicit_types[object_id] = raw_type
     for fact in facts:
         raw_object_ids = fact.get("object_ids")
         if not isinstance(raw_object_ids, list) or not raw_object_ids:
@@ -83,23 +99,16 @@ def build_ocel_from_facts(
             message = "fact object_ids must contain strings"
             raise TypeError(message)
         typed_ids = cast("list[str]", object_ids)
-        raw_overrides = fact.get("object_types", {})
-        if not isinstance(raw_overrides, dict):
-            message = "object_types must be a mapping"
-            raise TypeError(message)
-        overrides = cast("dict[object, object]", raw_overrides)
         for object_id in typed_ids:
             inferred_type = _object_type(object_id)
-            raw_override = overrides.get(object_id, inferred_type)
-            if not isinstance(raw_override, str):
-                message = "object type override must be a string"
-                raise TypeError(message)
+            raw_override = explicit_types.get(object_id, inferred_type)
             existing = object_types.get(object_id)
-            if existing is not None and existing != raw_override:
-                message = f"conflicting object type for {object_id}"
-                raise ValueError(message)
-            if raw_override != inferred_type:
-                message = f"conflicting object type for {object_id}"
+            if (
+                existing is not None
+                and existing != raw_override
+                and object_id not in explicit_types
+            ):
+                message = f"conflicting inferred object type for {object_id}"
                 raise ValueError(message)
             object_types[object_id] = raw_override
         events.append(

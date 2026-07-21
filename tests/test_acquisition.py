@@ -114,10 +114,14 @@ def test_acquisition_retries_transient_throttling() -> None:
             raise TransientSourceError(message)
         return AcquisitionPage(records=(fact("1"),), next_cursor=None)
 
-    result = acquire_partition("planner", "assigned-tasks", fetch, max_retries=1)
+    delays: list[float] = []
+    result = acquire_partition(
+        "planner", "assigned-tasks", fetch, max_retries=1, sleep=delays.append
+    )
 
     assert result.manifest.retry_count == 1
     assert result.manifest.acquired_count == 1
+    assert delays == [1.0]
 
 
 def test_acquisition_fails_after_retry_budget() -> None:

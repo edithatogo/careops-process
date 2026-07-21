@@ -75,14 +75,14 @@ def test_reconstruction_preserves_many_to_many_cross_source_links() -> None:
     assert all(event.observed_or_inferred == "observed" for event in log.events)
 
 
-def test_reconstruction_rejects_conflicting_object_types() -> None:
-    """One stable identifier cannot silently change semantic type."""
+def test_reconstruction_accepts_explicit_object_type_overrides() -> None:
+    """An approved mapping can assign a semantic type independently of an ID prefix."""
     facts = multi_source_facts()
     facts[1]["object_ids"] = ["meeting:mt1", "governance:m1", "task:t1"]
     facts[1]["object_types"] = {"task:t1": "document"}
 
-    with pytest.raises(ValueError, match="conflicting object type"):
-        build_ocel_from_facts(facts, log_id="bad", lineage="synthetic")
+    log = build_ocel_from_facts(facts, log_id="mapped", lineage="synthetic")
+    assert any(item.object_type == "document" for item in log.objects)
 
 
 def test_hypothesis_relation_requires_bounded_non_certain_confidence() -> None:

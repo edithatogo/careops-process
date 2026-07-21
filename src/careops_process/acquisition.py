@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, cast
 
@@ -111,7 +112,7 @@ def _normalize_fact(record: Mapping[str, object]) -> dict[str, object] | None:
     }
 
 
-def acquire_partition(  # noqa: C901, PLR0913, PLR0915
+def acquire_partition(  # noqa: C901, PLR0912, PLR0913, PLR0915
     source: str,
     container: str,
     fetch_page: Callable[[str | None], AcquisitionPage],
@@ -119,6 +120,8 @@ def acquire_partition(  # noqa: C901, PLR0913, PLR0915
     withdrawn: bool = False,
     watermark_utc: str | None = None,
     max_retries: int = 0,
+    retry_backoff_seconds: float = 1.0,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> AcquisitionResult:
     """Acquire a partition to exhaustion with deterministic reconciliation."""
     if withdrawn:
@@ -141,6 +144,12 @@ def acquire_partition(  # noqa: C901, PLR0913, PLR0915
                 content_hash=_content_hash(facts),
             ),
         )
+    if max_retries < 0:
+        message = "max_retries must not be negative"
+        raise ValueError(message)
+    if retry_backoff_seconds < 0:
+        message = "retry_backoff_seconds must not be negative"
+        raise ValueError(message)
 
     cursor: str | None = None
     seen_cursors: set[str] = set()
@@ -167,6 +176,7 @@ def acquire_partition(  # noqa: C901, PLR0913, PLR0915
             except TransientSourceError:
                 if page_attempts >= max_retries:
                     raise
+                sleep(retry_backoff_seconds * (2**page_attempts))
                 page_attempts += 1
                 retry_count += 1
         pages_read += 1
