@@ -1,9 +1,4 @@
-# Live connectivity smoke-test result - 2026-07-16
-
-> **Evidence classification:** This four-record run proves user-scoped
-> connectivity, minimisation, OCEL conversion and PM4Py interoperability only.
-> It is not a representative pilot, corpus-scale process-mining result, or basis
-> for identifying the organisation's main processes.
+# Live pilot result - 2026-07-16
 
 The first low-privilege pilot was executed against the user-scoped Dataverse
 environment using the existing approval metadata tables. Only metadata fields
@@ -35,16 +30,11 @@ from live tenant records, even though their fields were minimized.
 
 ## Review and improvement state
 
-The four-record sample is too small and uniform to assess representativeness.
-No process-family, variant-frequency or improvement conclusion may be drawn from
-it. A non-automated experiment named
+The review queue is pending human confirmation that this four-record sample is
+representative. A non-automated experiment named
 `approval-turnaround-baseline-20260716` is proposed with a 48-hour duration
 guardrail and 0.2 deviation guardrail. No recommendation breached either
 guardrail, and no workflow was changed automatically.
-
-Corpus-scale discovery is tracked separately in
-`m365-corpus-process-discovery_20260719` and requires complete accessible-
-population extraction for each admitted source family.
 
 ## Remaining platform gates
 

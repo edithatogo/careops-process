@@ -17,18 +17,3 @@
 
 ## [x] Track: Process intelligence semantic model and improvement loop
 *Link: [./tracks/process-intelligence_20260715/](./tracks/process-intelligence_20260715/)*
-
----
-
-- [ ] **Track: Implement the multi-user IHG Governance and Executive Action Hub without Entra or tenant-admin access**
-*Link: [./tracks/teams-governance-workflows_20260717/](./tracks/teams-governance-workflows_20260717/)*
-
----
-
-- [~] **Track: Discover the main processes across the complete authorised M365 corpus**
-*Link: [./tracks/m365-corpus-process-discovery_20260719/](./tracks/m365-corpus-process-discovery_20260719/)*
-
----
-
-- [ ] **Track: Cloud-only complete historical Outlook mailbox backfill**
-*Link: [./tracks/outlook-cloud-historical-backfill_20260721/](./tracks/outlook-cloud-historical-backfill_20260721/)*
