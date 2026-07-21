@@ -9,6 +9,7 @@ $env:CAREOPS_PSEUDONYM_SECRET = '<local secret managed outside the repository>'
 uv run python scripts/build-closed-run-report.py `
   --facts .\approved\minimized-facts.json `
   --evidence .\approved\backfill-evidence.json `
+  --pilot-entry .\approved\pilot-entry.json `
   --output .\approved\process-report.json
 ```
 

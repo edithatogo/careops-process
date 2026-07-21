@@ -3,7 +3,7 @@
 from datetime import UTC, datetime
 from typing import Any
 
-from careops_process.report import build_closed_run_report
+from careops_process.report import build_authorised_closed_run_report, build_closed_run_report
 
 FACTS: list[dict[str, Any]] = [
     {
@@ -25,6 +25,14 @@ EVIDENCE: dict[str, Any] = {
     "idempotency_replay_verified": True,
     "no_raw_content_stored": True,
 }
+PILOT_ENTRY: dict[str, Any] = {
+    "source_owner_approved": True,
+    "ig_approved": True,
+    "configuration_frozen": True,
+    "rollback_retention_approved": True,
+    "authorised_source_partitions": ["outlook-authorised-mailbox"],
+    "evidence_reference": "approved-ref",
+}
 
 
 def test_closed_run_report_retains_lineage_and_safe_outputs() -> None:
@@ -39,3 +47,14 @@ def test_closed_run_report_retains_lineage_and_safe_outputs() -> None:
     assert report["lineage"]
     assert report["evidence"]["reconciled"] is True
     assert "subject" not in str(report).lower()
+
+
+def test_authorised_report_requires_pilot_entry() -> None:
+    """The report path enforces pilot approvals."""
+    report = build_authorised_closed_run_report(
+        FACTS,
+        EVIDENCE,
+        PILOT_ENTRY,
+        pseudonym_secret="test-secret",  # noqa: S106
+    )
+    assert report["run_id"] == "run-1"
