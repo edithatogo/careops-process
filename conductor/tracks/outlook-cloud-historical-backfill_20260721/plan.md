@@ -26,10 +26,10 @@
 
 ## Phase 4: OCEL process discovery — GitHub #34
 
-- [ ] Task: Build OCEL objects, events and relations from the closed Outlook run.
-- [ ] Task: Generate empirical process families, variants, hand-offs, ageing and incomplete cases.
-- [ ] Task: Generate coverage-honest executive visuals and review queue.
-- [ ] Task: Preserve run-manifest lineage on every output.
+- [x] Task: Build OCEL objects, events and relations from the closed Outlook run.
+- [x] Task: Generate empirical process families, variants, hand-offs, ageing and incomplete cases.
+- [x] Task: Generate coverage-honest executive visuals and review queue.
+- [x] Task: Preserve run-manifest lineage on every output.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 5: Governance and executive validation — GitHub #35
@@ -41,7 +41,7 @@
 
 ## Phase 6: Assurance and handover
 
-- [ ] Task: Run repository quality, privacy, security and workflow checks.
+- [x] Task: Run repository quality, privacy, security and workflow checks.
 - [ ] Task: Reconcile Conductor, GitHub issues, live evidence and residual external gates.
-- [ ] Task: Update the parent M365 corpus-discovery track with the closed Outlook lane status.
+- [x] Task: Update the parent M365 corpus-discovery track with the closed Outlook lane status.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
