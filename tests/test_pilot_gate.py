@@ -1,0 +1,48 @@
+"""Corpus-scale pilot entry gate tests."""
+
+from typing import Any
+
+import pytest
+
+from careops_process.pilot_gate import validate_pilot_entry
+
+
+def entry() -> dict[str, Any]:
+    """Return a fully populated but unapproved pilot entry."""
+    return {
+        "source_owner_approved": True,
+        "ig_approved": True,
+        "configuration_frozen": True,
+        "rollback_retention_approved": True,
+        "authorised_source_partitions": ["outlook-authorised-mailbox"],
+        "evidence_reference": "approved-ref",
+    }
+
+
+def test_approved_entry_passes() -> None:
+    """All gates and one source partition permit pilot entry."""
+    validate_pilot_entry(entry())
+
+
+def test_missing_approval_fails_closed() -> None:
+    """A missing approval cannot be inferred from other controls."""
+    value = entry()
+    value["ig_approved"] = False
+    with pytest.raises(ValueError, match="approval"):
+        validate_pilot_entry(value)
+
+
+def test_empty_partition_scope_fails_closed() -> None:
+    """A pilot cannot run without an explicit source partition."""
+    value = entry()
+    value["authorised_source_partitions"] = []
+    with pytest.raises(ValueError, match="source partition"):
+        validate_pilot_entry(value)
+
+
+def test_blank_partition_label_fails_closed() -> None:
+    """A blank partition label cannot define an authorised scope."""
+    value = entry()
+    value["authorised_source_partitions"] = [" "]
+    with pytest.raises(ValueError, match="non-empty"):
+        validate_pilot_entry(value)
