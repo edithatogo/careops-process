@@ -1,0 +1,10 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Only non-secret test placeholders and generated local artefacts are excluded."
+paths = [
+  '''(^|/)\.git/''',
+  '''(^|/)(node_modules|\.venv|\.pytest_cache|\.ruff_cache|out|tmp|dist)/''',
+  '''(^|/).*\.zip$'''
+]

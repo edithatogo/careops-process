@@ -4,8 +4,8 @@
 
 - GitHub CLI is authenticated to `github.com` as `edithatogo` with private
   repository, workflow, and project scopes.
-- GitHub CLI is authenticated to `nswhealth.ghe.com` as `60217257` with private
-  repository and workflow scopes.
+- An enterprise Git hosting mirror is configured separately from the public
+  GitHub repository; its host, account and permissions are not recorded here.
 - PAC CLI has a live user-scoped NSW Health Dataverse connection and can list
   four accessible Power Platform environments.
 - Python 3.14.6 is installed through `uv` without administrator access.
