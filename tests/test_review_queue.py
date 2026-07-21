@@ -70,4 +70,3 @@ def test_merge_requires_target_and_pending_item() -> None:
             rationale_code="duplicate_review",
             configuration_version="discovery-1.0.0",
         )
-
