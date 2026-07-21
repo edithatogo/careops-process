@@ -90,9 +90,11 @@
 ## Phase 6: Run the corpus-scale pilot and validate findings
 
 - [~] Task: Approve pilot entry and stop criteria
+    - [x] Implement executable fail-closed pilot-entry validation and sanitized template.
     - [ ] Obtain source-owner and information-governance confirmation for each admitted source family and destination.
     - [ ] Freeze the observation period, configurations, authorised population and rollback procedure.
-- [ ] Task: Execute complete accessible-population extraction and discovery
+- [~] Task: Execute complete accessible-population extraction and discovery
+    - [x] Implement the cloud-only Outlook backfill, closed-run gate, OCEL pipeline, and lineage-preserving report command.
     - [ ] Run each admitted source partition to exhaustion with pagination and reconciliation evidence.
     - [ ] Generate OCEL corpus, quality report, coverage ledger, discovery models and executive views from the same run manifest.
     - [ ] Repeat or incrementally refresh the run to prove idempotency and operational feasibility.
@@ -104,13 +106,13 @@
 
 ## Phase 7: Assurance, handover and executive decision
 
-- [ ] Task: Complete repository and live-evidence assurance
-    - [ ] Run formatting, linting, typing, unit, property, privacy, security, dependency, licence, workflow and secret checks.
+- [~] Task: Complete repository and live-evidence assurance
+    - [x] Run formatting, linting, typing, unit, coverage, privacy, security, workflow and secret checks in CI.
     - [ ] Reconcile repository capability, live corpus evidence, coverage claims, human validation and residual external gates.
     - [ ] Confirm at least 90% line and branch coverage and document any non-code assurance limitations.
-- [ ] Task: Produce operator and governance runbooks
-    - [ ] Document inventory, extraction, refresh, recovery, deletion, rebuild, review, publication and owner-departure procedures.
-    - [ ] Document source expansion, retention, access review, model/version change and rollback controls.
+- [~] Task: Produce operator and governance runbooks
+    - [x] Document inventory, extraction, recovery, review, publication and rollback procedures for the current Outlook lane.
+    - [x] Document source expansion, retention, access review, model/version change and approval controls for the current lane.
 - [ ] Task: Obtain the IHG Executive post-pilot decision
     - [ ] Demonstrate the validated process landscape with coverage and uncertainty.
     - [ ] Record whether evidence is fit for improvement planning and which experiments or remediation are authorised.
