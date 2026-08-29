@@ -17,3 +17,6 @@
 
 ## [x] Track: Process intelligence semantic model and improvement loop
 *Link: [./tracks/process-intelligence_20260715/](./tracks/process-intelligence_20260715/)*
+
+## [~] Track: Credentialing privacy-minimised event and assurance pack
+*Link: [./tracks/credentialing-process-assurance_20260829/](./tracks/credentialing-process-assurance_20260829/)*
