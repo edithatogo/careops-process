@@ -31,4 +31,6 @@ jobs:
       - run: uv run pyright
       - run: uv run pytest
       - run: uv run bandit -q -r src
-      - run: uv run pip-audit
+      - name: Upgrade audited packaging tool to the fixed release
+        run: uv pip install --python .venv/bin/python --upgrade "pip>=26.2"
+      - run: uv run --no-sync pip-audit
