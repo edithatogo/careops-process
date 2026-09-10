@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/contracts/existing-system-observation-events.json",
+  "title": "Privacy-minimised existing-system observation event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version","event_id","event_type","occurred_at","source_system","source_record_ref","observation_hash","reconciliation_state"],
+  "properties": {
+    "contract_version": {"const": "0.1.0"},
+    "event_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "event_type": {"enum": ["source_record_observed","source_record_reconciled","source_record_corrected","source_record_rejected","source_record_changed"]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "source_system": {"type": "string", "minLength": 1, "maxLength": 120},
+    "source_record_ref": {"type": "string", "minLength": 1, "maxLength": 128},
+    "observation_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "reconciliation_state": {"enum": ["pending-human-review","confirmed","corrected","rejected","source-review-required"]},
+    "exception_class": {"type": ["string","null"], "maxLength": 120}
+  },
+  "prohibitedFields": ["name","email","registrationNumber","qualification","scopeText","decisionReason","patientData","rawPayload"],
+  "notes": "The event records process state only. It does not establish current approval, registration, qualification, scope, condition or authority and cannot trigger a production decision or write."
+}
