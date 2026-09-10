@@ -329,9 +329,7 @@ def merge_credentialing_projections(
             raise CredentialingContractError(message)
 
     watermarks = [
-        value
-        for value in (existing.watermark_utc, incoming.watermark_utc)
-        if value is not None
+        value for value in (existing.watermark_utc, incoming.watermark_utc) if value is not None
     ]
     return CredentialingProjection(
         contract_version=existing.contract_version,
@@ -355,11 +353,7 @@ def summarise_credentialing_projection(
 
     """
     activity_counts = Counter(fact.activity for fact in projection.facts)
-    object_ids = {
-        object_id
-        for fact in projection.facts
-        for object_id in fact.object_ids
-    }
+    object_ids = {object_id for fact in projection.facts for object_id in fact.object_ids}
     return CredentialingMetrics(
         event_count=len(projection.facts),
         unique_object_count=len(object_ids),
@@ -371,14 +365,8 @@ def summarise_credentialing_projection(
         ),
         completed_case_event_count=activity_counts["case_completed"],
         committee_deferral_count=activity_counts["committee_deferred"],
-        register_reconciliation_failure_count=activity_counts[
-            "register_reconciliation_failed"
-        ],
-        exception_event_count=sum(
-            activity_counts[activity] for activity in _EXCEPTION_ACTIVITIES
-        ),
-        rework_event_count=sum(
-            activity_counts[activity] for activity in _REWORK_ACTIVITIES
-        ),
+        register_reconciliation_failure_count=activity_counts["register_reconciliation_failed"],
+        exception_event_count=sum(activity_counts[activity] for activity in _EXCEPTION_ACTIVITIES),
+        rework_event_count=sum(activity_counts[activity] for activity in _REWORK_ACTIVITIES),
         activity_counts=dict(sorted(activity_counts.items())),
     )
