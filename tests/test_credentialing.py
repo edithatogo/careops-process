@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from typing import Any
 
 import pytest
@@ -267,9 +267,7 @@ def test_metrics_are_aggregate_and_deterministic() -> None:
             },
         ]
     )
-    metrics = summarise_credentialing_projection(
-        validate_credentialing_projection(payload)
-    )
+    metrics = summarise_credentialing_projection(validate_credentialing_projection(payload))
 
     assert metrics.event_count == 4
     assert metrics.unique_object_count == 3
@@ -286,7 +284,7 @@ def test_metrics_are_aggregate_and_deterministic() -> None:
 def test_timezone_normalisation_handles_non_whole_hour_offset() -> None:
     """UTC normalisation does not assume whole-hour local offsets."""
     payload = synthetic_payload()
-    offset = UTC + timedelta(0)
+    offset = timezone(timedelta(hours=5, minutes=30))
     payload["facts"][0]["timestamp_utc"] = datetime(
         2026,
         9,
