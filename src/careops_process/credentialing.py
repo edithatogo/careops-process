@@ -7,7 +7,7 @@ import re
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
-from typing import Literal, Self
+from typing import Literal, Self, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -239,7 +239,8 @@ def _normalise_key(value: object) -> str:
 
 def _find_forbidden_key(value: object, *, path: str = "$") -> str | None:
     if isinstance(value, Mapping):
-        for raw_key, child in value.items():
+        mapping = cast("Mapping[object, object]", value)
+        for raw_key, child in mapping.items():
             key = _normalise_key(raw_key)
             if key in _FORBIDDEN_KEYS:
                 return f"{path}.{raw_key}"
@@ -248,7 +249,8 @@ def _find_forbidden_key(value: object, *, path: str = "$") -> str | None:
                 return nested
         return None
     if isinstance(value, Sequence) and not isinstance(value, str | bytes | bytearray):
-        for index, child in enumerate(value):
+        sequence = cast("Sequence[object]", value)
+        for index, child in enumerate(sequence):
             nested = _find_forbidden_key(child, path=f"{path}[{index}]")
             if nested is not None:
                 return nested
