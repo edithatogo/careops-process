@@ -16,6 +16,12 @@ from careops_process.credentialing import (
     validate_credentialing_projection,
 )
 
+INFERRED_CONFIDENCE = 0.4
+EXPECTED_EVENT_COUNT = 4
+EXPECTED_UNIQUE_OBJECT_COUNT = 3
+EXPECTED_OBSERVED_EVENT_COUNT = 3
+EXPECTED_EXCEPTION_EVENT_COUNT = 2
+
 
 def synthetic_payload() -> dict[str, Any]:
     """Return a small, valid and deliberately unordered synthetic projection."""
@@ -131,10 +137,10 @@ def test_observed_event_requires_confidence_one() -> None:
 def test_inferred_event_may_have_bounded_confidence() -> None:
     """Inferred facts retain an explicit bounded confidence value."""
     payload = synthetic_payload()
-    payload["facts"][1]["confidence"] = 0.4
+    payload["facts"][1]["confidence"] = INFERRED_CONFIDENCE
 
     projection = validate_credentialing_projection(payload)
-    assert projection.facts[0].confidence == 0.4
+    assert projection.facts[0].confidence == INFERRED_CONFIDENCE
 
 
 def test_duplicate_event_identifiers_fail_closed() -> None:
@@ -269,15 +275,15 @@ def test_metrics_are_aggregate_and_deterministic() -> None:
     )
     metrics = summarise_credentialing_projection(validate_credentialing_projection(payload))
 
-    assert metrics.event_count == 4
-    assert metrics.unique_object_count == 3
-    assert metrics.observed_event_count == 3
+    assert metrics.event_count == EXPECTED_EVENT_COUNT
+    assert metrics.unique_object_count == EXPECTED_UNIQUE_OBJECT_COUNT
+    assert metrics.observed_event_count == EXPECTED_OBSERVED_EVENT_COUNT
     assert metrics.inferred_event_count == 1
     assert metrics.completed_case_event_count == 1
     assert metrics.committee_deferral_count == 1
     assert metrics.register_reconciliation_failure_count == 1
-    assert metrics.exception_event_count == 2
-    assert metrics.rework_event_count == 2
+    assert metrics.exception_event_count == EXPECTED_EXCEPTION_EVENT_COUNT
+    assert metrics.rework_event_count == EXPECTED_EXCEPTION_EVENT_COUNT
     assert list(metrics.activity_counts) == sorted(metrics.activity_counts)
 
 
