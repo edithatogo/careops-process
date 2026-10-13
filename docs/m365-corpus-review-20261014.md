@@ -91,3 +91,33 @@ Health decision brief and pilot-entry draft remain unapproved. This resolves
 the earlier account/stage ambiguity, not the actual Queensland Health authority
 or live-evidence gates. Outlook owns VUW authentication; the coordinator owns
 final combined verification. No duplicate login or unattended polling is needed.
+
+
+## Integrated blocker receipt — 14 October 2026
+
+The coordinator's `898d1b1` checkpoint records successful repository-wide
+Conductor/Ruff/typing/Bandit checks at `bbb347a`, 203 scoped Teams feature tests,
+and both offline exporter PowerShell suites after `cd934bc`. This strengthens
+integration evidence without establishing final full-suite coverage or live
+acceptance. See [the coordinator receipt](orchestration-checkpoint-20261014.md).
+
+### High — Native processing runtime reliability remains unproven
+
+The credentialing-owned finite investigation reports failures in standard-library
+JSON as well as Pydantic serialization, with corrected processor-parity events
+as a diagnostic lead. No host root cause or safe remedy is proven. This newer
+receipt supersedes treating the earlier access violation as a closed transient
+issue. The M365 scoped 485-test pass remains valid for that captured run; it does
+not establish that repeated live corpus processing is operationally reliable.
+
+Keep the runtime/operational-feasibility gate open. The native investigator owns
+the minimal reproduction, exact build/failure counts and proposed remedy; the
+coordinator owns matched final-revision verification. Do not duplicate that
+investigation, alter shared dependencies from an unproven Pydantic hypothesis,
+or infer live fitness from the scoped pass.
+
+The next M365 pilot inputs remain authentic Queensland Health account/source
+access, admitted scope, data-owner/IG decisions, storage/retention/rollback and
+actual reconciled/replayed corpus evidence. VUW is development testing only.
+No authentication polling, duplicate sign-in or unattended follow-up is required
+from this chat while human sign-in or recorded decisions are needed.

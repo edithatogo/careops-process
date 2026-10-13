@@ -214,3 +214,17 @@ source/IG decisions and frozen scope/storage/retention/rollback remain pending.
 - [x] Task: Prepare a finite VUW development/integration test plan and Queensland Health pilot decision brief with a non-authorising draft record.
 - [ ] Task: Complete human VUW sign-in and verify authorised test capabilities through the Outlook work.
 - [ ] Task: Record the actual Queensland Health pilot decisions and scope before live acquisition.
+
+
+## Integrated blocker receipt — 2026-10-14
+
+- [x] Task: Reconcile the coordinator's new scoped verification and unresolved native-runtime evidence with the M365 review.
+- [ ] Task: Obtain the native investigator's supported remedy and coordinator verification before claiming operationally reliable local corpus processing.
+
+Coordinator receipt `898d1b1` strengthens local integration evidence but does not
+close final aggregate/runtime or live/human gates. Reported JSON/Pydantic native
+failures are under a finite investigation owned by credentialing; their root
+cause and remedy remain unproven. VUW testing and the actual Queensland Health
+pilot remain separate. Human sign-in and authentic source/IG decisions are still
+required before the corresponding account/live work proceeds; no repeat login
+or unattended status polling is scheduled by this chat.
