@@ -1,9 +1,17 @@
 # Outlook backfill operator runbook
 
-Current state, 14 October 2026: local synthetic exporter tests pass; no live
-mailbox scope, destination or governance approval is recorded for the proposed
-pilot. The user proposes VUW first, then Queensland Health, and may also assess
-a personal Azure login. This is a proposed progression, not approval evidence.
+Current state, 14 October 2026: local synthetic exporter tests pass. The operator
+authorized the proposed VUW Inbox-only seven-day metadata test stored locally
+outside Git and selected an existing Power Automate Outlook connection.
+VUW Azure/Graph identity and Power Automate environment access are verified;
+the selected environment and connection binding remain pending. Azure CLI's
+Graph token lacks mail-read permission, and Mail.ReadBasic acquisition returned
+AADSTS65002. Use the selected connector route rather than repeating Azure login.
+Frozen configuration, retention and approval evidence still require recording.
+VUW supplies development test evidence only. Queensland Health is the actual
+pilot and requires its own source, destination and governance records; see the
+[account and stage boundary](m365-test-to-pilot-boundary.md). A personal Azure
+source remains a separate access proposal.
 Keep account addresses, tenant IDs, real approval records and bindings outside
 Git. An Azure login alone does not establish an Outlook mailbox or Graph access.
 

@@ -142,8 +142,14 @@ Verification: the expanded offline PowerShell suite passes approval denial,
 scope mismatch, primitive-type confusion, proposal preparation/no-overwrite,
 non-null UTC-window handling across PowerShell versions, and all earlier
 privacy/replay/recovery cases. The 62 Outlook/M365 contract, reconciliation and
-integration tests pass. Azure CLI is currently unavailable in the local shell;
-installed M365/PAC executables alone do not establish authenticated access.
+integration tests pass. Azure CLI 2.91.0 is now installed; VUW Azure/Graph
+identity and Power Automate environment access were subsequently verified.
+The operator authorized a VUW Inbox-only seven-day metadata development test
+and selected their Developer environment's existing Outlook connection route.
+Connection enumeration needs separate FlowAgent authentication, which remains
+incomplete. No mailbox extraction or connection identity verification occurred.
+VUW is testing only; Queensland Health is the actual pilot and requires its
+own approval, frozen configuration and destination records.
 
 The full objective remains unproven. Live consent, mailbox/folder scope,
 destination/retention approval, deployed connector verification, full-folder

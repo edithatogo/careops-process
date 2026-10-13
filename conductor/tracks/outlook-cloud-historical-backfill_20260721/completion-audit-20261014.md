@@ -23,10 +23,34 @@ closed, deployment performed or live mailbox accessed by this work.
 
 Acquisition now requires `-PilotEntryPath` with strict approvals and a binding
 to the exact keyed mailbox/folder/time/output scope. Preparation mode creates
-only a false-flagged proposal, never consent. Azure CLI is unavailable in the
-current shell; M365/PAC executable presence does not prove login or mail access.
-Neither a VUW account nor the proposed personal Azure account has been verified
-here. A personal Azure login does not by itself establish a Graph mail source.
+only a false-flagged proposal, never consent. Azure CLI 2.91.0 is installed and
+its version was verified. One VUW device sign-in completed successfully after
+the operator's federated sign-in. No duplicate sign-in was started. M365 remains
+logged out, and no project/user M365 app configuration was found. M365/PAC
+executable presence does not prove mail access. The personal Azure account
+remains unverified; a personal Azure
+login does not by itself establish a Graph mail source.
+
+Subsequent operator confirmation authorizes the proposed Inbox-only seven-day
+metadata test stored locally outside Git. VUW is development testing;
+Queensland Health is the actual pilot and requires its own approval evidence.
+Azure login has now completed, and
+Graph identity verification confirms the supplied mailbox address belongs to
+the authenticated staff identity. Existing token permissions contain none of
+Mail.ReadBasic, Mail.Read or Mail.ReadWrite. Requesting Mail.ReadBasic through
+Azure CLI returned AADSTS65002 (application/resource preauthorization required),
+so this CLI route cannot currently acquire mail. An approved mail-capable
+application or existing Outlook connector is required; repeated device sign-in
+does not repair that permission boundary. The operator selected the existing
+VUW Power Automate Outlook connection. A Power Automate resource token was
+obtained without logging it, and the installed FlowAgent bundle successfully
+listed VUW environments. The operator selected their Developer environment.
+Connection listing requires FlowAgent's separate Power Platform authentication;
+the bounded local check ended before that sign-in completed. No connection
+identity/status was verified, and no mailbox metadata has been acquired.
+The private frozen configuration, retention decision and approval evidence must
+still be recorded before acquisition. Account identifiers, device codes and
+authentication screenshots are excluded from this repository record.
 
 The sanctioned production acceptance route uses the approved Power Automate
 Outlook connector and Dataverse. Graph/offline support does not replace that
