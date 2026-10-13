@@ -4,7 +4,8 @@ Current state, 14 October 2026: local synthetic exporter tests pass. The operato
 authorized the proposed VUW Inbox-only seven-day metadata test stored locally
 outside Git and selected an existing Power Automate Outlook connection.
 VUW Azure/Graph identity and Power Automate environment access are verified;
-the selected environment and connection binding remain pending. Azure CLI's
+the operator selected their Developer environment; connection binding remains
+pending. Azure CLI's
 Graph token lacks mail-read permission, and Mail.ReadBasic acquisition returned
 AADSTS65002. Use the selected connector route rather than repeating Azure login.
 Frozen configuration, retention and approval evidence still require recording.
@@ -14,6 +15,25 @@ pilot and requires its own source, destination and governance records; see the
 source remains a separate access proposal.
 Keep account addresses, tenant IDs, real approval records and bindings outside
 Git. An Azure login alone does not establish an Outlook mailbox or Graph access.
+
+## Authentication handoff
+
+For an authorized device-code login, enter the code returned by the active
+login process into the verified Microsoft device-login page automatically.
+Enter the supplied account identifier and advance the routine login flow.
+Do not ask the operator to copy a code already available to the agent. Hand
+off when a password, MFA or another required human action is reached.
+Never commit device codes, credentials, tokens or account identifiers.
+
+The VUW Azure device code was entered by the agent and that login completed;
+it is not a pending operator step. FlowAgent connection management uses a
+separate browser callback login, not that Azure device code. Its bounded
+connection-list check ended before authentication completed. The old callback
+page cannot complete a terminated process. When the operator resumes that
+sign-in, start one new live FlowAgent request and complete its own browser flow;
+do not reuse the completed Azure code or start duplicate login requests.
+If human authentication is required while the operator is away, stop checks
+and preserve a precise handoff rather than repeatedly polling or restarting.
 
 ## Pilot preparation
 
