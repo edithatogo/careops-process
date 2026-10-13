@@ -16,3 +16,17 @@ tenant-side build/import/bind gate.
 The harvested XML was scanned with Gitleaks; no leaks were found. No tenant
 exports, records, mailbox content, connection IDs, tokens, or user identities
 were added to the repository.
+
+## Remaining platform blocker
+
+The authenticated PAC profile can inspect the PowerPagesDeveloper environment,
+but `pac connection list` currently returns no connections there. There is
+therefore no available Outlook connection reference to bind to a cloud-only
+Power Automate workflow from this profile. PAC also provides no flow-authoring
+command in this environment. This is an environment/connection provisioning
+gate, not a repository implementation defect.
+
+The default environment is separately blocked for Dataverse schema import by
+`prvCreateEntity` at Basic depth. The populated schema is preserved in source
+control and requires deployment by an environment maker/system customizer or
+an approved managed-solution pipeline.

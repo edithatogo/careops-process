@@ -17,7 +17,7 @@ dependencies = [
 careops-process-smoke = "careops_process.cli:main"
 
 [project.optional-dependencies]
-mining = ["pm4py==2.7.23.1"]
+mining = ["pm4py==2.7.23.8"]
 
 [dependency-groups]
 dev = [
