@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/schemas/careops-ontology-1.0.0.json",
+  "title": "CareOps process ontology",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ontology_id", "version", "objects", "events", "qualifiers"],
+  "properties": {
+    "ontology_id": {"const": "careops-process"},
+    "version": {"const": "1.0.0"},
+    "objects": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,79}$"}},
+    "events": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,119}$"}},
+    "qualifiers": {"type": "array", "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,79}$"}}
+  }
+}

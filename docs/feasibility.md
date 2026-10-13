@@ -1,51 +1,76 @@
-# Feasibility baseline - 2026-07-15
+# Feasibility baseline
 
-## Confirmed
+Last reviewed: 2026-08-29
 
-- GitHub CLI is authenticated to `github.com` as `edithatogo` with private
-  repository, workflow, and project scopes.
-- GitHub CLI is authenticated to `nswhealth.ghe.com` as `60217257` with private
-  repository and workflow scopes.
-- PAC CLI has a live user-scoped NSW Health Dataverse connection and can list
-  four accessible Power Platform environments.
-- Python 3.14.6 is installed through `uv` without administrator access.
-- PM4Py 2.7.23.1 declares Python 3.14 support.
-- Polars, Arrow, and synthetic event-contract testing are viable locally and in
-  GitHub Actions.
+This document records the reusable feasibility boundary for CareOps Process.
+Deployment-specific permissions and tool availability must be captured in a
+separate, non-sensitive environment receipt and reverified before each pilot.
+Historical organisation, account, host, and tenant details are not part of the
+product contract.
 
-## Gated or degraded
+## Repository-confirmed capabilities
 
-- Azure CLI 2.88 can authenticate as the NSW Health user and acquire a Power BI
-  API token, but the API returns zero accessible workspaces and zero dedicated
-  capacities. Fabric is therefore unavailable under current permissions.
-- Graph Data Connect remains Entra application and Global Administrator gated.
-- Mojo requires Linux or WSL and is not a native-Windows runtime. It is suitable
-  only for experimental Linux CI kernels with Python parity tests.
-- PACX starts after installing the user-scoped x64 .NET 8.0.29 runtime. Its
-  previous encrypted credential store was corrupt and has been preserved in a
-  timestamped local backup. A replacement `careops-owner` OAuth profile is now
-  connected and `pacx auth ping` succeeds against Dataverse 9.2. PAC CLI also
-  remains connected and usable.
-- Azure CLI 2.88 is installed through `uv` on Python 3.13 and is tenant-level
-  authenticated. No Azure subscription is exposed to the account.
-- Microsoft 365 CLI 11.9.0 can be installed under Node 24, but the global Node
-  26/npm installation produces incomplete dependency trees and the isolated
-  CLI does not complete startup. Azure CLI, Microsoft Graph REST, PAC CLI, and
-  Power Platform connectors are the supported automation surfaces until the
-  upstream Node/tool interaction is resolved.
-- WSL is not installed and its installation requires a Windows feature change;
-  Mojo therefore remains a Linux GitHub Actions experiment rather than a local
-  runtime requirement.
-- GHE Actions jobs fail before the first step, indicating that no compatible
-  `ubuntu-latest` runner is available to this repository. GitHub.com Actions is
-  the execution mirror until an enterprise runner is assigned.
-- GitHub Advanced Security is not purchased for the private personal repo.
-  Secret scanning is unavailable there and is enterprise-policy-blocked on
-  GHE. Repository-local secret scanning and fail-closed CI are required.
+- Python, Polars, Arrow, and synthetic event-contract testing are viable in a
+  local or hosted CI environment.
+- OCEL 2.0, privacy-minimised fact projection, replay, tombstone, dead-letter,
+  conformance, semantic-projection, and recommendation contracts are present.
+- Power Automate and Dataverse adapters can be designed and tested with
+  synthetic data without tenant-wide permissions.
+- PM4Py may be used as an optional process-mining engine after licence and
+  deployment review.
+- GitHub or an approved enterprise Git host can run credential-free validation
+  where an appropriate runner is available.
 
-## Decision
+## Deployment-gated capabilities
 
-Proceed with repository, schemas, synthetic harness, Dataverse/Power Automate
-adapter design, and GitHub.com CI mirrored to GHE. Do not claim Fabric, Graph
-Data Connect, Azure resource deployment, Mojo production parity, GHE runner
-execution, or live mailbox ingestion until their dedicated gates pass.
+The following must not be claimed until the selected environment provides and
+evidences them:
+
+- accessible Power Platform development, test, and production environments;
+- approved user-scoped or workload-identity connections;
+- Dataverse tables and security roles;
+- Power BI or Fabric workspace and capacity;
+- Microsoft Graph or Graph Data Connect permissions;
+- Azure subscription and approved resource deployment;
+- hosted or self-hosted CI runners;
+- secret scanning and code-security services;
+- live mailbox, Teams, SharePoint, or source-system ingestion;
+- local or hosted AI/LLM access for NLP or process-family discovery; and
+- production support, monitoring, retention, backup, recovery, and continuity.
+
+## Supported low-privilege baseline
+
+The preferred initial path uses:
+
+- a narrow, approved source such as a Dataverse or SharePoint status row;
+- only event ID, activity, timestamp, source system, and pseudonymous object
+  references;
+- no message body, subject, sender, recipient, attachment, practitioner,
+  patient, or clinical narrative fields;
+- replay-safe checkpoints and idempotency;
+- synthetic or approved minimised pilot data;
+- no production writes; and
+- a documented human governance decision before live execution.
+
+## Tooling fallbacks
+
+- Use Power Automate and standard connectors before requesting tenant-wide app
+  permissions.
+- Use Dataverse operational views before making Power BI or Fabric a dependency.
+- Use local or hosted Python only for analytical work that cannot be safely or
+  maintainably expressed in Power Platform.
+- Treat Mojo, preview Copilot features, Dataverse MCP, and other emerging tools
+  as optional experiments behind feature flags and parity tests.
+- If enterprise-hosted CI is unavailable, another approved runner may execute
+  credential-free validation against the same commit; this is supporting
+  evidence, not proof of equivalent enterprise controls.
+
+## Pilot decision
+
+Proceed with schemas, synthetic fixtures, event projections, adapters, tests,
+and privacy-safe reporting. Do not claim live ingestion, Fabric, Graph, Azure,
+AI production use, or operating effectiveness until the deployment-specific
+gates are passed and evidenced.
+
+Repository completion, environment deployment, successful pilot execution, and
+operating effectiveness are separate statuses.

@@ -1,0 +1,21 @@
+{
+  "track_id": "credentialing-process-assurance_20260829",
+  "title": "Credentialing privacy-minimised event and assurance pack",
+  "status": "in_progress",
+  "created": "2026-08-29",
+  "owner": "CareOps Process maintainer",
+  "ontologyVersion": "0.1.0",
+  "contractVersion": "0.1.0",
+  "sources": [
+    "careops-approve",
+    "careops-decisions",
+    "deployment-approved-authoritative-register"
+  ],
+  "nonGoals": [
+    "operational-case-management",
+    "autonomous-workflow-change",
+    "individual-performance-ranking",
+    "raw-sensitive-content-ingestion",
+    "ai-certified-conformance"
+  ]
+}

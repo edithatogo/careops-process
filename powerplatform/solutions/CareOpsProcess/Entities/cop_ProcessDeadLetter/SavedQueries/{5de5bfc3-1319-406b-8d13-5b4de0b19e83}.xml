@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{5de5bfc3-1319-406b-8d13-5b4de0b19e83}</savedqueryid>
+    <layoutxml>
+      <grid name="cop_processdeadletters" jump="cop_deadletterkey" select="1" icon="1" preview="1">
+        <row name="cop_processdeadletter" id="cop_processdeadletterid">
+          <cell name="cop_deadletterkey" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>2</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="cop_processdeadletter">
+          <attribute name="cop_processdeadletterid" />
+          <attribute name="cop_deadletterkey" />
+          <attribute name="createdon" />
+          <order attribute="cop_deadletterkey" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="CareOps Process Dead Letter Associated View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>
