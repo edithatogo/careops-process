@@ -1,0 +1,14 @@
+{
+  "run_id": "<closed-run-id>",
+  "evidence_reference": "<approved-evidence-location-reference>",
+  "scope_approved": false,
+  "ig_approved": false,
+  "owner_validation": {
+    "status": "pending",
+    "validated_family_count": 0,
+    "unresolved_family_count": 0
+  },
+  "executive_decision": "pending",
+  "decision_reference": null,
+  "review_date": null
+}

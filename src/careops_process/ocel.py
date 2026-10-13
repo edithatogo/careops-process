@@ -81,6 +81,26 @@ class OcelEvent(OcelModel):
         return value
 
 
+class OcelRelation(OcelModel):
+    """An object-object relationship with explicit provenance."""
+
+    relation_id: str = Field(min_length=1, max_length=128)
+    relation_type: str = Field(min_length=1, max_length=120)
+    source_object_id: str = Field(min_length=1, max_length=128)
+    target_object_id: str = Field(min_length=1, max_length=128)
+    observed_or_inferred: Literal["observed", "inferred"]
+    confidence: float = Field(ge=0.0, le=1.0)
+
+    @field_validator("relation_id", "source_object_id", "target_object_id")
+    @classmethod
+    def safe_relation_ids(cls, value: str) -> str:
+        """Reject uncontrolled relation identifiers."""
+        if not _SAFE_ID.fullmatch(value):
+            message = "relation identifiers must be safe, non-sensitive identifiers"
+            raise ValueError(message)
+        return value
+
+
 class OcelLog(OcelModel):
     """Minimal OCEL 2.0-compatible envelope for CareOps."""
 
@@ -88,6 +108,7 @@ class OcelLog(OcelModel):
     log_id: str = Field(min_length=1, max_length=128)
     objects: list[OcelObject] = Field(min_length=1)
     events: list[OcelEvent] = Field(min_length=1)
+    relations: list[OcelRelation] = Field(default_factory=list[OcelRelation])
     lineage: str = Field(min_length=1, max_length=500)
     schema_version: str = Field(pattern=r"^\d+\.\d+\.\d+$")
 
@@ -101,11 +122,15 @@ def pseudonymize(value: str, *, secret: str) -> str:
     return "psn_" + digest[:32]
 
 
-def validate_ocel(log: OcelLog) -> OcelLog:
+def validate_ocel(log: OcelLog) -> OcelLog:  # noqa: C901
     """Validate object references and reject direct identity-like attributes."""
     object_ids = {item.object_id for item in log.objects}
     if len(object_ids) != len(log.objects):
         message = "object_id must be unique"
+        raise ContractError(message)
+    event_ids = {item.event_id for item in log.events}
+    if len(event_ids) != len(log.events):
+        message = "event_id must be unique"
         raise ContractError(message)
     forbidden = {"email", "email_address", "display_name", "subject", "body", "phone"}
     for item in log.objects:
@@ -118,5 +143,16 @@ def validate_ocel(log: OcelLog) -> OcelLog:
             raise ContractError(message)
         if not set(event.object_ids).issubset(object_ids):
             message = f"Unknown object reference in {event.event_id}"
+            raise ContractError(message)
+    relation_ids = {item.relation_id for item in log.relations}
+    if len(relation_ids) != len(log.relations):
+        message = "relation_id must be unique"
+        raise ContractError(message)
+    for relation in log.relations:
+        if relation.source_object_id == relation.target_object_id:
+            message = "object relations cannot self-reference"
+            raise ContractError(message)
+        if not {relation.source_object_id, relation.target_object_id}.issubset(object_ids):
+            message = f"Unknown object reference in {relation.relation_id}"
             raise ContractError(message)
     return log

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://careops.example/contracts/m365-corpus-coverage.schema.json",
+  "title": "CareOps authorised M365 corpus coverage ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "run_id", "generated_at_utc", "evidence_class", "partitions", "tenant_wide_coverage"],
+  "properties": {
+    "contract_version": { "const": "1.0.0" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "generated_at_utc": { "type": "string", "format": "date-time" },
+    "evidence_class": { "enum": ["synthetic", "smoke_test", "live_corpus"] },
+    "tenant_wide_coverage": { "type": "null" },
+    "partitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "container", "accessible", "candidate_count", "acquired_count", "observation_start", "observation_end", "permission_state", "provenance", "retention_state", "limitation"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "container": { "type": "string", "minLength": 1 },
+          "accessible": { "type": "boolean" },
+          "candidate_count": { "type": ["integer", "null"], "minimum": 0 },
+          "acquired_count": { "type": "integer", "minimum": 0 },
+          "observation_start": { "type": ["string", "null"], "format": "date-time" },
+          "observation_end": { "type": ["string", "null"], "format": "date-time" },
+          "permission_state": { "enum": ["accessible", "denied", "unavailable", "inconclusive"] },
+          "provenance": { "type": "string", "minLength": 1 },
+          "retention_state": { "enum": ["known", "unknown", "not_applicable"] },
+          "limitation": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

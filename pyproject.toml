@@ -13,12 +13,16 @@ dependencies = [
   "pydantic>=2.11",
 ]
 
+[project.scripts]
+careops-process-smoke = "careops_process.cli:main"
+
 [project.optional-dependencies]
 mining = ["pm4py==2.7.23.1"]
 
 [dependency-groups]
 dev = [
   "bandit>=1.8",
+  "defusedxml>=0.7.1",
   "hypothesis>=6.135",
   "pip-audit>=2.9",
   "pyright>=1.1.403",
@@ -33,6 +37,7 @@ packages = ["src/careops_process"]
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers --cov=careops_process --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
 testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.ruff]
 target-version = "py314"
@@ -44,6 +49,7 @@ ignore = ["COM812", "D203", "D213"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101"]
+"scripts/build-executive-landscape.py" = ["N999"]
 
 [tool.pyright]
 pythonVersion = "3.14"
