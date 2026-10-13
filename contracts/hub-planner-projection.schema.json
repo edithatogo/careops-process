@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "ActionRecord": {
+      "additionalProperties": false,
+      "description": "Retain canonical action accountability; Planner is only an optional projection.",
+      "properties": {
+        "action_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Action Id",
+          "type": "string"
+        },
+        "owner_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Owner Ref",
+          "type": "string"
+        },
+        "due_at": {
+          "format": "date-time",
+          "title": "Due At",
+          "type": "string"
+        },
+        "state": {
+          "default": "assigned",
+          "enum": [
+            "assigned",
+            "in_progress",
+            "completed",
+            "cancelled"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "closure_evidence_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Closure Evidence Ref"
+        },
+        "planner_projection_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Planner Projection Ref"
+        }
+      },
+      "required": [
+        "action_id",
+        "owner_ref",
+        "due_at"
+      ],
+      "title": "ActionRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Only minimised action metadata and synthetic task-observation state.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "projection_key": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Projection Key",
+      "type": "string"
+    },
+    "matter_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Ref",
+      "type": "string"
+    },
+    "action_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Action Ref",
+      "type": "string"
+    },
+    "owner_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Owner Ref",
+      "type": "string"
+    },
+    "due_at": {
+      "format": "date-time",
+      "title": "Due At",
+      "type": "string"
+    },
+    "canonical_revision": {
+      "minimum": 0,
+      "title": "Canonical Revision",
+      "type": "integer"
+    },
+    "canonical_action": {
+      "$ref": "#/$defs/ActionRecord"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "completion_signal": {
+      "default": false,
+      "title": "Completion Signal",
+      "type": "boolean"
+    },
+    "canonical_completed": {
+      "default": false,
+      "title": "Canonical Completed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "projection_key",
+    "matter_ref",
+    "action_ref",
+    "owner_ref",
+    "due_at",
+    "canonical_revision",
+    "canonical_action",
+    "observed_at"
+  ],
+  "title": "PlannerProjection",
+  "type": "object"
+}

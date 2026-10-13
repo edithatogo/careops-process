@@ -1,0 +1,289 @@
+{
+  "$defs": {
+    "ApprovalEvent": {
+      "additionalProperties": false,
+      "description": "Preserve response identity and protected response reference without comments.",
+      "properties": {
+        "execution_mode": {
+          "const": "synthetic",
+          "default": "synthetic",
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "event_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Event Ref",
+          "type": "string"
+        },
+        "replay_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Replay Ref",
+          "type": "string"
+        },
+        "request_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Request Ref",
+          "type": "string"
+        },
+        "matter_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Ref",
+          "type": "string"
+        },
+        "authority": {
+          "$ref": "#/$defs/AuthorityRecord"
+        },
+        "kind": {
+          "enum": [
+            "response",
+            "cancel",
+            "timeout",
+            "reassign"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "actor_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Actor Ref",
+          "type": "string"
+        },
+        "workflow_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Workflow Version",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "response_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Ref"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "consultation",
+                "recommendation",
+                "endorsement",
+                "approval",
+                "noting",
+                "ratification",
+                "decline",
+                "return_for_further_work"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "replacement_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replacement Ref"
+        }
+      },
+      "required": [
+        "event_ref",
+        "replay_ref",
+        "request_ref",
+        "matter_ref",
+        "authority",
+        "kind",
+        "actor_ref",
+        "workflow_version",
+        "expected_revision",
+        "occurred_at"
+      ],
+      "title": "ApprovalEvent",
+      "type": "object"
+    },
+    "AuthorityRecord": {
+      "additionalProperties": false,
+      "description": "Reference an existing authority and its accountable owner or decision body.",
+      "properties": {
+        "authority_source_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Source Ref",
+          "type": "string"
+        },
+        "decision_owner_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Owner Ref",
+          "type": "string"
+        },
+        "decision_body_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision Body Ref"
+        },
+        "delegate_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegate Ref"
+        },
+        "acting_arrangement_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Acting Arrangement Ref"
+        }
+      },
+      "required": [
+        "authority_source_ref",
+        "decision_owner_ref"
+      ],
+      "title": "AuthorityRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Immutable orchestration state independent of canonical decision/ratification.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "request_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Request Ref",
+      "type": "string"
+    },
+    "matter_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Ref",
+      "type": "string"
+    },
+    "assignee_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Assignee Ref",
+      "type": "string"
+    },
+    "initial_assignee_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Initial Assignee Ref",
+      "type": "string"
+    },
+    "authority": {
+      "$ref": "#/$defs/AuthorityRecord"
+    },
+    "workflow_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Workflow Version",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "status": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "responded",
+        "rejected",
+        "cancelled",
+        "timed_out"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "provisional_response": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApprovalEvent"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "collective_decision": {
+      "const": false,
+      "default": false,
+      "title": "Collective Decision",
+      "type": "boolean"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ApprovalEvent"
+      },
+      "title": "History",
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_ref",
+    "matter_ref",
+    "assignee_ref",
+    "initial_assignee_ref",
+    "authority",
+    "workflow_version",
+    "expires_at"
+  ],
+  "title": "ApprovalEnvelope",
+  "type": "object"
+}
