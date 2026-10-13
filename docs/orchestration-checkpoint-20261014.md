@@ -77,3 +77,30 @@ The measurement extension's design and task plan are committed as `3c1d4c0` in
 its isolated worktree. Implementation is underway and not yet integrated.
 Review feedback requests explicit handling of repeated or contradictory
 case evaluations, distinct-case suppression and partial effort observations.
+
+## Stage-time integration receipt
+
+The coordinator reproduced a scope-container defect in the initial stage-time
+checkpoint: a string became character grants, and a one-shot iterator was
+consumed before population construction. The owner confirmed five failing
+regressions and fixed the boundary to require a set and detach it once.
+
+Source commits `3c1d4c0`, `663a474`, `12bd50f` and `005b5e4` were reviewed and
+integrated as `313435b`, `3049bad`, `5d308c6` and `2fd218f`. At shared executable
+revision `2fd218ffe53861c864b2ce251de13945b9e34fe0`, the coordinator independently
+verified 37 stage-time tests, repository-wide Ruff lint/format (109 files),
+strict Pyright, Conductor validation and Bandit. All passed.
+
+One full-suite run passed 705 tests. Its separate coverage dataset passed the
+line and branch gate: 3755/3841 lines (97.76%) and 1103/1160 branches (95.09%).
+The private receipt is
+`careops-integration-10f31ef9208d430fa7cdd738d0ba5a77/coverage.xml` under the
+coordinator's temporary directory. No retry or CPU-affinity workaround was used
+for this receipt. The unrelated Outlook runbook edit was preserved and is not
+part of the executable verification claim.
+
+This successful run does not close the independently reproduced intermittent
+host/runtime fault or prove the remaining workload, quality and human-review
+interfaces. Those tasks are still being implemented in the isolated worktree.
+Hosted checks, real source/policy approvals and full track acceptance remain
+pending.
