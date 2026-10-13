@@ -47,8 +47,13 @@ tests before fixes.
   custom validators, pytest or Hypothesis also fails; serialization-only runs fail
   without deepcopy. The root cause remains unproven. Disabling cyclic GC, comparing
   Pydantic 2.12.5, Python 3.13.15 and Python 3.14.7 did not eliminate failure.
-- **Suggestion**: keep completion gated; capture a native exception matched to the
-  minimal reproducer's PID/build before applying a speculative runtime fix.
+- **Suggestion**: keep completion gated; analyse the captured native exception and
+  object ownership before applying a speculative runtime fix. A ProcDump full dump
+  is now matched to the synthetic process PID 84172 and creation time. Limited
+  offline metadata records thread 57196, read access violation targeting `0x14`,
+  core module offset `0x16dfdc`; the matching faulthandler location is `model_dump`.
+  The module location does not prove the root cause. No symbolized analysis or
+  product dependency/runtime change has been made.
 
 ```diff
 - Treat a single passing full-suite run as sufficient runtime evidence.

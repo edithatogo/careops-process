@@ -66,6 +66,11 @@ offline Zizmor and scoped review-commit Gitleaks checks pass with limitations
 recorded in `review.md`. The earlier green full-suite result is not superseding
 the reproduced failures.
 
+A second monitored standalone run produced a native full dump matched to PID and
+creation time; exception-thread metadata matches faulthandler. It records a core
+module read access violation during `model_dump`. Offline metadata inspection
+provides a native exception/build checkpoint, not root-cause proof or a fix.
+
 The track remains in progress. Durable ledger storage, concurrency, trusted
 authorisation/case mapping and cross-release privacy controls are production
 adapter responsibilities. Local pathway/authority mapping and every live
