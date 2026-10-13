@@ -30,6 +30,36 @@ migration/rollback, recovery/dead-letter and task-projection contracts, actual
 brief-source/agenda/minute orchestration, connector reconciliation and release
 assets. This checkpoint does not complete entire phases or live verification.
 
+## Catalog, projection, meeting, recovery and release checkpoint
+
+Local synthetic catalog activation/migration/rollback, bound approval/Planner
+projections, current-canonical meeting/brief/minute records, pinned later urgent
+ratification, minimal recoverable dead letters and read-only deployment dry run
+are implemented. See the
+[catalog/projection guide](../../../docs/ihg-hub-catalog-and-projections.md),
+[meeting guide](../../../docs/ihg-hub-meeting-records.md) and
+[remaining-local/external audit](../../../docs/ihg-hub-recovery-and-release.md).
+Completed subitems below refer to executable synthetic contracts, not real
+provider tasks, live approvals, shared Power Apps, or an approved pilot.
+
+The current shared ALM validator supports table exports; actual app/flow bundles
+need validation adapters. No callable Canvas authoring session or confirmed
+pilot target is available in this chat. Operating-model confirmation remains
+explicitly pending. Actual app/flow/connector authoring, persistent/authenticated
+adapters, pathway-specific policies, staged pilot and manual approval remain open.
+
+## Local verification checkpoint
+
+- Final owned hub test slice: 238 passed. Scoped and repository Ruff lint/format,
+  strict typing, Bandit, Conductor validation and owned secret-pattern checks pass.
+- Last clean full shared run: 650 passed, line coverage 96.97%, branch coverage
+  93.29%. Additional edge tests pass in the owned slice.
+- Later 655-test aggregate verification is unresolved: intermittent native Windows
+  failures and a credentialing tombstone/deep-copy TypeError were observed; its
+  isolated test passes. This is not recorded as a clean final aggregate run.
+- Actual app/flow authoring, live provider/resource rights, IHG model/lane approval,
+  multi-user pilot, production decision and manual verification remain incomplete.
+
 ## Shared ALM dependency
 
 Reuse the solution validation, packaging, configuration templates and release
@@ -65,9 +95,9 @@ governance hub or approve its production use.
     - [x] Model governance matters, classification, authority, risk, pathway, consultation, decision, meeting, ratification, action, evidence and archive.
     - [x] Define stable identifiers, lifecycle transitions, replay keys, template versions and provenance.
     - [x] Add invalid, boundary, duplicate, stale, superseded and out-of-order transition tests.
-- [~] Task: Define versioned workflow-template contracts
+- [x] Task: Define versioned workflow-template contracts
     - [x] Model roles, decision semantics, thresholds, escalation, notifications, records and closure rules as configuration.
-    - [~] Add activation, migration, rollback and compatibility checks for template changes.
+    - [x] Add activation, migration, rollback and compatibility checks for template changes.
     - [x] Prevent silent changes to rules governing active matters.
 - [~] Task: Implement connector-neutral workflow logic
     - [x] Implement the generic Governance Matter engine and linked-matter dependencies.
@@ -76,7 +106,7 @@ governance hub or approve its production use.
 - [~] Task: Implement privacy, authority and access validators
     - [x] Reject prohibited sensitive fields from collaboration projections and logs.
     - [~] Validate role, authority, classification, pathway and least-privilege compatibility.
-    - [ ] Add recoverable dead-letter records without sensitive payloads.
+    - [x] Add recoverable dead-letter records without sensitive payloads.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Generic governance model and configurable pathways' (Protocol adapted from workflow.md)
 
 ## Phase 3: Executive decision, meeting and secretariat workflow
@@ -90,9 +120,9 @@ governance hub or approve its production use.
     - [ ] Implement materiality, cross-service, contest, urgency and escalation-threshold rules.
     - [x] Provide an exception-focused executive queue and secretariat work queue.
 - [~] Task: Implement agenda, brief, minute and ratification records
-    - [ ] Generate a structured agenda entry and one-page decision brief.
-    - [ ] Record meeting, participants, conflicts, chair confirmation, outcome, minute reference and resulting actions.
-    - [ ] Implement out-of-session expiry and later ratification where required.
+    - [x] Generate a structured agenda entry and one-page decision brief.
+    - [~] Record meeting, participants, conflicts, chair confirmation, outcome, minute reference and resulting actions.
+    - [x] Implement out-of-session expiry and later ratification where required.
 - [~] Task: Implement executive portfolio and digest views
     - [x] Show decisions required, material risk, overdue actions, cross-service dependencies, ratification gaps and assurance exceptions.
     - [x] Generate configurable weekly digests without requiring Power BI/Fabric.
@@ -101,10 +131,10 @@ governance hub or approve its production use.
 
 ## Phase 4: Power Platform solution and restricted fallback
 
-- [ ] Task: Create failing solution-packaging and deployment tests
+- [~] Task: Create failing solution-packaging and deployment tests
     - [ ] Validate solution structure, environment variables, connection references and versioning.
-    - [ ] Validate that deployment scripts are Windows-native, user-scoped and secret-free.
-    - [ ] Test dry-run, interrupted deployment, export-before-change and rollback behaviour.
+    - [~] Validate that deployment scripts are Windows-native, user-scoped and secret-free.
+    - [~] Test dry-run, interrupted deployment, export-before-change and rollback behaviour.
 - [ ] Task: Implement the preferred Dataverse and Power Apps solution
     - [ ] Add canonical tables, relationships, keys, least-privilege roles and auditing configuration.
     - [ ] Add Teams-accessible intake, triage, agenda, case, review, decision, action, assurance and archive experiences.
@@ -118,18 +148,18 @@ governance hub or approve its production use.
 
 ## Phase 5: Approvals, Planner and Teams interaction
 
-- [ ] Task: Define approval and task-projection contract tests
-    - [ ] Cover first response, collective response, rejection, cancellation, reassignment, timeout and ratification outcomes.
-    - [ ] Cover duplicate Planner creation, stale task updates, removed users and unavailable connections.
-    - [ ] Verify that all collaboration text is privacy minimised.
-- [ ] Task: Implement governed approval orchestration
+- [x] Task: Define approval and task-projection contract tests
+    - [x] Cover first response, collective response, rejection, cancellation, reassignment, timeout and ratification outcomes.
+    - [x] Cover duplicate Planner creation, stale task updates, removed users and unavailable connections.
+    - [x] Verify that all collaboration text is privacy minimised.
+- [~] Task: Implement governed approval orchestration
     - [ ] Route approvals to authorised individuals or existing groups supported by the selected lane.
     - [ ] Persist authority, participant, conflict, response, comments, timestamp, workflow version and ratification state.
     - [ ] Implement reminders, escalation, cancellation, return-for-information and recovery.
-- [ ] Task: Implement Planner action projection and reconciliation
-    - [ ] Create privacy-minimised tasks only after a governed action is assigned.
-    - [ ] Synchronise ownership, due date and completion without allowing Planner to alter decisions or closure evidence.
-    - [ ] Reconcile missing, deleted, duplicate and inaccessible tasks.
+- [~] Task: Implement Planner action projection and reconciliation
+    - [x] Create privacy-minimised tasks only after a governed action is assigned.
+    - [x] Synchronise ownership, due date and completion without allowing Planner to alter decisions or closure evidence.
+    - [x] Reconcile missing, deleted, duplicate and inaccessible tasks.
 - [ ] Task: Implement Teams notifications, digests and case links
     - [ ] Deliver authorised intake, decision, escalation, overdue, ratification and closure notifications.
     - [ ] Generate secretariat and executive digests with configurable frequency.

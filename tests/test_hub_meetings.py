@@ -579,3 +579,93 @@ def test_identical_agenda_replay_preserves_original_timestamp_after_deadline() -
         )
         == agenda
     )
+
+
+def test_loaded_agenda_revision_duplicates_and_scope_are_consistent() -> None:
+    """Reject contradictory loaded agenda snapshots before minute processing."""
+    agenda, _ = prepared_minutes()
+    invalid = [
+        {**agenda.model_dump(), "revision": 99},
+        {**agenda.model_dump(), "participant_refs": ["synthetic-a", "synthetic-a"]},
+        {
+            **agenda.model_dump(),
+            "entries": [
+                {
+                    **agenda.entries[0].model_dump(),
+                    "brief": {**brief().model_dump(), "scope_ref": "other-scope"},
+                }
+            ],
+        },
+    ]
+    for value in invalid:
+        with pytest.raises(ValidationError):
+            MeetingAgenda.model_validate(value)
+    with pytest.raises(ValueError, match="timezone-aware"):
+        add_agenda_entry(
+            meeting(),
+            matter(),
+            brief(),
+            actor_ref="synthetic-secretariat",
+            expected_revision=0,
+            now=NOW.replace(tzinfo=None),
+        )
+
+
+def test_minutes_reject_changed_session_replay_and_unheld_meeting() -> None:
+    """Keep replay collisions and pre-meeting records outside the canonical minutes."""
+    agenda, recorded = prepared_minutes()
+    changed = session(
+        responses=[
+            {**response.model_dump(), "outcome": "noting"} for response in session().responses
+        ]
+    )
+    with pytest.raises(ValueError, match="replay"):
+        record_minutes(
+            recorded,
+            rule(),
+            changed,
+            actor_ref="synthetic-secretariat",
+            expected_revision=1,
+            minute_ref="synthetic-minute",
+            chair_confirmation_ref="synthetic-chair-evidence",
+            now=NOW + timedelta(days=1),
+        )
+    with pytest.raises(ValueError, match="held"):
+        record_minutes(
+            agenda,
+            rule(),
+            session(),
+            actor_ref="synthetic-secretariat",
+            expected_revision=1,
+            minute_ref="synthetic-minute",
+            chair_confirmation_ref="synthetic-chair-evidence",
+            now=NOW,
+        )
+
+
+def test_urgent_expiry_waiver_and_missing_ratification_evidence() -> None:
+    """Evaluate explicit waiver and expiry without inventing final ratification evidence."""
+    ledger = UrgentDecisionLedger(
+        matter_id="synthetic-matter-1",
+        scope_ref="synthetic-scope",
+        decision_id="synthetic-decision",
+        decision_session_id="synthetic-session",
+        policy_ref="synthetic-urgency-policy",
+        urgency_evidence_ref="synthetic-urgency",
+        authority_ref="synthetic-terms",
+        template_version="1.0.0",
+        review_cycle=0,
+        approved_ratification_policy_digest=decision_rule_digest(
+            rule(decision_outcome="ratification")
+        ),
+        original_response_refs=("synthetic-response",),
+        provisionally_decided_at=NOW,
+        expires_at=NOW + timedelta(hours=1),
+        ratification_required=False,
+    )
+    assert urgent_decision_status(ledger, now=NOW) == "provisional"
+    assert urgent_decision_status(ledger, now=NOW + timedelta(hours=2)) == "expired"
+    with pytest.raises(ValidationError):
+        UrgentDecisionLedger.model_validate({**ledger.model_dump(), "expires_at": NOW})
+    with pytest.raises(ValueError, match="predates"):
+        urgent_decision_status(ledger, now=NOW - timedelta(seconds=1))

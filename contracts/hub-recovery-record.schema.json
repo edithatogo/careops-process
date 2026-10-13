@@ -1,0 +1,197 @@
+{
+  "additionalProperties": false,
+  "description": "Retain opaque pointers and fixed metadata without the failed payload.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "matter_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "event_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "replay_key": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Replay Key",
+      "type": "string"
+    },
+    "template_id": {
+      "enum": [
+        "pra_pitstop",
+        "research_governance",
+        "clinical_risk",
+        "executive_decision",
+        "policy_endorsement",
+        "operational_exception",
+        "review_action"
+      ],
+      "title": "Template Id",
+      "type": "string"
+    },
+    "template_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "template_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Template Digest",
+      "type": "string"
+    },
+    "failed_command_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Failed Command Digest",
+      "type": "string"
+    },
+    "command_record_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Command Record Ref",
+      "type": "string"
+    },
+    "policy_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Policy Ref",
+      "type": "string"
+    },
+    "policy_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Policy Digest",
+      "type": "string"
+    },
+    "error_code": {
+      "const": "transition_rejected",
+      "default": "transition_rejected",
+      "title": "Error Code",
+      "type": "string"
+    },
+    "maximum_attempts": {
+      "maximum": 10,
+      "minimum": 1,
+      "title": "Maximum Attempts",
+      "type": "integer"
+    },
+    "retry_delay_seconds": {
+      "maximum": 86400,
+      "minimum": 1,
+      "title": "Retry Delay Seconds",
+      "type": "integer"
+    },
+    "attempt_count": {
+      "default": 0,
+      "maximum": 10,
+      "minimum": 0,
+      "title": "Attempt Count",
+      "type": "integer"
+    },
+    "revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "status": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "queued",
+        "recovered"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "captured_at": {
+      "format": "date-time",
+      "title": "Captured At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "not_before": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Not Before"
+    },
+    "recovered_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recovered At"
+    },
+    "receipt_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Receipt Ref"
+    },
+    "receipt_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Receipt Digest"
+    }
+  },
+  "required": [
+    "matter_id",
+    "scope_ref",
+    "event_id",
+    "replay_key",
+    "template_id",
+    "template_version",
+    "template_digest",
+    "failed_command_digest",
+    "command_record_ref",
+    "policy_ref",
+    "policy_digest",
+    "maximum_attempts",
+    "retry_delay_seconds",
+    "captured_at",
+    "updated_at"
+  ],
+  "title": "RecoveryRecord",
+  "type": "object"
+}

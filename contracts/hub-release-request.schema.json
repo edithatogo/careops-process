@@ -1,0 +1,167 @@
+{
+  "additionalProperties": false,
+  "description": "Record neutral review pointers, never credentials, tenant bindings or approval claims.",
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "mode": {
+      "const": "dry_run_only",
+      "default": "dry_run_only",
+      "title": "Mode",
+      "type": "string"
+    },
+    "lane": {
+      "default": "unselected",
+      "enum": [
+        "unselected",
+        "dataverse",
+        "restricted_fallback"
+      ],
+      "title": "Lane",
+      "type": "string"
+    },
+    "stage": {
+      "default": "dev",
+      "enum": [
+        "dev",
+        "test",
+        "prod"
+      ],
+      "title": "Stage",
+      "type": "string"
+    },
+    "classification": {
+      "default": "unconfirmed",
+      "enum": [
+        "unconfirmed",
+        "low_sensitivity_metadata",
+        "protected"
+      ],
+      "title": "Classification",
+      "type": "string"
+    },
+    "operating_model_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Operating Model Ref"
+    },
+    "publisher_confirmation_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publisher Confirmation Ref"
+    },
+    "capability_verification_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Capability Verification Ref"
+    },
+    "lane_decision_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lane Decision Ref"
+    },
+    "information_governance_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Information Governance Ref"
+    },
+    "continuity_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Continuity Ref"
+    },
+    "resource_owner_approval_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resource Owner Approval Ref"
+    },
+    "fallback_configuration_export_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fallback Configuration Export Ref"
+    },
+    "fallback_backup_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fallback Backup Ref"
+    }
+  },
+  "title": "HubReleaseRequest",
+  "type": "object"
+}
