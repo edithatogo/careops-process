@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, cast
 
 from careops_process.report import build_authorised_closed_run_report
+from careops_process.report_publication import publish_report
 
 
 def main() -> int:
@@ -23,6 +24,12 @@ def main() -> int:
     if not secret:
         parser.error("CAREOPS_PSEUDONYM_SECRET must be set; no default secret is permitted")
     try:
+        if args.output.resolve() in {
+            args.facts.resolve(),
+            args.evidence.resolve(),
+            args.pilot_entry.resolve(),
+        }:
+            parser.error("report output must be separate from its authoritative inputs")
         raw_facts: object = json.loads(args.facts.read_text(encoding="utf-8"))
         raw_evidence: object = json.loads(args.evidence.read_text(encoding="utf-8"))
         raw_entry: object = json.loads(args.pilot_entry.read_text(encoding="utf-8"))
@@ -42,7 +49,10 @@ def main() -> int:
         parser.error(
             "closed-run inputs failed validation; inspect them in the approved evidence store"
         )
-    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    try:
+        publish_report(report, args.output)
+    except OSError, ValueError, TypeError:
+        parser.error("report publication failed; previous output was preserved")
     return 0
 
 

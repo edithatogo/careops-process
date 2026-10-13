@@ -182,3 +182,20 @@ passed; a newly edited Teams test still produced one strict typing error at
 `tests/test_hub_domain.py:580` in that snapshot. M365 scoped typing passes.
 The final independent aggregate coverage run remains with hardening. This
 supersedes the earlier temporary 474/5 result without erasing its provenance.
+
+
+## Atomic publication and reproducible scoped verification — 2026-10-14
+
+- [x] Task: Reproduce interrupted report publication and input/output alias overwrite; implement atomic staging, flush/replacement, cleanup and safe diagnostics.
+- [x] Task: Verify successful serialization, failed serialization and failed publication preserve the intended authoritative artifact.
+- [x] Task: Verify a fresh M365/Outlook scoped snapshot with locked dependencies, full snapshot tests and independent line/branch gates.
+- [x] Task: Refresh conductor-review with exact scope, current integration limits and the unchanged live/human acceptance matrix.
+
+Fresh scoped verification: baseline `75613ab` plus the recorded publication and
+delivered Outlook evidence overlays; 485 tests passed. Lines: 2384/2444 (97.55%);
+branches: 653/694 (94.09%). Locked sync, formatting, lint, strict typing, Bandit
+and dependency audit passed. Overlay hashes remained unchanged after capture.
+The private snapshot has its own coverage files and excludes uncommitted Teams
+product work. It does not complete the final whole-shared-tree task above or
+Phases 6–7 live/human gates. Publication/rollback instructions and the review
+record are updated; approvals or live data were not fabricated.

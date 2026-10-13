@@ -9,8 +9,8 @@ The v2 evidence/report consumer closes the reproduced local scope, count, lineag
 - [ ] **Plan Compliance**: Partial — local evidence/reporting is implemented; Phases 6–7 live and human gates remain open.
 - [x] **Style Compliance**: Pass for owned files — scoped formatting, Ruff and strict Pyright passed.
 - [x] **New Tests**: Yes — 32 bound-evidence cases, six Outlook integration cases, four CLI subprocess cases and added report context/determinism/freshness checks.
-- [ ] **Test Coverage**: Pending final aggregate snapshot — hardening owns the independent line/branch gate; historical combined scores are insufficient.
-- [x] **Test Results**: Scoped pass — 60 targeted cases. Latest completed shared snapshot: 494 passed; earlier concurrent failures resolved. Shared typing still had one active Teams-test error; see below.
+- [x] **Test Coverage**: Reviewed scoped snapshot — 2384/2444 lines (97.55%) and 653/694 branches (94.09%), independently gated. Final whole shared-tree coverage remains a separate coordinator gate.
+- [x] **Test Results**: 485 tests passed in a fresh isolated M365/Outlook snapshot; publication/CLI cases pass. Concurrent shared-tree verification remains distinct; see below.
 
 ## Scope and implemented fixes
 
@@ -22,7 +22,7 @@ The consumer requires an exact frozen partition inventory, explicit timezone-awa
 
 The approval configuration hash and exact scope must match the run. Reports retain evidence class, partition/configuration hashes, both reconciliation hashes, OCEL, candidate landscape, operational patterns, quality and a coverage ledger with source/event counts kept separate. Owner validation remains pending and tenant-wide coverage unknown. Restricted analytical artifacts do not become owner-validated executive findings.
 
-CLI validation failures now omit payload-bearing exception diagnostics and preserve a previous output. Closure configuration model errors are also sanitized. A single generation timestamp now supplies both report and semantic projection; fixed-input/fixed-time reports rebuild identically.
+CLI validation failures now omit payload-bearing exception diagnostics and preserve a previous output. A new regression reproduced direct publication damaging the old report on disk failure and a subprocess regression reproduced output overwriting its own input. Publication now stages/fsyncs/replaces complete JSON, removes failed stages, and rejects input/output aliases; serialization and replacement failures preserve the authoritative report. Closure configuration model errors are also sanitized. A single generation timestamp now supplies both report and semantic projection; fixed-input/fixed-time reports rebuild identically.
 
 ## Findings
 
@@ -32,13 +32,34 @@ CLI validation failures now omit payload-bearing exception diagnostics and prese
 - **Context**: Local functions verify supplied artifacts, not their origin, source-system completeness or whether two actual live acquisitions happened. No source-owner/IG approvals, closed live corpus, operational-owner validations or executive decision were established by this work.
 - **Suggestion**: Follow the documented handoff using actual approved folder/page/source/destination artifacts and independent replay. Retain both reconciliation artifacts in the authoritative store, obtain operational-owner review, then record the Executive decision. Keep the track in progress.
 
-### Medium — Final shared typing and aggregate coverage need confirmation
+### Medium — Shared in-progress product work remains outside scoped verification
 
-- **File**: `tests/test_hub_domain.py:580`, plus shared aggregate coverage evidence.
-- **Context**: The latest full suite completed with 494 tests passed. All five failures from the earlier 474/5 snapshot subsequently resolved; a separate 72-case Outlook/M365/Teams integration check also passed. Shared Ruff lint/format and Bandit passed. Strict Pyright reported one partially unknown `changes` dictionary in the actively edited Teams test; M365 scoped typing passed.
-- **Suggestion**: The Teams owner resolves that typing error and the hardening owner produces final independent line/branch measurements for the consolidated snapshot. A previous passing coverage snapshot does not prove the current integrated tree's rates.
+- **Files**: actively edited Teams domain/decision/view modules and tests; shared aggregate coverage.
+- **Context**: The earlier shared 494-test snapshot passed, but a later full-suite attempt stopped at collection because `tests/test_hub_views.py` imported an as-yet-unimplemented `careops_process.hub_views` module. Shared lint also reported an active Teams decision docstring/import issue, and shared typing reported unresolved view symbols. These source-owner RED/GREEN stages were preserved and excluded from the fixed-scope snapshot.
+- **Suggestion**: The coordinator verifies the final shared revision after all source owners commit. The scoped snapshot verifies M365 and the delivered Outlook evidence interface, not unfinished Teams product work.
 
-An earlier aggregate process exited after a Windows access violation while executing credentialing tests. It was confirmed terminal before retry; subsequent complete suites ran successfully. This was a transient observed runtime failure, not a reported test pass. The dependency audit reported no known vulnerabilities; the local project itself is not available on PyPI. Hosted CodeQL, full-history secret scans and live licence/records determinations were not performed here.
+## Reproducible scoped verification — 14 October 2026
+
+The isolated snapshot uses committed baseline `75613ab` plus the exact captured
+M365 publication/CLI files, delivered Outlook reconciliation module/tests and
+Outlook backfill-contract validator/tests. Uncommitted Teams product code and
+live exporter/operator work are excluded. Its complete pytest suite passed all
+485 tests, with independent line coverage 2384/2444 (97.55%) and branch coverage
+653/694 (94.09%). Locked `uv sync`, Ruff formatting/lint, strict Pyright, Bandit
+and pip-audit passed; the local unpublished project is skipped by the PyPI audit.
+All captured overlay hashes still matched the shared files after verification.
+
+Private reproducibility artifacts are at
+`C:/Users/doughnut/Documents/Codex/2026-10-14/c/work/m365-verification-22305927`:
+`snapshot-evidence.json` records the baseline, overlay file hashes and exclusions;
+`verification-result.json` records observations and `coverage.xml` hashes/counts.
+No shared `.coverage` or aggregate report was overwritten.
+
+The isolated run is stronger evidence for this reviewed change than an evolving
+shared-tree snapshot, but does not establish final whole-project acceptance,
+hosted checks, live source verification or human decisions. An earlier transient
+Windows access violation remains in the historical record; later scoped and
+shared complete runs succeeded. No private source payload was used in tests.
 
 ## Acceptance evidence matrix
 
