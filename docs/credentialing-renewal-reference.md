@@ -120,6 +120,13 @@ through the privacy gate before enabling broader reporting.
 
 ## Manual verification
 
+Published JSON Schema validation must explicitly enable date-time assertion with
+a working RFC3339 checker. A validator that treats `format` only as annotation,
+or lacks its optional format-checker dependency, is not evidence that naive or
+malformed timestamps were rejected. Runtime validation independently requires
+timezone-aware timestamps. Validate the normalized versioned envelope against
+the schema and retain executable cross-field/replay checks as separate evidence.
+
 Review the diagram against the synthetic golden path; remove a required stage,
 change authority, reverse timestamps, insert a deferral, and replace a stage
 with inference. Confirm each produces a review or insufficient-evidence result.

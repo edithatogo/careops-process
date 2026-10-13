@@ -11,7 +11,7 @@ gates remain open.
 - [ ] **Plan Compliance**: Partial — minimum counters/reference/reporting are
   implemented; measurement, later-pathway and manual/live gates remain open.
 - [x] **Style Compliance**: Pass — repository-wide Ruff lint and formatting pass;
-  Pyright and Conductor validation pass at dcd50a2.
+  Pyright and Conductor validation pass after f2c2eed (source checkpoint 7ecd397).
 - [x] **New Tests**: Yes — deterministic boundary, restoration, direct-merge
   source-field validation, summary rejection and nested snapshot isolation tests.
 - [ ] **Test Coverage**: Partial — current scoped line 99.33%, branch 98.91%;
@@ -104,3 +104,8 @@ pseudonymisation and vocabularies, trusted case grants, durable atomic storage,
 concurrency, cross-release privacy, retrospective and prospective silent-mode
 evaluation, governance approvals and maintainer acceptance. See the open plan
 items. Final local checks above do not constitute integration-owner acceptance.
+
+The requirement-by-requirement [completion audit](completion-audit.md) records
+the remaining specification, acceptance, plan, artifact and evidence gates.
+Fresh schema and diagram validation passes, with explicit RFC3339 format
+checking. This does not resolve the native failure or missing full-pack features.

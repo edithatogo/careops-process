@@ -10,3 +10,5 @@ not manage cases or change workflows.
 - [Specification](spec.md)
 - [Implementation plan](plan.md)
 - [Metadata](metadata.json)
+- [Review findings](review.md)
+- [Completion audit](completion-audit.md)
