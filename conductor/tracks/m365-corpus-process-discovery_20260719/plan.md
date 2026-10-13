@@ -199,3 +199,18 @@ The private snapshot has its own coverage files and excludes uncommitted Teams
 product work. It does not complete the final whole-shared-tree task above or
 Phases 6–7 live/human gates. Publication/rollback instructions and the review
 record are updated; approvals or live data were not fabricated.
+
+
+## Account and stage direction — 2026-10-14
+
+The user clarified that VUW is for testing, not piloting; the actual pilot is
+intended for the Queensland Health account. See
+[the test-to-pilot boundary](../../../docs/m365-test-to-pilot-boundary.md).
+VUW sign-in and synthetic/non-sensitive integration tests prepare the system;
+they do not satisfy Phase 6 live coverage or Phase 7 owner/Executive acceptance.
+The earlier seven-day Inbox suggestion was not confirmed. Queensland Health
+source/IG decisions and frozen scope/storage/retention/rollback remain pending.
+
+- [x] Task: Prepare a finite VUW development/integration test plan and Queensland Health pilot decision brief with a non-authorising draft record.
+- [ ] Task: Complete human VUW sign-in and verify authorised test capabilities through the Outlook work.
+- [ ] Task: Record the actual Queensland Health pilot decisions and scope before live acquisition.

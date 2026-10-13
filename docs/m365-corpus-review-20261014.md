@@ -80,3 +80,14 @@ shared complete runs succeeded. No private source payload was used in tests.
 ## Decision and handoff
 
 Retain the track and its open human/live checkpoints. Local M365 artifacts are ready for scoped integration; full completion is not claimed. The final source-to-report interface is documented in `docs/closed-run-evidence-v2.md` and `docs/closed-run-report-cli.md`; its strict machine schema is `contracts/closed-run-evidence-v2.schema.json`. Outlook supplies the actual folder/page/destination reconciliations. Hardening owns exporters outside Outlook, dependency/CI safeguards and authoritative aggregate coverage. No synthetic record was recorded as live approval or tenant evidence.
+
+
+## User account/stage clarification — 14 October 2026
+
+The user clarified that VUW is a test account only and that the actual pilot is
+intended for Queensland Health. The approval preparation has been corrected:
+VUW has a synthetic-first development/integration test plan; the Queensland
+Health decision brief and pilot-entry draft remain unapproved. This resolves
+the earlier account/stage ambiguity, not the actual Queensland Health authority
+or live-evidence gates. Outlook owns VUW authentication; the coordinator owns
+final combined verification. No duplicate login or unattended polling is needed.
