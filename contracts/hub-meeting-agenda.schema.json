@@ -1,0 +1,367 @@
+{
+  "$defs": {
+    "AgendaEntry": {
+      "additionalProperties": false,
+      "description": "Preserve an agenda snapshot and protected-source references without replacing the matter.",
+      "properties": {
+        "matter_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Id",
+          "type": "string"
+        },
+        "matter_revision": {
+          "minimum": 0,
+          "title": "Matter Revision",
+          "type": "integer"
+        },
+        "review_cycle": {
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        },
+        "decision_refs": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Decision Refs",
+          "type": "array"
+        },
+        "added_at": {
+          "format": "date-time",
+          "title": "Added At",
+          "type": "string"
+        },
+        "template_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Template Digest",
+          "type": "string"
+        },
+        "brief": {
+          "$ref": "#/$defs/BriefReferences"
+        },
+        "chair_exception_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chair Exception Ref"
+        }
+      },
+      "required": [
+        "matter_id",
+        "matter_revision",
+        "review_cycle",
+        "decision_refs",
+        "added_at",
+        "template_digest",
+        "brief"
+      ],
+      "title": "AgendaEntry",
+      "type": "object"
+    },
+    "BriefReferences": {
+      "additionalProperties": false,
+      "description": "Bind approved brief sources to one scope, matter, template and decision policy.",
+      "properties": {
+        "execution_mode": {
+          "const": "synthetic",
+          "default": "synthetic",
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "matter_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Id",
+          "type": "string"
+        },
+        "scope_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Scope Ref",
+          "type": "string"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "approval_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Approval Ref",
+          "type": "string"
+        },
+        "decision_rule_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Decision Rule Digest",
+          "type": "string"
+        },
+        "question_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Question Ref",
+          "type": "string"
+        },
+        "recommendation_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Recommendation Ref",
+          "type": "string"
+        },
+        "alternatives_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Alternatives Ref",
+          "type": "string"
+        },
+        "risk_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Risk Ref",
+          "type": "string"
+        },
+        "authority_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Ref",
+          "type": "string"
+        },
+        "conflicts_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Conflicts Ref",
+          "type": "string"
+        },
+        "consultations_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Consultations Ref",
+          "type": "string"
+        },
+        "proposed_actions_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Proposed Actions Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "matter_id",
+        "scope_ref",
+        "template_version",
+        "approval_ref",
+        "decision_rule_digest",
+        "question_ref",
+        "recommendation_ref",
+        "alternatives_ref",
+        "risk_ref",
+        "authority_ref",
+        "conflicts_ref",
+        "consultations_ref",
+        "proposed_actions_ref"
+      ],
+      "title": "BriefReferences",
+      "type": "object"
+    },
+    "MinuteDecision": {
+      "additionalProperties": false,
+      "description": "Record evaluated meeting outcome; a minute is not a canonical lifecycle mutation.",
+      "properties": {
+        "matter_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Id",
+          "type": "string"
+        },
+        "meeting_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "matter_revision": {
+          "minimum": 0,
+          "title": "Matter Revision",
+          "type": "integer"
+        },
+        "review_cycle": {
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "template_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Template Digest",
+          "type": "string"
+        },
+        "decision_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "session_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Session Id",
+          "type": "string"
+        },
+        "authority_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Ref",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "response_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Response Digest",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "minute_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Minute Ref",
+          "type": "string"
+        },
+        "chair_confirmation_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Chair Confirmation Ref",
+          "type": "string"
+        },
+        "collective_confirmed": {
+          "title": "Collective Confirmed",
+          "type": "boolean"
+        },
+        "gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gaps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "matter_id",
+        "meeting_id",
+        "matter_revision",
+        "review_cycle",
+        "template_version",
+        "template_digest",
+        "decision_id",
+        "session_id",
+        "authority_ref",
+        "policy_digest",
+        "response_digest",
+        "recorded_at",
+        "minute_ref",
+        "chair_confirmation_ref",
+        "collective_confirmed",
+        "gaps"
+      ],
+      "title": "MinuteDecision",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Keep immutable agenda and minute snapshots inside an explicit synthetic operating context.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "meeting_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Meeting Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "chair_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Chair Ref",
+      "type": "string"
+    },
+    "secretariat_refs": {
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Secretariat Refs",
+      "type": "array"
+    },
+    "participant_refs": {
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Participant Refs",
+      "type": "array"
+    },
+    "scheduled_at": {
+      "format": "date-time",
+      "title": "Scheduled At",
+      "type": "string"
+    },
+    "agenda_deadline": {
+      "format": "date-time",
+      "title": "Agenda Deadline",
+      "type": "string"
+    },
+    "authority_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Authority Ref",
+      "type": "string"
+    },
+    "cadence_policy_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Cadence Policy Ref",
+      "type": "string"
+    },
+    "revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "entries": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AgendaEntry"
+      },
+      "title": "Entries",
+      "type": "array"
+    },
+    "decisions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MinuteDecision"
+      },
+      "title": "Decisions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "meeting_id",
+    "scope_ref",
+    "chair_ref",
+    "secretariat_refs",
+    "participant_refs",
+    "scheduled_at",
+    "agenda_deadline",
+    "authority_ref",
+    "cadence_policy_ref"
+  ],
+  "title": "MeetingAgenda",
+  "type": "object"
+}

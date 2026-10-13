@@ -142,6 +142,19 @@
       "title": "Review Cycle",
       "type": "integer"
     },
+    "meeting_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Meeting Ref"
+    },
     "chair_confirmation_ref": {
       "anyOf": [
         {

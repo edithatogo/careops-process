@@ -86,6 +86,7 @@ class DecisionSession(MetadataRecord):
     decision_id: OpaqueReference
     template_version: Version
     review_cycle: Revision
+    meeting_ref: OpaqueReference | None = None
     chair_confirmation_ref: OpaqueReference | None = None
     chair_confirmation_actor_ref: OpaqueReference | None = None
     minute_ref: OpaqueReference | None = None
