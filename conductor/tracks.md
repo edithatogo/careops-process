@@ -33,5 +33,5 @@
 - [~] **Track: Teams clinical-governance workflows**
   *Link: [./tracks/teams-governance-workflows_20260717/index.md](./tracks/teams-governance-workflows_20260717/index.md)*
 
-- [ ] **Track: Local reliability and ALM hardening**
+- [~] **Track: Local reliability and ALM hardening**
   *Link: [./tracks/reliability-alm-hardening_20261014/index.md](./tracks/reliability-alm-hardening_20261014/index.md)*
