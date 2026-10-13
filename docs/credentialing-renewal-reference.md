@@ -2,6 +2,15 @@
 
 Version: 0.1.0. Synthetic, organisation-neutral reference; disconnected by default.
 
+Source-system and qualifier values are code-shaped tokens: an initial ASCII
+letter or digit followed by letters, digits, dots, underscores, colons or
+hyphens, within the existing length limits. Sentences, email addresses and
+arbitrary narratives are rejected by both the runtime and published schema.
+This syntax check cannot establish that a token is non-identifying: deployment
+must map approved controlled vocabularies and must never encode names or other
+sensitive values as tokens. Stable object/event references likewise require
+approved pseudonymisation or verified non-identifying source-local semantics.
+
 The executable comparison is `assess_routine_renewal` in
 `src/careops_process/credentialing_assurance.py`. It returns reference-model
 evidence for human review, not policy certification. The caller supplies the

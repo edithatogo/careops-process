@@ -44,6 +44,13 @@ repository evidence, not live tenant execution or governance approval.
 
 ### Manual checkpoint and integration limits
 
+Follow-up audit on 2026-10-14 identified unrestricted string values in allowed
+qualifier/source fields. Runtime and published schema now require bounded
+code-shaped tokens. Sixteen regression tests reject narrative and email values;
+68 scoped credentialing/ontology tests pass. Syntax alone cannot prove that
+identifiers or codes are non-identifying; approved vocabularies and source
+pseudonymisation remain an external gate.
+
 - [ ] Maintainer verifies the repository tranche using
   `docs/credentialing-renewal-reference.md` and accepts the generic-model limits.
 - [ ] Integration owner reruns all required checks on the final shared revision.

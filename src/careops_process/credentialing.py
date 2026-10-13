@@ -68,6 +68,7 @@ DurationBucket = Literal[
 ]
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+_CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:-]*$"
 _FORBIDDEN_KEYS = frozenset(
     {
         "body",
@@ -124,15 +125,23 @@ class CredentialingModel(BaseModel):
 class CredentialingQualifiers(CredentialingModel):
     """Non-identifying dimensions permitted on a credentialing event."""
 
-    pathway_code: str | None = Field(default=None, max_length=80)
-    professional_stream: str | None = Field(default=None, max_length=80)
-    facility_or_service_type: str | None = Field(default=None, max_length=80)
-    exception_code: str | None = Field(default=None, max_length=120)
+    pathway_code: str | None = Field(default=None, max_length=80, pattern=_CODE_PATTERN)
+    professional_stream: str | None = Field(default=None, max_length=80, pattern=_CODE_PATTERN)
+    facility_or_service_type: str | None = Field(
+        default=None,
+        max_length=80,
+        pattern=_CODE_PATTERN,
+    )
+    exception_code: str | None = Field(default=None, max_length=120, pattern=_CODE_PATTERN)
     feature_pack_version: str | None = Field(
         default=None,
         pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$",
     )
-    authority_mapping_version: str | None = Field(default=None, max_length=80)
+    authority_mapping_version: str | None = Field(
+        default=None,
+        max_length=80,
+        pattern=_CODE_PATTERN,
+    )
     duration_bucket: DurationBucket | None = None
 
 
@@ -142,7 +151,7 @@ class CredentialingFact(CredentialingModel):
     event_id: str = Field(min_length=1, max_length=128)
     activity: Activity
     timestamp_utc: datetime
-    source_system: str = Field(min_length=1, max_length=80)
+    source_system: str = Field(min_length=1, max_length=80, pattern=_CODE_PATTERN)
     object_ids: list[str] = Field(min_length=1)
     observed_or_inferred: DerivationKind
     confidence: float = Field(ge=0.0, le=1.0)

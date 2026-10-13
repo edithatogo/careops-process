@@ -301,3 +301,37 @@ def test_timezone_normalisation_handles_non_whole_hour_offset() -> None:
 
     projection = validate_credentialing_projection(payload)
     assert projection.facts[1].timestamp_utc.tzinfo is UTC
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "pathway_code",
+        "professional_stream",
+        "facility_or_service_type",
+        "exception_code",
+        "authority_mapping_version",
+    ],
+)
+@pytest.mark.parametrize(
+    "value",
+    [
+        "Dr Jane Smith reviewed this case",
+        "jane@example.invalid",
+        "case evidence / unrestricted narrative",
+    ],
+)
+def test_qualifiers_reject_free_text_and_email_values(field: str, value: str) -> None:
+    """Allowed qualifier keys cannot serve as a free-text content channel."""
+    payload = synthetic_payload()
+    payload["facts"][0]["qualifiers"][field] = value
+    with pytest.raises(ValidationError):
+        validate_credentialing_projection(payload)
+
+
+def test_source_system_rejects_free_text_content() -> None:
+    """Source-system labels are codes rather than unrestricted descriptions."""
+    payload = synthetic_payload()
+    payload["facts"][0]["source_system"] = "raw correspondence text"
+    with pytest.raises(ValidationError):
+        validate_credentialing_projection(payload)
