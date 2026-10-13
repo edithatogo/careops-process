@@ -223,10 +223,8 @@ def validate_conductor(root: Path, *, verify_git: bool = True) -> list[str]:
     errors = _tracks(root)
     try:
         errors.extend(_skills(root, verify_git=verify_git))
-    except OSError, ValueError as exc:
-        errors.append(
-            f".agents/skills-manifest.json: {exc}"
-        )
+    except (OSError, ValueError) as exc:
+        errors.append(f".agents/skills-manifest.json: {exc}")
     return sorted(set(errors))
 
 
