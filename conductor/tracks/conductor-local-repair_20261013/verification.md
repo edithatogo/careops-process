@@ -71,3 +71,14 @@ Ruling: preserved third-party sources unchanged and validated their real
 resource links while excluding inline examples — avoids interpreting templates
 as dependencies; cost if wrong: a nonstandard inline resource link may need
 explicit classification. Git working-tree checks still detect tracked deletion.
+
+## Continuation audit
+
+Both deferred review issues are now resolved: the Outlook registry title is
+normalised, and invalid source/skill paths produce an actionable manifest
+diagnostic instead of a traceback. Two regression cases failed before the
+diagnostic fix and pass afterwards. The complete suite passes 179 tests;
+setup validation, Ruff, formatting, strict typing and Bandit also pass.
+
+All planned implementation tasks are finished. The four human-review
+checkpoints remain unrecorded and must not be represented as approvals.

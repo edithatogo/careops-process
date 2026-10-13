@@ -220,7 +220,14 @@ def _skills(root: Path, *, verify_git: bool) -> list[str]:
 def validate_conductor(root: Path, *, verify_git: bool = True) -> list[str]:
     """Return actionable setup errors without contacting platforms or writing files."""
     root = root.resolve()
-    return sorted(set(_tracks(root) + _skills(root, verify_git=verify_git)))
+    errors = _tracks(root)
+    try:
+        errors.extend(_skills(root, verify_git=verify_git))
+    except OSError, ValueError as exc:
+        errors.append(
+            f".agents/skills-manifest.json: {exc}"
+        )
+    return sorted(set(errors))
 
 
 def main() -> int:

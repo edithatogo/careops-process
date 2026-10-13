@@ -21,7 +21,7 @@
 - [x] **Track: Canonical OCEL 2.0 contract and process ontology**
   *Link: [./tracks/ocel-contract_20260715/index.md](./tracks/ocel-contract_20260715/index.md)*
 
-- [~] **Track: Track: Cloud-only complete historical Outlook mailbox backfill**
+- [~] **Track: Cloud-only complete historical Outlook mailbox backfill**
   *Link: [./tracks/outlook-cloud-historical-backfill_20260721/index.md](./tracks/outlook-cloud-historical-backfill_20260721/index.md)*
 
 - [x] **Track: Platform feasibility and secure repository bootstrap**

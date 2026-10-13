@@ -177,6 +177,18 @@ def test_malformed_manifest_is_an_actionable_error(tmp_path: Path) -> None:
     assert any("manifest" in error for error in validate_conductor(root, verify_git=False))
 
 
+@pytest.mark.parametrize("record", ["sources", "skills"])
+def test_manifest_path_escape_has_actionable_diagnostic(tmp_path: Path, record: str) -> None:
+    """Invalid source and skill paths fail without exposing a traceback."""
+    root = make_project(tmp_path)
+    path = root / ".agents/skills-manifest.json"
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    manifest[record][0]["path"] = "../../outside"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    errors = validate_conductor(root, verify_git=False)
+    assert any("escapes" in error for error in errors)
+
+
 def test_damaged_entrypoint_fails_validation(tmp_path: Path) -> None:
     """An existing file without skill metadata and upstream instructions is unusable."""
     root = make_project(tmp_path)
