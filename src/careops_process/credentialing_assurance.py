@@ -76,14 +76,14 @@ class CredentialingLedger:
         self.projection = validate_credentialing_projection(self.projection)
         self.tombstoned_event_ids = set(self.tombstoned_event_ids)
         self.dead_letters = list(self.dead_letters)
+        self.inference_provenance = dict(self.inference_provenance)
+        for event_id in tuple(self.tombstoned_event_ids):
+            self.tombstone(event_id)
         self._require_provenance(self.projection)
         self.inference_provenance = {
             event_id: InferenceRun.model_validate(run.model_dump(mode="python"))
             for event_id, run in self.inference_provenance.items()
         }
-        for event_id in tuple(self.tombstoned_event_ids):
-            self.tombstone(event_id)
-        self._require_provenance(self.projection)
 
     def _require_provenance(self, projection: CredentialingProjection) -> None:
         for fact in projection.facts:
@@ -180,6 +180,7 @@ def assess_routine_renewal(
     separate local applicability mapping before this evidence is operational.
     Tied required-stage timestamps are ambiguous and require human review.
     """
+    projection = validate_credentialing_projection(projection)
     linked = [fact for fact in projection.facts if case_id in fact.object_ids]
     observed = [fact for fact in linked if fact.observed_or_inferred == "observed"]
     excluded = len(linked) - len(observed)
@@ -230,6 +231,7 @@ def project_credentialing_report(
     ):
         message = "Reporting minimum must be at least two distinct cases"
         raise CredentialingContractError(message)
+    projection = validate_credentialing_projection(projection)
     facts = [fact for fact in projection.facts if case_ids.intersection(fact.object_ids)]
     if role == "case_analyst":
         return {

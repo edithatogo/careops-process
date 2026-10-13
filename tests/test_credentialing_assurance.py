@@ -152,6 +152,35 @@ def test_existing_projection_is_revalidated() -> None:
         CredentialingLedger(projection)
 
 
+def test_assessment_rejects_mutated_observed_confidence() -> None:
+    """Post-validation mutation cannot produce a reference match."""
+    projection = validate_credentialing_projection(renewal_payload())
+    projection.facts[0].confidence = 0.2
+    with pytest.raises(ValidationError):
+        assess_routine_renewal(projection, "case-1", authority_version="synthetic-v1")
+
+
+def test_reporting_rejects_mutated_identifiers() -> None:
+    """A previously parsed object cannot release an injected identifying value."""
+    projection = validate_credentialing_projection(renewal_payload())
+    projection.facts[0].event_id = "synthetic@example.invalid"
+    with pytest.raises(ValidationError):
+        project_credentialing_report(
+            projection, role="case_analyst", case_ids={"case-1"}, minimum_cases=2
+        )
+
+
+def test_restored_deleted_inference_needs_no_retained_provenance() -> None:
+    """Restoration deletes facts before checking provenance of the retained population."""
+    payload = renewal_payload()
+    payload["facts"][0]["observed_or_inferred"] = "inferred"
+    projection = validate_credentialing_projection(payload)
+    deleted = projection.facts[0].event_id
+    ledger = CredentialingLedger(projection, tombstoned_event_ids={deleted})
+    ledger.merge(projection)
+    assert deleted not in {fact.event_id for fact in ledger.projection.facts}
+
+
 def test_failed_tombstone_preserves_all_previous_state(monkeypatch: pytest.MonkeyPatch) -> None:
     """A failed preparation must leave deletion memory and facts consistent."""
     ledger = CredentialingLedger(validate_credentialing_projection(renewal_payload()))

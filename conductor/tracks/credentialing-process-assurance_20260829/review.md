@@ -9,8 +9,8 @@ the implementer reproduced them and added passing regression tests after fixes.
 
 ## Verification Checks
 
-- Credentialing and ontology slice: 74 tests passed.
-- Fresh full repository run: 661 tests passed; combined coverage 96.99%, with
+- Credentialing and ontology slice: 77 tests passed.
+- Fresh full repository run: 664 tests passed; combined coverage 97.06%, with
   line and branch coverage separately above 90%.
 - Scoped Ruff lint and formatting, Pyright, and Conductor validation passed.
 - All fixtures are synthetic. No live source writes or pilot evaluation occurred.
@@ -25,6 +25,10 @@ and tombstone replacements are prepared before state changes. Regression tests
 demonstrate deletion replay safety, nested provenance isolation, invalid assignment
 rejection and injected deletion-copy failure consistency. Constructor projection
 isolation and unrelated-tombstone snapshot preservation also have regression tests.
+Assessment and reporting additionally revalidate model contents. Restored deleted
+inference is removed before retained-event provenance checks; deleted run links
+are not required or retained. These follow-up defects were reproduced in failing
+tests before fixes.
 
 Unresolved runtime evidence: the independent reviewer observed a Hypothesis
 FlakyFailure inside standard-library deepcopy; an isolated rerun and the final

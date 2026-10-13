@@ -81,6 +81,12 @@ intermittent runtime evidence. External and manual gates remain open.
 
 ## Later packs
 
+Follow-up boundary review (2026-10-14): renewal assessment and reporting now
+revalidate mutable projection contents. Restored tombstones are applied before
+provenance is required for the retained population. 77 scoped tests and 664 full
+repository tests pass, along with scoped lint/format, typing and Conductor checks.
+The measurement and human-review gaps in `review.md` remain open.
+
 - [ ] Changed or additional scope.
 - [ ] Mutual recognition.
 - [ ] Interim, emergency, disaster, and other temporary pathways.
