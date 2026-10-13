@@ -87,6 +87,34 @@ def test_parsed_projection_is_revalidated_as_a_detached_snapshot() -> None:
     assert validated is not projection
 
 
+@pytest.mark.parametrize("invalid_side", ["existing", "incoming"])
+def test_merge_revalidates_mutated_source_fields(invalid_side: str) -> None:
+    """Neither retained nor arriving invalid facts can cross the direct merge boundary."""
+    invalid = validate_credentialing_projection(synthetic_payload())
+    invalid.facts[1].source_system = "synthetic@example.invalid"
+    empty = validate_credentialing_projection({"source": "careops-approve", "facts": []})
+    existing, incoming = (invalid, empty) if invalid_side == "existing" else (empty, invalid)
+    with pytest.raises(ValidationError, match="source_system"):
+        merge_credentialing_projections(existing, incoming)
+
+
+def test_metrics_reject_post_validation_mutation() -> None:
+    """Invalid observed evidence cannot be counted as a validated source event."""
+    projection = validate_credentialing_projection(synthetic_payload())
+    projection.facts[1].confidence = 0.2
+    with pytest.raises(ValidationError, match="confidence"):
+        summarise_credentialing_projection(projection)
+
+
+def test_direct_merge_detaches_nested_source_values() -> None:
+    """Subsequent caller edits cannot silently rewrite the returned history."""
+    projection = validate_credentialing_projection(synthetic_payload())
+    empty = validate_credentialing_projection({"source": "careops-approve", "facts": []})
+    merged = merge_credentialing_projections(projection, empty)
+    projection.facts[0].qualifiers.pathway_code = "caller-modified"
+    assert merged.facts[0].qualifiers.pathway_code == "routine-renewal"
+
+
 @pytest.mark.parametrize(
     "forbidden_key",
     [

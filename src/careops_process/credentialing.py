@@ -319,8 +319,11 @@ def merge_credentialing_projections(
     Raises:
         CredentialingContractError: If versions or sources differ, or an event ID
             is reused with different content.
+        pydantic.ValidationError: If either mutable projection violates the contract.
 
     """
+    existing = validate_credentialing_projection(existing)
+    incoming = validate_credentialing_projection(incoming)
     if (
         existing.contract_version != incoming.contract_version
         or existing.ontology_version != incoming.ontology_version
@@ -362,7 +365,11 @@ def summarise_credentialing_projection(
     Returns:
         Aggregate counts suitable for a minimum assurance dashboard.
 
+    Raises:
+        pydantic.ValidationError: If the mutable projection violates the contract.
+
     """
+    projection = validate_credentialing_projection(projection)
     activity_counts = Counter(fact.activity for fact in projection.facts)
     object_ids = {object_id for fact in projection.facts for object_id in fact.object_ids}
     return CredentialingMetrics(

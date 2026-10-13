@@ -12,11 +12,16 @@ gates remain open.
   implemented; measurement, later-pathway and manual/live gates remain open.
 - [x] **Style Compliance**: Pass — repository-wide Ruff lint and formatting pass;
   Pyright and Conductor validation pass at dcd50a2.
-- [x] **New Tests**: Yes — deterministic boundary and restoration regressions.
-- [x] **Test Coverage**: Yes — line 97.70%, branch 94.91%, measured independently.
-- [ ] **Test Results**: Failed repeatability — the full suite passed 664 tests,
-  but a fresh ten-process deletion/replay run passed only eight; one access
-  violation and one Hypothesis FlakyFailure remain. Standalone probes also fail.
+- [x] **New Tests**: Yes — deterministic boundary, restoration, direct-merge
+  source-field validation, summary rejection and nested snapshot isolation tests.
+- [ ] **Test Coverage**: Partial — current scoped line 99.33%, branch 98.91%;
+  both credentialing modules individually reach 100% line and branch coverage.
+  The latest full run crashed and produced no completed coverage report. Earlier
+  repository-wide line 97.70% and branch 94.91% are historical evidence only.
+- [ ] **Test Results**: Failed full run — 81 scoped tests pass, but the latest
+  full run crashed with 0xC0000005 in
+  `test_arbitrary_deleted_stage_sets_never_reappear`. Earlier full-suite evidence
+  was 664 passes; repeated deletion/replay and standalone probes still fail.
 
 Both offline PowerShell regression scripts pass. Bandit JSON audit: zero findings
 and parse errors (four configured skipped checks). Dependency audit: no known
@@ -39,6 +44,13 @@ inference is removed before retained-event provenance checks; deleted run links
 are not required or retained. These follow-up defects were reproduced in failing
 tests before fixes.
 
+Direct merges now revalidate and detach both input projections, including nested
+source-field values; the metrics function revalidates before counting. Four new
+cases first demonstrated invalid mutated source acceptance, unsafe counting and
+caller mutation of returned history, then passed after fixes. Scoped lint/format,
+Pyright, Bandit and patch secret checks pass. This changes contract correctness,
+not the unresolved native-runtime finding.
+
 ### High — Reproducible native runtime failures
 
 - **File**: `src/careops_process/credentialing.py` (validation/serialization boundary).
@@ -54,6 +66,11 @@ tests before fixes.
   core module offset `0x16dfdc`; the matching faulthandler location is `model_dump`.
   The module location does not prove the root cause. No symbolized analysis or
   product dependency/runtime change has been made.
+  Saved exception registers and instruction bytes agree: `rdx=0x14` and the fault
+  instruction reads `byte ptr [rdx]`. This confirms the immediate invalid read,
+  not the origin of the pointer. A separate probe disabling GC before Pydantic
+  imports/model definitions also failed, with zero collector callbacks observed;
+  the proposed GC workaround remains unverified.
 
 ```diff
 - Treat a single passing full-suite run as sufficient runtime evidence.
