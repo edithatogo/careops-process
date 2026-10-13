@@ -1,5 +1,12 @@
 # Closed-run report command
 
+The consumer now requires the [v2 evidence interface](closed-run-evidence-v2.md)
+and [machine-readable schema](../contracts/closed-run-evidence-v2.schema.json).
+Summary-only evidence is rejected. Approval must bind the configuration hash,
+and facts must match the partition and complete-input hashes. Graph exporter
+`acquired` output still needs independently supplied folder/page and destination
+reconciliation evidence; it cannot be promoted by changing its status.
+
 After the Power Automate backfill has closed and its sanitized evidence has
 been exported to the approved evidence location, the workflow owner or analyst
 can build the process-mining report with:
@@ -19,3 +26,11 @@ are not reconciled, idempotent replay is unverified, or raw content storage is
 not explicitly ruled out. Never commit the input exports, secret, or generated
 report if it contains tenant-derived data; retain them only in the approved
 evidence location.
+
+The v2 report contains OCEL, candidate process families, operational patterns,
+corpus quality and a coverage ledger from the same validated run. The ledger
+keeps source-record counts separate from emitted-event counts, labels evidence
+as synthetic/smoke-test/live, and leaves tenant-wide coverage unknown and owner
+validation pending. It is a restricted analytical review artifact, not an
+owner-validated executive decision. Validation diagnostics do not echo input
+payloads, and validation failure leaves a previous report untouched.
