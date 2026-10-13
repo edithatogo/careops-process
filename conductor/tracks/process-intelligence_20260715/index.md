@@ -1,5 +1,13 @@
 # Process intelligence semantic model and improvement loop
 
+Status: completed
+
+- [Specification](spec.md)
+- [Implementation plan](plan.md)
+- [Metadata](metadata.json)
+
+## Historical index
+
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/6
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 

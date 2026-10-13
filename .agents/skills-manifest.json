@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "conductor",
+      "path": ".agents/plugins/conductor",
+      "url": "https://github.com/gemini-cli-extensions/conductor.git",
+      "commit": "6e8f9a860bcdd6a2c423473c12e745200688c633",
+      "license": "Apache-2.0",
+      "maintainer": "Conductor upstream",
+      "live_status": "unconfigured"
+    },
+    {
+      "id": "dataverse-skills",
+      "path": ".agents/plugins/dataverse-skills",
+      "url": "https://github.com/microsoft/Dataverse-skills.git",
+      "commit": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
+      "license": "MIT",
+      "maintainer": "Microsoft",
+      "live_status": "unconfigured"
+    },
+    {
+      "id": "power-platform-skills",
+      "path": ".agents/plugins/power-platform-skills",
+      "url": "https://github.com/microsoft/power-platform-skills.git",
+      "commit": "83e2c4463762156370cdd946689d0fcb8070cb09",
+      "license": "MIT",
+      "maintainer": "Microsoft",
+      "live_status": "unconfigured"
+    },
+    {
+      "id": "skills-for-fabric",
+      "path": ".agents/plugins/skills-for-fabric",
+      "url": "https://github.com/microsoft/skills-for-fabric.git",
+      "commit": "bc42aaf734771bf752c1d7082dd91e5a6ca72b9f",
+      "license": "MIT",
+      "maintainer": "Microsoft",
+      "live_status": "unconfigured"
+    },
+    {
+      "id": "microsoft-skills",
+      "path": ".agents/plugins/microsoft-skills",
+      "url": "https://github.com/microsoft/skills.git",
+      "commit": "91ec09549ca16bd6c44e6ccdef26d61eb2082f07",
+      "license": "MIT",
+      "maintainer": "Microsoft",
+      "live_status": "unconfigured"
+    },
+    {
+      "id": "cli-microsoft365",
+      "path": ".agents/plugins/cli-microsoft365",
+      "url": "https://github.com/pnp/cli-microsoft365.git",
+      "commit": "f682e10ea5f6e3b3ff6094a10bf53a39bc6b651d",
+      "license": "MIT",
+      "maintainer": "PnP community",
+      "live_status": "unconfigured"
+    }
+  ],
+  "skills": [
+    {
+      "name": "careops-conductor-setup",
+      "source": "conductor",
+      "path": "skills/conductor-setup",
+      "description": "Scaffolds the project and sets up the Conductor environment. Use this whenever a project needs to be initialized or if the Conductor configuration is missing.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-conductor-new-track",
+      "source": "conductor",
+      "path": "skills/conductor-new-track",
+      "description": "Plans a new track (feature or bug fix), generates spec/plan documents, and updates the registry.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-conductor-implement",
+      "source": "conductor",
+      "path": "skills/conductor-implement",
+      "description": "Executes the tasks defined in the specified track's plan. Use this to start or continue working on a feature, bug fix, or chore.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-conductor-status",
+      "source": "conductor",
+      "path": "skills/conductor-status",
+      "description": "Displays the current progress of the project by parsing the Tracks Registry and individual track plans.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-conductor-review",
+      "source": "conductor",
+      "path": "skills/conductor-review",
+      "description": "Reviews the completed track work against guidelines and the plan. Acts as a Principal Software Engineer to ensure quality and compliance.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-conductor-revert",
+      "source": "conductor",
+      "path": "skills/conductor-revert",
+      "description": "Reverts previous work (tracks, phases, or tasks) by identifying associated commits and performing Git reverts.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-overview",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-overview",
+      "description": "Foundational cross-cutting context for Dataverse / Power Platform work \u2014 scope and the skill map, the tool-capability reference, the safety rules, and the safe change lifecycle. Use when the user mentions Dataverse, Dynamics 365, Power Platform, CRM, or ERP; load this first for orientation. Specialist skills self-route via their own frontmatter triggers. Finance and Operations / F&O business-data requests also require this skill first, then dv-query for reads.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-connect",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-connect",
+      "description": "One-step setup and connection diagnostics for a Dataverse environment \u2014 installs tools, authenticates, registers MCP, writes `.env`, and verifies active profiles and linked ERP endpoints. Use when starting a new project, switching environments, fixing authentication, troubleshooting MCP, or checking existing Dataverse / Finance and Operations connectivity or linkage.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-query",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-query",
+      "description": "Bulk reads, multi-page iteration, and analytics over Dataverse data. Use when the user wants to read, list, filter, aggregate, group, join, or analyze records \u2014 including pandas DataFrame workflows and notebook exploration. Also covers ERP (Finance and Operations / F&O) business-data reads and runtime entity, schema, or action discovery; load dv-overview first, then this skill.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-data",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-data",
+      "description": "Record-level CRUD and bulk operations \u2014 create, update, delete, upsert, CSV import, multi-table foreign-key loads, AI-generated sample data. Use when the user wants to write, modify, seed, or import data records into Dataverse tables, or plan or perform Finance and Operations (ERP) record writes and DMF package imports.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-metadata",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-metadata",
+      "description": "Dataverse schema authoring and inspection \u2014 tables, columns, relationships, forms, and views. Use when the user wants to define, evolve, or inspect the data model \u2014 add a column, create a table, set up a lookup, customize a form, build a view, or list existing columns and relationships.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-solution",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-solution",
+      "description": "Dataverse solution lifecycle \u2014 create, export, import, promote across environments, and validate deployments. Use when the user wants to package customizations, deploy to another environment, or move work between dev / test / prod.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-security",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-security",
+      "description": "Security-role assignment, user access, application users, business units, and admin self-elevation in Dataverse environments. Use when the user wants to give someone access, grant a role, become an admin, or add a service principal.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dv-admin",
+      "source": "dataverse-skills",
+      "path": ".github/plugins/dataverse/skills/dv-admin",
+      "description": "Environment-level Dataverse administration \u2014 bulk delete, retention/archival, organization settings, OrgDB settings, recycle bin, audit, and the 37 allowlisted PPAC toggles. Use when the user wants to clean up data at scale, configure audit, change environment settings, manage retention policies, or list/cancel ERP batch jobs.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-setup",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/setup",
+      "description": "Set up Power Automate CLI prerequisites. Use when the user is new, something isn't working, or they need help getting started.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-route-environments",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/route-environments",
+      "description": "Check Power Platform environment routing status and understand default environment resolution. Use when the user asks about environment routing, developer environments, or new maker landing. Routing is configured in the admin center, not here. NOT for listing flows or managing connections.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-browse-flows",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/browse-flows",
+      "description": "Browse Power Automate environments and flows interactively. Use when the user wants to browse, list, or explore their flows and environments.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-create-flow",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/create-flow",
+      "description": "Guided flow creation wizard. Use when the user wants to create a new flow interactively.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-build-flow",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/build-flow",
+      "description": "Autonomously build a complete Power Automate flow from a description. Use when you need to generate a full flow definition and create it.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-manage-flows",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/manage-flows",
+      "description": "Manage flow lifecycle - publish, test, batch operations, inventory reports. Use when the user asks to publish, test, batch manage, or get an inventory of flows.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-debug-flow",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/debug-flow",
+      "description": "Debug a failed Power Automate flow run. Use when a flow failed, has errors, or the user wants to troubleshoot a run.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-diagnose-flow",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/diagnose-flow",
+      "description": "Deep autonomous diagnosis of a failed flow run. Provide environment, flow, and run IDs. Use when the user asks to diagnose or deeply investigate a specific failed flow run.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-automate-manage-desktop-flows",
+      "source": "power-platform-skills",
+      "path": "plugins/power-automate/skills/manage-desktop-flows",
+      "description": "Manage and run Power Automate Desktop (RPA) flows and machine groups. Use when the user asks about desktop flows, RPA, or machine groups.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-apps-canvas-app",
+      "source": "power-platform-skills",
+      "path": "plugins/canvas-apps/skills/canvas-app",
+      "description": "Creates or edits a Power Apps Canvas App through the Canvas Authoring MCP coauthoring session. Handles staged experience design, direct and partitioned targeted edits, planned multi-screen changes, responsive layout, and compile-error convergence. Trigger on requests to create, build, generate, modify, update, change, fix, or edit a Canvas App or .pa.yaml files.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-apps-add-data-source",
+      "source": "power-platform-skills",
+      "path": "plugins/canvas-apps/skills/add-data-source",
+      "description": "Guide the user to add a data source, connection, or API connector to a Canvas App via Power Apps Studio, then verify and continue. USE WHEN the user asks to add a data source, add a connection, add an API, add a connector, connect to SharePoint / Dataverse / SQL / Excel / OneDrive / Teams / Office 365, or any similar request to make new data available to the app. DO NOT USE WHEN the user is asking to list or describe existing data sources \u2014 call list_data_sources or list_apis directly instead.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-power-apps-configure-canvas-mcp",
+      "source": "power-platform-skills",
+      "path": "plugins/canvas-apps/skills/configure-canvas-mcp",
+      "description": "Configure the Canvas Authoring MCP server for the current coauthoring session. USE WHEN \"configure MCP\", \"set up MCP server\", \"MCP not working\", \"connect Canvas Apps MCP\", \"canvas-authoring not available\", \"MCP not configured\", \"set up canvas apps\".",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-powerbi-report-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/powerbi-report-cli",
+      "description": "Plan, design, author, preview, publish, and manage Power BI reports across requirements, page design, local PBIR/PBIP edits, validation, screenshots, Fabric upload/download, and rebinding. Use for report lifecycle work; use semantic-model-authoring for model or DAX changes and fabriciq for data questions. Triggers: plan Power BI report, design report page, edit PBIR, preview PBIP, publish report, rebind report",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-semantic-model-authoring",
+      "source": "skills-for-fabric",
+      "path": "skills/semantic-model-authoring",
+      "description": "Manages Power BI semantic models, including tables, columns, measures, relationships, field parameters, DAX, Import, DirectQuery and Direct Lake designs, sources, connections, permissions, refresh, and deployment. Load this skill before acting on a semantic model, unless it is part of publishing a PBIP project, which powerbi-report-cli owns. For natural-language data questions use fabriciq; for visuals use powerbi-report-cli.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-search-consumption-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/search-consumption-cli",
+      "description": "Finds Fabric items across every workspace with the Catalog Search API when the workspace is unknown, locating an item by display name, inventorying one item type tenant-wide, and returning the workspace and item IDs later calls need. Dataflow Gen1 and Gen2 items are not supported. Use only to locate items; once found, query them with the owning item skill such as sqldw-cli, spark-cli, eventhouse-cli or fabriciq.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-onelake-catalog-govern-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/onelake-catalog-govern-cli",
+      "description": "Governs Microsoft Fabric OneLake catalog health, protection, and trust through Fabric Admin, Core, and Power BI REST APIs. Use for tenant or owner-scoped audits and guarded remediation of domains, workspace assignment, capacity, labels, tags, descriptions, refresh, and item identity. Catalog item discovery belongs to search-consumption-cli.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-dataflows-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/dataflows-cli",
+      "description": "Manages Fabric Dataflow Gen2 items, including creation, M editing, connections, output destinations, getDefinition and updateDefinition inspection, executeQuery, refresh history, and Gen1-to-Gen2 save-as upgrades via saveAsNativeArtifact. Use for Dataflow items or Power Query M definitions. For pipeline JSON use pipeline-migration; for Spark or Warehouse transformations use their own skills.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-deployment-pipelines-authoring-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/deployment-pipelines-authoring-cli",
+      "description": "Manages Fabric deployment pipelines for ALM promotion across dev, test, and prod stages, including stage creation, workspace assignment, selective forward or backward deploys, operation polling, stage role assignments, and the pipeline and workspace permissions each action requires. For Git sync use git-integration-operations-cli.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-git-integration-operations-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/git-integration-operations-cli",
+      "description": "Runs the Fabric Git integration lifecycle through fab api or az rest, including connecting a workspace to Azure DevOps or GitHub, committing, updating from Git, reading sync status, resolving conflicts, disconnecting a connected workspace, and automating sync with a service principal. For stage promotion use deployment-pipelines-authoring-cli. Branch switching, fab deploy, fabric-cicd and cross-workspace rebinding are out of scope.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-spark-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/spark-cli",
+      "description": "Manages Fabric Spark work, including notebook cell code with %%configure, %%sql, PySpark and notebookutils, named notebook runs, Livy sessions, triage of failed or OOM notebook and pipeline Spark runs, and the Materialized Lake View (MLV) lifecycle. Load it before writing MLV SQL, since CREATE MATERIALIZED LAKE VIEW and its CONSTRAINT clause are Fabric-only. KQL materialized views belong to eventhouse-cli.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-variable-library-cli",
+      "source": "skills-for-fabric",
+      "path": "skills/variable-library-cli",
+      "description": "Manages Fabric Variable Library items, including definitions, libraryVariables and valueSets overrides. Covers which consumers can reference a variable and with what syntax -- pipelines, notebooks via notebookutils variableLibrary, Dataflow Gen2, Copy Jobs, shortcuts, UDFs and Plan items -- the active value set per workspace or deployment stage, and Git serialization for CI/CD.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-microsoft-docs",
+      "source": "microsoft-skills",
+      "path": ".github/skills/microsoft-docs",
+      "description": "Understand Microsoft technologies by querying official documentation. Use whenever the user asks how something works, wants tutorials, needs configuration options, limits, quotas, or best practices for any Microsoft technology (Azure, .NET, M365, Windows, Power Platform, etc.)\u2014even if they don't mention \"docs.\" If the question is about understanding a concept rather than writing code, this is the right skill.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-teams-app-developer",
+      "source": "microsoft-skills",
+      "path": ".github/plugins/microsoft-365-agents-toolkit/skills/teams-app-developer",
+      "description": "Builds, tests, and deploys Microsoft 365 apps and agents for Teams and Copilot. Includes sub-skills for project creation, local testing, cloud deployment, troubleshooting, and Slack-to-Teams migration. USE FOR: Teams agent, bot, tab, message extension, Declarative Agents, Custom Engine Agents, local testing, Agents Playground, Azure resource provision, remote deployment, Slack to Teams migration, cross-platform bot development, Block Kit to Adaptive Cards conversion. DO NOT USE FOR: general web development, non-bot/non-Teams projects.",
+      "live_status": "unconfigured"
+    },
+    {
+      "name": "careops-clim365",
+      "source": "cli-microsoft365",
+      "path": "skills/clim365",
+      "description": "Use CLI for Microsoft 365 (`m365`) to manage Microsoft 365 tenants, SharePoint, Entra ID, Teams, Outlook, Planner, Power Platform, Viva, Purview, and more from the command line. Activate when the user asks to manage, query, configure, or automate anything in Microsoft 365 \u2014 including SharePoint sites/lists/pages, Entra users/groups/apps, Teams channels/messages, Outlook mail/calendars, Planner tasks, Power Automate flows, Power Apps, Viva Engage/Connections, Purview labels, OneDrive, To Do, or Microsoft Graph extensions.",
+      "live_status": "unconfigured"
+    }
+  ],
+  "prerequisites": {
+    "installation_only": true,
+    "dataverse": [
+      "PAC, Dataverse CLI/SDK or MCP",
+      "verified account and environment"
+    ],
+    "flows": [
+      "Node.js, FlowAgent CLI/MCP",
+      "verified environment and connections"
+    ],
+    "m365": [
+      "Node.js, Microsoft 365 CLI",
+      "verified delegated account access"
+    ],
+    "powerbi": [
+      "Azure CLI or supported Fabric CLI/MCP",
+      "verified workspace permissions and capacity"
+    ],
+    "teams": [
+      "Node.js, Agents Toolkit CLI",
+      "verified account"
+    ]
+  }
+}

@@ -1,5 +1,13 @@
 # Canonical OCEL 2.0 contract and process ontology
 
+Status: completed
+
+- [Specification](spec.md)
+- [Implementation plan](plan.md)
+- [Metadata](metadata.json)
+
+## Historical index
+
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/2
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 

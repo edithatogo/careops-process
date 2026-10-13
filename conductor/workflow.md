@@ -8,3 +8,15 @@
 5. Separate repository evidence from live tenant evidence and external gates.
 6. Require manual verification at the end of every track.
 
+## Local setup validation
+
+Run `uv run python scripts/validate_conductor.py` before declaring Conductor
+ready. This checks required guides, every track registration and document,
+metadata/status consistency, local links, skill entrypoints and pinned source
+commits. The upstream setup helper's index-exists check is not sufficient.
+
+After cloning, run `git submodule update --init` and
+`uv run python scripts/install_repo_skills.py` to refresh repository entrypoints.
+For user-level Codex installation and prerequisites, see
+[Repository skills](../docs/repository-skills.md).
+

@@ -42,6 +42,7 @@ pythonpath = ["src"]
 [tool.ruff]
 target-version = "py314"
 line-length = 100
+extend-exclude = [".agents/plugins/**"]
 
 [tool.ruff.lint]
 select = ["ALL"]
