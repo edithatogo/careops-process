@@ -3,6 +3,7 @@
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)
 - [Metadata](./metadata.json)
+- [Local review, 14 October 2026](./review-20261014.md)
 
 ## ALM issues
 

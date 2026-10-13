@@ -37,10 +37,11 @@ reconciliation and owner approvals remain in this track.
 
 ## Phase 4: OCEL process discovery — GitHub #34
 
-- [x] Task: Build OCEL objects, events and relations from the closed Outlook run.
-- [x] Task: Generate empirical process families, variants, hand-offs, ageing and incomplete cases.
-- [x] Task: Generate coverage-honest executive visuals and review queue.
-- [x] Task: Preserve run-manifest lineage on every output.
+- [x] Task: Implement OCEL reconstruction from supplied closed-run evidence (repository capability; live execution pending).
+- [x] Task: Implement empirical process-family, variant, hand-off, ageing and incomplete-case outputs (synthetic verification).
+- [x] Task: Implement coverage-honest executive visuals and review queue (synthetic verification).
+- [x] Task: Implement run-manifest lineage preservation on generated outputs.
+- [ ] Task: Execute and validate these outputs over the actual reconciled authorised Outlook run after Phase 3.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 5: Governance and executive validation — GitHub #35
@@ -54,7 +55,7 @@ reconciliation and owner approvals remain in this track.
 
 - [x] Task: Run repository quality, privacy, security and workflow checks.
 - [ ] Task: Reconcile Conductor, GitHub issues, live evidence and residual external gates.
-- [x] Task: Update the parent M365 corpus-discovery track with the closed Outlook lane status.
+- [x] Task: Update the parent M365 corpus-discovery track with repository capability status; live Outlook closure remains pending.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Verification evidence — 2026-10-14
@@ -64,14 +65,54 @@ with 90.88% overall coverage; Ruff formatting and lint; Pyright (zero errors);
 and Bandit over `src`. The Phase 1 manual checkpoint remains pending.
 These checks establish repository behaviour only, not live mailbox completeness.
 
-Before Phase 2 live execution, correct `scripts/Invoke-GraphMailboxBackfill.ps1`:
-its current projection persists subject, sender, recipient addresses and raw
-identifiers, contrary to the privacy-minimised specification. It also requires
-folder inventory, per-folder reconciliation and idempotent-rerun evidence before
-it can satisfy the full-mailbox acceptance gate. Do not execute this script
-against a live mailbox in its current form.
+Initial verification finding (superseded by the local repairs below):
+`scripts/Invoke-GraphMailboxBackfill.ps1` persisted subject, sender, recipient
+addresses and raw identifiers contrary to the privacy-minimised specification.
+That projection defect has been repaired and verified offline. Full-mailbox
+acceptance still requires frozen inventory, actual per-folder reads,
+destination reconciliation and unchanged replay evidence.
 
 Delegated consent, authorised mailbox scope and retention/destination approvals
 remain external gates. The July access-denial evidence is historical and does
 not establish the current tenant permission state. No live extraction was
 attempted during this verification.
+
+## Local repairs and review — 2026-10-14
+
+- [x] Task: Replace unsafe Graph projection with allowlisted keyed pseudonyms and sanitized diagnostics.
+- [x] Task: Verify encoded UTC windows, explicit timezones, bounded retries, safe pagination, duplicate/replay accounting and empty results offline.
+- [x] Task: Stage directory publication, protect a previous artifact, block concurrent writers and verify failed publication/recovery paths.
+- [x] Task: Add folder-scoped acquisition with measured page ledgers and scope-bound replay.
+- [x] Task: Add nested/hidden-folder inventory traversal, explicit inherited exclusions and drift/cycle checks through an approved-source adapter interface.
+- [x] Task: Reconcile supplied frozen inventory/page ledgers and canonical destination snapshots without inventing writes or approval.
+- [x] Task: Verify canonical partitions and initial/replay reconciliation against M365's closure interface using synthetic evidence only.
+- [x] Task: Enforce contract identity prohibitions, pseudonym domains and source metadata allowlisting with failing-then-passing regressions.
+- [x] Task: Document acquired evidence, operator preparation, VUW-first proposal, closure inputs and Queensland Health promotion gates.
+- [x] Task: Commit the verified local repairs as `1554aaf` and conduct the [scoped Conductor review](review-20261014.md).
+- [ ] Task: Complete manual Conductor verification and actual authorised full-folder/source-to-Dataverse run, replay and governance decisions.
+
+Local evidence: 56 Outlook Python tests pass; scoped Python coverage is 97.89%
+lines and 90.00% branches. The offline PowerShell exporter suite passes,
+including cross-language pseudonym encoding, folder page ledgers, retries,
+concurrent writer rejection, publication rollback and a failed-recovery backup.
+Scoped Ruff, strict Pyright and Bandit pass. Installed dependencies have no known
+vulnerabilities in pip-audit (the local project itself is not a PyPI audit target).
+Conductor validation passes. These are repository checks, not tenant evidence.
+
+The shared suite passed an earlier 352-test snapshot. A later full-suite run
+was interrupted during collection by the concurrent Teams implementation's
+missing `apply_decision_transition` import in `tests/test_hub_decisions.py`.
+Shared final verification is coordinated separately; do not infer it from
+Outlook's scoped results.
+
+GitHub reconciliation: #30, #33, #34 and #35 remain open; #31 and #32 are closed
+for contract/blueprint work. Their closed state does not establish live
+completeness. No GitHub status or comments were changed during this work.
+
+The user confirmed that no approved pilot mailbox scope/destination currently
+exists and proposed VUW before Queensland Health, with a personal Azure account
+as another possible access check. Actual account access, consent, configuration
+approval, connection binding, retention/destination controls, full folder reads,
+destination writes and replay are still pending. No live acquisition or consent
+request was attempted. The sanctioned Power Automate route remains the production
+acceptance route; Graph/offline helpers do not replace its live verification.
