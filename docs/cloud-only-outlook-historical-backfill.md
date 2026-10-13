@@ -69,6 +69,9 @@ mailbox identity. Message, conversation, folder and mailbox references use
 domain-separated HMAC-SHA256 pseudonyms. A stable base64 key containing at least
 32 random bytes must be supplied in `CAREOPS_MAIL_PSEUDONYM_KEY` from an approved
 secret store. Never commit or print the key, and retain the same key for replay.
+An approved scope-bound private record must be supplied with `-PilotEntryPath`
+before token/source access; `-PreparePilotEntryPath` creates only an unapproved
+local proposal. See the operator runbook for the preparation/approval boundary.
 
 Offline verification needs no account:
 

@@ -2,6 +2,8 @@
 param(
     [Parameter(Mandatory)] [string] $Mailbox,
     [Parameter(Mandatory)] [string] $OutputDirectory,
+    [string] $PilotEntryPath,
+    [string] $PreparePilotEntryPath,
     [string] $FolderId,
     [string] $Since,
     [string] $Until,
@@ -50,6 +52,63 @@ try {
     $destination = [IO.Path]::GetFullPath($OutputDirectory)
     $parent = [IO.Path]::GetDirectoryName($destination)
     if (-not $parent -or $destination -eq [IO.Path]::GetPathRoot($destination)) { throw 'An output subdirectory is required.' }
+    $outputRef = Get-MailPseudonym 'destination' @($destination)
+    if ($PreparePilotEntryPath) {
+        if ($PilotEntryPath) { throw 'Preparation and acquisition are mutually exclusive.' }
+        $proposal = [ordered]@{
+            source_owner_approved = $false; ig_approved = $false
+            configuration_frozen = $false; rollback_retention_approved = $false
+            authorised_source_partitions = @($(if ($folderRef) { $folderRef }))
+            configuration_hash = '<sha256-of-approved-frozen-configuration>'
+            evidence_reference = '<approved-evidence-location-reference>'
+            acquisition_scope = [ordered]@{
+                mailbox_ref = $mailboxRef; folder_ref = $folderRef
+                since_utc = $sinceUtc; until_utc = $untilUtc
+                output_directory_ref = $outputRef; whole_mailbox_approved = $false
+            }
+        }
+        $proposalBytes = [Text.UTF8Encoding]::new($false).GetBytes(($proposal | ConvertTo-Json -Depth 8))
+        $proposalStream = [IO.File]::Open([IO.Path]::GetFullPath($PreparePilotEntryPath), [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+        try { $proposalStream.Write($proposalBytes, 0, $proposalBytes.Length) } finally { $proposalStream.Dispose() }
+        Write-Output 'Prepared an unapproved Outlook acquisition record; source access was not attempted.'
+        return
+    }
+    # A token or a user-supplied mailbox is not source-owner/IG approval. Check
+    # the private pilot record and its exact acquisition binding before I/O.
+    if ([string]::IsNullOrWhiteSpace($PilotEntryPath)) { throw 'Approved pilot entry is required.' }
+    $approvalText = Get-Content -LiteralPath $PilotEntryPath -Raw
+    $approval = $approvalText | ConvertFrom-Json -AsHashtable -Depth 16
+    $approvalFields = @('source_owner_approved', 'ig_approved', 'configuration_frozen', 'rollback_retention_approved', 'authorised_source_partitions', 'configuration_hash', 'evidence_reference', 'acquisition_scope')
+    if ($approval -isnot [Collections.IDictionary] -or $approval.Count -ne $approvalFields.Count) { throw 'Invalid pilot entry shape.' }
+    foreach ($field in $approvalFields) { if (-not $approval.Contains($field)) { throw 'Incomplete pilot entry.' } }
+    foreach ($field in @('source_owner_approved', 'ig_approved', 'configuration_frozen', 'rollback_retention_approved')) {
+        if ($approval[$field] -isnot [bool] -or $approval[$field] -ne $true) { throw 'Pilot approval gate is incomplete.' }
+    }
+    if ($approval.configuration_hash -isnot [string] -or $approval.configuration_hash -cnotmatch '^[a-f0-9]{64}$' -or
+        $approval.evidence_reference -isnot [string] -or [string]::IsNullOrWhiteSpace($approval.evidence_reference) -or
+        $approval.authorised_source_partitions -isnot [array] -or -not $approval.authorised_source_partitions.Count) { throw 'Invalid approval references.' }
+    $partitions = $approval.authorised_source_partitions
+    if (@($partitions | Where-Object { $_ -isnot [string] -or [string]::IsNullOrWhiteSpace($_) }).Count -or
+        @($partitions | Sort-Object -Unique).Count -ne $partitions.Count) { throw 'Invalid approved source partitions.' }
+    $scope = $approval.acquisition_scope
+    $scopeFields = @('mailbox_ref', 'folder_ref', 'since_utc', 'until_utc', 'output_directory_ref', 'whole_mailbox_approved')
+    if ($scope -isnot [Collections.IDictionary] -or $scope.Count -ne $scopeFields.Count) { throw 'Invalid approved acquisition scope.' }
+    foreach ($field in $scopeFields) { if (-not $scope.Contains($field)) { throw 'Incomplete approved acquisition scope.' } }
+    # ConvertFrom-Json date coercion differs across PowerShell versions. Keep
+    # the exact JSON string/null bounds and reject other JSON primitive types.
+    $approvalDocument = [Text.Json.JsonDocument]::Parse($approvalText)
+    try {
+        $scopeDocument = $approvalDocument.RootElement.GetProperty('acquisition_scope')
+        foreach ($field in @('since_utc', 'until_utc')) { $scope[$field] = $scopeDocument.GetProperty($field).GetString() }
+    } finally { $approvalDocument.Dispose(); $approvalText = $null }
+    if ($scope.mailbox_ref -isnot [string] -or $scope.mailbox_ref -cne $mailboxRef -or
+        $scope.folder_ref -cne $folderRef -or $scope.since_utc -cne $sinceUtc -or $scope.until_utc -cne $untilUtc -or
+        $scope.output_directory_ref -isnot [string] -or $scope.output_directory_ref -cne $outputRef -or
+        $scope.whole_mailbox_approved -isnot [bool]) { throw 'Acquisition does not match approved scope.' }
+    if ($FolderId) {
+        if ($partitions -cnotcontains $folderRef) { throw 'Folder absent from approved partitions.' }
+    } elseif ($scope.whole_mailbox_approved -ne $true) { throw 'Mailbox-wide acquisition is not approved.' }
+    $approvalHash = (Get-FileHash -LiteralPath $PilotEntryPath -Algorithm SHA256).Hash.ToLowerInvariant()
     New-Item -ItemType Directory -Force -Path $parent | Out-Null
     $lockPath = Join-Path $parent ('.' + [IO.Path]::GetFileName($destination) + '.careops-mail.lock')
     $writerLock = [IO.File]::Open($lockPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
@@ -67,6 +126,7 @@ try {
         if ($previous.schema_version -ne '2.0.0' -or $previous.status -ne 'acquired' -or
             $previous.mailbox_ref -ne $mailboxRef -or $previous.key_ref -ne $keyRef -or
             $previous.folder_ref -ne $folderRef -or
+            $previous.approval_hash -ne $approvalHash -or $previous.configuration_hash -ne $approval.configuration_hash -or
             $previous.since_utc -ne $sinceUtc -or $previous.until_utc -ne $untilUtc -or
             $previous.content_hash -ne (Get-FileHash -LiteralPath $previousEvents -Algorithm SHA256).Hash.ToLowerInvariant()) {
             throw 'Previous scope, key or integrity does not match.'
@@ -180,6 +240,7 @@ try {
     [ordered]@{
         schema_version = '2.0.0'; run_id = [guid]::NewGuid().ToString(); status = 'acquired'
         mailbox_ref = $mailboxRef; key_ref = $keyRef; pseudonymization_version = 'hmac-sha256-json-array-v1'
+        approval_hash = $approvalHash; configuration_hash = $approval.configuration_hash
         folder_ref = $folderRef; page_ledger = @($pageLedger.ToArray())
         since_utc = $sinceUtc; until_utc = $untilUtc; pages_read = $pagesRead
         candidate_count = $candidateCount; acquired_count = $facts.Count

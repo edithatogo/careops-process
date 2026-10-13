@@ -32,19 +32,50 @@ match that old label. Folder access, connector actions and organisational policy
 must also be checked. Authentication failures remain external gates.
 
 Supply `CAREOPS_MAIL_PSEUDONYM_KEY` through the approved secret mechanism, then
-invoke the collector only after approval, with a dedicated output path outside
-Git. Example placeholders below are not executable approval records:
+prepare a scope-bound draft in the private evidence location:
+
+```powershell
+pwsh -NoProfile -File scripts/Invoke-GraphMailboxBackfill.ps1 `
+  -Mailbox '<candidate approved mailbox>' -OutputDirectory '<candidate artifact directory>' `
+  -FolderId '<candidate approved folder ID>' `
+  -Since '2026-01-01T00:00:00Z' -Until '2026-01-02T00:00:00Z' `
+  -PreparePilotEntryPath '<new private pilot-entry JSON path>'
+```
+
+Preparation makes no token request or mailbox read, never overwrites an existing
+record, and leaves every approval flag false. The record binds keyed mailbox,
+folder and output-directory references plus exact UTC bounds. Owners must review
+the actual corresponding source/destination, complete the frozen configuration
+hash and evidence reference, confirm the approved partition list and record the
+required human decisions. For mailbox-wide acquisition, preparation leaves the
+partition inventory empty and whole-mailbox approval false; the operator must
+supply the complete approved frozen folder list and explicit mailbox-wide
+approval. Do not use a mailbox reference as a substitute for folder inventory.
+
+Only after those approvals exist, invoke the collector with the matching private
+record, stable key and a dedicated output path outside Git. Example placeholders
+below are not executable approval records:
 
 ```powershell
 pwsh -NoProfile -File scripts/Invoke-GraphMailboxBackfill.ps1 `
   -Mailbox '<approved mailbox>' -OutputDirectory '<approved new artifact directory>' `
-  -Since '2026-01-01T00:00:00Z' -Until '2026-01-02T00:00:00Z'
+  -Since '2026-01-01T00:00:00Z' -Until '2026-01-02T00:00:00Z' `
+  -PilotEntryPath '<approved private pilot-entry JSON path>'
 ```
 
 For a folder-only pilot, additionally supply `-FolderId '<approved folder ID>'`.
 Treat that binding as protected transient configuration outside Git. No account
 or tenant is inferred from these placeholders. Dates require an explicit offset
 or `Z`; invalid date/page-size input fails without echoing its value.
+
+The exporter rejects missing/false/type-confused approval, unknown record fields,
+duplicate partitions, mismatched mailbox/folder/window/output bindings and an
+unapproved mailbox-wide route before token acquisition. Folder-specific reads
+also require the folder reference in the approved partition list. Every acquired
+manifest retains approval-file and frozen-configuration hashes; replay requires
+the same approval record. This checks consistency of the recorded decision, not
+the authenticity or organisational authority of a signature. Keep real approval
+records outside Git; the script's synthetic tests are not evidence of consent.
 
 For `Get emails (V3)`, explicitly disable unread-only and attachment-only filters
 and attachment content, and leave subject/address/importance/search filters

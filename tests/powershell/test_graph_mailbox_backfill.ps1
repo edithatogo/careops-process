@@ -10,6 +10,7 @@ $global:requests = [Collections.Generic.List[string]]::new()
 $global:pages = @()
 $global:pageIndex = 0
 $global:tokenFailure = $false
+$global:tokenCalls = 0
 $global:publishFailure = $false
 $global:rollbackFailure = $false
 $global:sleeps = [Collections.Generic.List[int]]::new()
@@ -32,7 +33,7 @@ function global:Move-Item {
     }
     Microsoft.PowerShell.Management\Move-Item -LiteralPath $LiteralPath -Destination $Destination
 }
-function global:az { if ($global:tokenFailure) { throw 'RAW-TOKEN-ERROR' }; 'test-token' }
+function global:az { $global:tokenCalls++; if ($global:tokenFailure) { throw 'RAW-TOKEN-ERROR' }; 'test-token' }
 function global:Invoke-RestMethod {
     param($Uri, $Headers, $Method, $TimeoutSec, $MaximumRedirection)
     $global:requests.Add([string]$Uri)
@@ -43,10 +44,41 @@ function global:Invoke-RestMethod {
 }
 function Assert($Condition, $Message) { if (-not $Condition) { throw $Message } }
 function Reset-Pages($Values) {
-    $global:pages = @($Values); $global:pageIndex = 0; $global:requests.Clear()
+    $global:pages = @($Values); $global:pageIndex = 0; $global:requests.Clear(); $global:tokenCalls = 0
 }
 function Export($Directory, $Extra = @{}) {
-    & $exporter -Mailbox 'synthetic@example.invalid' -OutputDirectory $Directory @Extra | Out-Null
+    # These transient synthetic approval-shaped records are used only with the
+    # mocked source/token functions above; they are not tenant approval evidence.
+    $fixtureHmac = [Security.Cryptography.HMACSHA256]::new([byte[]](1..32))
+    function Fixture-Ref($Domain, $Values) {
+        $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject (@($Domain) + $Values) -Compress))
+        $Domain + '_' + [Convert]::ToHexString($fixtureHmac.ComputeHash($bytes)).ToLowerInvariant()
+    }
+    $mailboxRef = Fixture-Ref 'mailbox' @('synthetic@example.invalid')
+    $folderRef = if ($Extra.FolderId) { Fixture-Ref 'folder' @($mailboxRef, [string]$Extra.FolderId) } else { $null }
+    $boundValues = @{}
+    foreach ($name in @('Since', 'Until')) {
+        $parsed = [datetimeoffset]::MinValue
+        $boundValues[$name] = if ($Extra[$name] -is [datetimeoffset]) { $Extra[$name].UtcDateTime.ToString('o') } elseif ($Extra.ContainsKey($name) -and [datetimeoffset]::TryParse([string]$Extra[$name], [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$parsed)) { $parsed.UtcDateTime.ToString('o') } else { $null }
+    }
+    $entry = [ordered]@{
+        source_owner_approved = $true; ig_approved = $true; configuration_frozen = $true; rollback_retention_approved = $true
+        authorised_source_partitions = @($(if ($folderRef) { $folderRef } else { $mailboxRef }))
+        configuration_hash = 'a' * 64; evidence_reference = 'synthetic-offline-fixture-only'
+        acquisition_scope = [ordered]@{
+            mailbox_ref = $mailboxRef; folder_ref = $folderRef
+            since_utc = $boundValues.Since; until_utc = $boundValues.Until
+            output_directory_ref = Fixture-Ref 'destination' @([IO.Path]::GetFullPath($Directory))
+            whole_mailbox_approved = -not $folderRef
+        }
+    }
+    $fixtureHmac.Dispose()
+    $approvalPath = Join-Path $root ('synthetic-approval-' + [guid]::NewGuid() + '.json')
+    $entry | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $approvalPath -Encoding utf8
+    $global:lastApprovalPath = $approvalPath
+    $parameters = @{ Mailbox = 'synthetic@example.invalid'; OutputDirectory = $Directory; PilotEntryPath = $approvalPath }
+    foreach ($name in $Extra.Keys) { $parameters[$name] = $Extra[$name] }
+    & $exporter @parameters | Out-Null
 }
 function Expect-Failure($Directory, $Extra = @{}) {
     $failed = $false
@@ -64,6 +96,32 @@ $message = @{
     internetMessageId = 'RAW-INTERNET-ID'
 }
 try {
+    Reset-Pages @()
+    $pendingPath = Join-Path $root 'pending-pilot.json'
+    $pendingOutput = Join-Path $root 'not-acquired'
+    & $exporter -Mailbox 'synthetic@example.invalid' -OutputDirectory $pendingOutput -FolderId 'RAW-FOLDER' -PreparePilotEntryPath $pendingPath | Out-Null
+    $pending = Get-Content -LiteralPath $pendingPath -Raw | ConvertFrom-Json
+    Assert (-not $pending.source_owner_approved -and -not $pending.ig_approved -and -not $pending.configuration_frozen -and -not $pending.rollback_retention_approved) 'Preparation manufactured approval'
+    Assert (-not $pending.acquisition_scope.whole_mailbox_approved) 'Preparation granted mailbox-wide permission'
+    Assert ($global:tokenCalls -eq 0 -and $global:requests.Count -eq 0 -and -not (Test-Path $pendingOutput)) 'Preparation contacted source or created an acquisition artifact'
+    Assert ((Get-Content -LiteralPath $pendingPath -Raw) -notmatch 'RAW-|synthetic@example') 'Approval proposal contains protected identifiers'
+    $pendingBytes = [IO.File]::ReadAllBytes($pendingPath)
+    $overwriteBlocked = $false
+    try {
+        & $exporter -Mailbox 'synthetic@example.invalid' -OutputDirectory $pendingOutput -FolderId 'RAW-FOLDER' -PreparePilotEntryPath $pendingPath | Out-Null
+    } catch { $overwriteBlocked = $true }
+    Assert ($overwriteBlocked -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($pendingPath)) -eq [Convert]::ToBase64String($pendingBytes)) 'Preparation overwrote an existing review record'
+    Assert ($global:tokenCalls -eq 0) 'Preparation overwrite failure requested a token'
+    Expect-Failure $pendingOutput @{ FolderId = 'RAW-FOLDER'; PilotEntryPath = $pendingPath }
+    Assert ($global:tokenCalls -eq 0) 'Unapproved generated record requested a token'
+    Reset-Pages @(@{ value = @($message) })
+    $unapprovedFailed = $false
+    try {
+        & $exporter -Mailbox 'synthetic@example.invalid' -OutputDirectory (Join-Path $root 'unapproved') | Out-Null
+    } catch { $unapprovedFailed = $true }
+    Assert $unapprovedFailed 'Missing pilot approval did not block source acquisition'
+    Assert ($global:requests.Count -eq 0) 'Missing pilot approval contacted the mailbox'
+    Assert ($global:tokenCalls -eq 0) 'Missing pilot approval requested a token'
     $output = Join-Path $root 'output'
     Reset-Pages @(@{ value = @($message); '@odata.nextLink' = 'https://graph.microsoft.com/v1.0/users/synthetic%40example.invalid/messages?$skip=1' }, @{ value = @($message) })
     Export $output
@@ -74,10 +132,33 @@ try {
     Assert ($fact.id -match '^mail_[a-f0-9]{64}$') 'Message identity must be keyed and pseudonymous'
     Assert ($fact.object_ids.Count -eq 1) 'Conversation object linkage missing'
     $manifest = $manifestText | ConvertFrom-Json
+    Assert ($manifest.approval_hash -match '^[a-f0-9]{64}$' -and $manifest.configuration_hash -eq ('a' * 64)) 'Manifest is not bound to the reviewed approval/configuration'
     Assert ($manifest.candidate_count -eq 2 -and $manifest.acquired_count -eq 1 -and $manifest.duplicate_count -eq 1) 'Counts must reconcile duplicates'
     Assert ($manifest.status -eq 'acquired' -and -not $manifest.full_mailbox_verified) 'Message-list pagination cannot certify full mailbox scope'
     Assert ($global:requests.Count -eq 2) 'Continuation not followed'
     Assert ($global:requests[0] -notmatch 'subject|Recipients|internetMessageId|sentDateTime|from') 'Request includes prohibited or unused fields'
+    $baselineApproval = $global:lastApprovalPath
+    foreach ($defect in @('denied', 'string_boolean', 'mailbox', 'folder', 'window', 'date_type_confusion', 'destination', 'whole_scope', 'duplicate_partition', 'invalid_configuration_hash', 'raw_extra_field')) {
+        $entry = Get-Content -LiteralPath $baselineApproval -Raw | ConvertFrom-Json -AsHashtable
+        switch ($defect) {
+            'denied' { $entry.ig_approved = $false }
+            'string_boolean' { $entry.ig_approved = 'true' }
+            'mailbox' { $entry.acquisition_scope.mailbox_ref = 'mailbox_' + ('b' * 64) }
+            'folder' { $entry.acquisition_scope.folder_ref = 'folder_' + ('b' * 64) }
+            'window' { $entry.acquisition_scope.since_utc = '2026-01-01T00:00:00.0000000Z' }
+            'date_type_confusion' { $entry.acquisition_scope.since_utc = 123 }
+            'destination' { $entry.acquisition_scope.output_directory_ref = 'destination_' + ('b' * 64) }
+            'whole_scope' { $entry.acquisition_scope.whole_mailbox_approved = $false }
+            'duplicate_partition' { $entry.authorised_source_partitions += $entry.authorised_source_partitions[0] }
+            'invalid_configuration_hash' { $entry.configuration_hash = 'RAW-INVALID-HASH' }
+            'raw_extra_field' { $entry.subject = 'RAW-NARRATIVE' }
+        }
+        $invalidApprovalPath = Join-Path $root ('invalid-approval-' + $defect + '.json')
+        $entry | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $invalidApprovalPath -Encoding utf8
+        Reset-Pages @(@{ value = @($message) }); Expect-Failure $output @{ PilotEntryPath = $invalidApprovalPath }
+        Assert ($global:requests.Count -eq 0 -and $global:tokenCalls -eq 0) 'Invalid or mismatched approval contacted source/token endpoint'
+        Assert ((Get-Content (Join-Path $output 'mail-events.jsonl') -Raw) -eq $projection) 'Approval failure changed prior valid output'
+    }
     Reset-Pages @(@{ value = @($message, $message) })
     $folderOutput = Join-Path $root 'folder'; Export $folderOutput @{ FolderId = 'RAW-FOLDER' }
     Assert ($global:requests[0].Contains('/mailFolders/RAW-FOLDER/messages?')) 'Folder-scoped acquisition broadened to the mailbox'
@@ -183,7 +264,7 @@ try {
     Assert ($savedBackup.Count -eq 1 -and (Get-Content (Join-Path $savedBackup[0].FullName 'mail-events.jsonl') -Raw) -eq $projection) 'Failed recovery did not preserve a verified backup'
     Assert (-not (Test-Path (Join-Path $root '.rollback.careops-mail.lock'))) 'Failed recovery leaked writer lock'
     $env:CAREOPS_MAIL_PSEUDONYM_KEY = ''; Reset-Pages @(); Expect-Failure $output
-    Write-Output 'PASS: Outlook exporter offline privacy, pagination, replay, window and failure regressions'
+    Write-Output 'PASS: Outlook exporter offline approval, privacy, pagination, replay, window and failure regressions'
 } finally {
     $env:CAREOPS_MAIL_PSEUDONYM_KEY = $oldSecret
     # Only the literal freshly-created test directory is removed.

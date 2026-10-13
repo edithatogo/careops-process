@@ -40,6 +40,26 @@ UUID. `mailbox_ref` and `key_ref` bind replay without exposing protected input;
 and `until_utc` record optional inclusive/exclusive bounds. An unrestricted
 collector run leaves both null; a pilot window cannot be called a full backfill.
 
+The collector requires `-PilotEntryPath`: the common pilot approval/freeze
+fields, nonempty unique authorised partitions, configuration hash and evidence
+reference, plus a strict `acquisition_scope`. That object contains exactly
+`mailbox_ref`, `folder_ref`, `since_utc`, `until_utc`, `output_directory_ref` and
+`whole_mailbox_approved`. All four common approval/freeze flags must be true
+booleans. The scope must match the requested mailbox, optional folder, time
+bounds and normalized output directory using the supplied stable key. A folder
+must be in the approved partitions; a mailbox-wide route additionally requires
+explicit whole-mailbox approval. The record is checked before token acquisition,
+directory staging or source reads. Preparation mode generates only a pending,
+unapproved record and cannot be combined with acquisition mode.
+
+`approval_hash` is SHA256 of the exact private pilot-entry file bytes;
+`configuration_hash` is the approved frozen-configuration hash supplied by that
+record. Neither identifies an approval person or copies the approval reference.
+These bind the acquired artifact and its replay to the reviewed record; the
+closed consumer separately checks the actual canonical frozen configuration.
+The script verifies recorded consistency, not owner authority or signature
+authenticity. Never record a synthetic approval fixture as a real decision.
+
 With `-FolderId` supplied from the approved transient folder binding, acquisition
 uses only that folder's message endpoint, verifies every returned parent-folder
 ID and binds replay to `folder_ref`. `page_ledger` contains measured per-page

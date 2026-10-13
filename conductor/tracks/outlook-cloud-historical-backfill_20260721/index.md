@@ -4,6 +4,7 @@
 - [Implementation Plan](./plan.md)
 - [Metadata](./metadata.json)
 - [Local review, 14 October 2026](./review-20261014.md)
+- [Completion audit, 14 October 2026](./completion-audit-20261014.md)
 
 ## ALM issues
 

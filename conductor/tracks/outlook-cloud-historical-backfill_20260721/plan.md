@@ -89,6 +89,8 @@ attempted during this verification.
 - [x] Task: Enforce contract identity prohibitions, pseudonym domains and source metadata allowlisting with failing-then-passing regressions.
 - [x] Task: Document acquired evidence, operator preparation, VUW-first proposal, closure inputs and Queensland Health promotion gates.
 - [x] Task: Commit the verified local repairs as `1554aaf` and conduct the [scoped Conductor review](review-20261014.md).
+- [x] Task: Enforce pilot-entry approvals before token/source access, bind exact mailbox/folder/window/output scope and retain approval/configuration hashes in acquired evidence.
+- [x] Task: Provide an unapproved local preparation mode with no source/token access, false approval flags and no overwrite of an existing review record.
 - [ ] Task: Complete manual Conductor verification and actual authorised full-folder/source-to-Dataverse run, replay and governance decisions.
 
 Local evidence: 56 Outlook Python tests pass; scoped Python coverage is 97.89%
@@ -121,3 +123,28 @@ approval, connection binding, retention/destination controls, full folder reads,
 destination writes and replay are still pending. No live acquisition or consent
 request was attempted. The sanctioned Power Automate route remains the production
 acceptance route; Graph/offline helpers do not replace its live verification.
+
+## Continuation audit — approval boundary
+
+The completion audit found that the Graph exporter previously relied on the
+operator runbook rather than validating pilot approval before token acquisition.
+That local gap is now repaired: `-PilotEntryPath` is required for acquisition,
+with strict true approval/freeze flags and exact scope binding. The acquired
+manifest and replay bind the approval-file and approved configuration hashes.
+`-PreparePilotEntryPath` only creates an unapproved local proposal and neither
+requests a token nor reads a mailbox. It leaves approvals false and does not
+overwrite existing records. Tests use transient synthetic fixtures and mocked
+token/source functions, never tenant approval records.
+
+Verification: the expanded offline PowerShell suite passes approval denial,
+scope mismatch, primitive-type confusion, proposal preparation/no-overwrite,
+non-null UTC-window handling across PowerShell versions, and all earlier
+privacy/replay/recovery cases. The 62 Outlook/M365 contract, reconciliation and
+integration tests pass. Azure CLI is currently unavailable in the local shell;
+installed M365/PAC executables alone do not establish authenticated access.
+
+The full objective remains unproven. Live consent, mailbox/folder scope,
+destination/retention approval, deployed connector verification, full-folder
+acquisition, destination reconciliation, unchanged live replay, process-owner
+validation, Executive decision and manual Conductor checkpoints remain pending.
+See the [requirement-level completion audit](completion-audit-20261014.md).
