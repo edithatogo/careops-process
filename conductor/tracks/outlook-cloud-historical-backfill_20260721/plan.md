@@ -105,6 +105,11 @@ missing `apply_decision_transition` import in `tests/test_hub_decisions.py`.
 Shared final verification is coordinated separately; do not infer it from
 Outlook's scoped results.
 
+Latest subsequent shared snapshot: 537 passed, 7 failed in the concurrent Teams
+decision/domain implementation. The [review failure record](review-20261014.md)
+lists every failing test. No Outlook failure was observed in that run; the
+shared suite remains unverified until its owners finish and recheck.
+
 GitHub reconciliation: #30, #33, #34 and #35 remain open; #31 and #32 are closed
 for contract/blueprint work. Their closed state does not establish live
 completeness. No GitHub status or comments were changed during this work.
