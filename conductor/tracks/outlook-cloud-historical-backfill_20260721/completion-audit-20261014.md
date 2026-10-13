@@ -45,9 +45,17 @@ does not repair that permission boundary. The operator selected the existing
 VUW Power Automate Outlook connection. A Power Automate resource token was
 obtained without logging it, and the installed FlowAgent bundle successfully
 listed VUW environments. The operator selected their Developer environment.
-Connection listing requires FlowAgent's separate Power Platform authentication;
-the bounded local check ended before that sign-in completed. No connection
-identity/status was verified, and no mailbox metadata has been acquired.
+FlowAgent's separate cached Power Platform identity is now verified to match
+Azure's VUW identity. Outlook-filtered and unfiltered connection listings both
+returned empty in the operator-selected Developer environment and, following
+the operator's next selection, the VUW STAFF Default environment. No existing
+connection binding is available from those results. Creating a new connection
+was not attempted. FlowAgent's find-only discovery was also checked in STAFF
+Default: its PPAPI fallback returned NotFound with creation disabled. This
+confirms the earlier empty-list result through the alternate discovery route.
+Creating a new connection
+or selecting another environment awaits the operator's decision. No mailbox
+metadata has been acquired.
 The private frozen configuration, retention decision and approval evidence must
 still be recorded before acquisition. Account identifiers, device codes and
 authentication screenshots are excluded from this repository record.

@@ -25,13 +25,25 @@ Do not ask the operator to copy a code already available to the agent. Hand
 off when a password, MFA or another required human action is reached.
 Never commit device codes, credentials, tokens or account identifiers.
 
+The operator authorizes using browser-managed saved credentials for VUW and
+Queensland Health routine sign-in while away. Use autofill in the intended
+service's browser login; do not extract passwords into scripts or files.
+MFA remains an operator action. This authorization does not extend mailbox
+scope, approve new app permissions or replace acquisition governance records.
+The requested notifier, Velma, means ChatGPT Dot. No direct Dot notification
+tool is exposed in this session; do not claim an MFA alert was delivered.
+
 The VUW Azure device code was entered by the agent and that login completed;
 it is not a pending operator step. FlowAgent connection management uses a
-separate browser callback login, not that Azure device code. Its bounded
-connection-list check ended before authentication completed. The old callback
-page cannot complete a terminated process. When the operator resumes that
-sign-in, start one new live FlowAgent request and complete its own browser flow;
-do not reuse the completed Azure code or start duplicate login requests.
+separate browser callback login, not that Azure device code. The first bounded
+check ended before authentication completed, but subsequent cached sign-in
+was verified to match Azure's VUW identity. Both the Outlook-filtered and full
+connection lists returned empty for the selected Developer environment.
+The operator then selected VUW STAFF Default; both its Outlook-filtered and
+full connection lists also returned empty. The next step is an operator decision
+to create a test connection or inspect another environment, not repeating
+authentication. If later sign-in is needed, use
+one live request's own browser flow; never reuse the completed Azure code.
 If human authentication is required while the operator is away, stop checks
 and preserve a precise handoff rather than repeatedly polling or restarting.
 
