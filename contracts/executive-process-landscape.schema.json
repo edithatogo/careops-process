@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://careops.example/contracts/executive-process-landscape.schema.json",
+  "title": "CareOps executive process landscape",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_class",
+    "observation_start",
+    "observation_end",
+    "accessible_denominator",
+    "included_population",
+    "exclusions",
+    "generated_at",
+    "tenant_wide_coverage",
+    "families",
+    "patterns"
+  ],
+  "properties": {
+    "evidence_class": { "const": "live_corpus" },
+    "observation_start": { "type": "string", "format": "date-time" },
+    "observation_end": { "type": "string", "format": "date-time" },
+    "accessible_denominator": { "type": "integer", "minimum": 1 },
+    "included_population": { "type": "integer", "minimum": 1 },
+    "exclusions": { "type": "array", "items": { "type": "string" } },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "tenant_wide_coverage": { "type": "null" },
+    "patterns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "directly_follows",
+        "source_handoffs",
+        "repeated_activity_count",
+        "escalation_event_count",
+        "incomplete_object_count",
+        "maximum_duration_hours"
+      ],
+      "properties": {
+        "directly_follows": { "type": "array" },
+        "source_handoffs": { "type": "array" },
+        "repeated_activity_count": { "type": "integer", "minimum": 0 },
+        "escalation_event_count": { "type": "integer", "minimum": 0 },
+        "incomplete_object_count": { "type": "integer", "minimum": 0 },
+        "maximum_duration_hours": { "type": "number", "minimum": 0 }
+      }
+    },
+    "families": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "family_id",
+          "member_count",
+          "event_count",
+          "activity_sequence",
+          "confidence",
+          "temporal_stability",
+          "source_dependence",
+          "validation_status",
+          "suppressed"
+        ],
+        "properties": {
+          "family_id": { "type": "string", "minLength": 1 },
+          "member_count": { "type": ["integer", "null"], "minimum": 1 },
+          "event_count": { "type": ["integer", "null"], "minimum": 1 },
+          "activity_sequence": { "type": "array", "items": { "type": "string" } },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "temporal_stability": { "type": "number", "minimum": 0, "maximum": 1 },
+          "source_dependence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "validation_status": { "enum": ["unvalidated", "validated", "rejected", "unresolved"] },
+          "suppressed": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

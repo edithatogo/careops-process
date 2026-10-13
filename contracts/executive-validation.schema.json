@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/contracts/executive-validation.schema.json",
+  "title": "IHG executive process-discovery validation record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "evidence_reference", "scope_approved", "ig_approved", "owner_validation", "executive_decision"],
+  "properties": {
+    "run_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,128}$" },
+    "evidence_reference": { "type": "string", "minLength": 1 },
+    "scope_approved": { "type": "boolean" },
+    "ig_approved": { "type": "boolean" },
+    "owner_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "validated_family_count", "unresolved_family_count"],
+      "properties": {
+        "status": { "enum": ["pending", "complete"] },
+        "validated_family_count": { "type": "integer", "minimum": 0 },
+        "unresolved_family_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "executive_decision": {
+      "enum": ["pending", "fit-for-improvement", "expand-pilot", "pause", "close"]
+    },
+    "decision_reference": { "type": ["string", "null"] },
+    "review_date": { "type": ["string", "null"] }
+  }
+}

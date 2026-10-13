@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="lk_cop_processdeadletter_createdby" />
+  <EntityRelationship Name="lk_cop_processdeadletter_modifiedby" />
+  <EntityRelationship Name="lk_cop_processevent_createdby" />
+  <EntityRelationship Name="lk_cop_processevent_modifiedby" />
+  <EntityRelationship Name="organization_cop_processdeadletter" />
+  <EntityRelationship Name="organization_cop_processevent" />
+</EntityRelationships>

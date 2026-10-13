@@ -3,7 +3,6 @@
 - Status: completed
 - Evidence: [feasibility](../../../docs/feasibility.md)
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/1
-- GHE issue: https://nswhealth.ghe.com/60217257/careops-process/issues/1
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 
 ## Acceptance
