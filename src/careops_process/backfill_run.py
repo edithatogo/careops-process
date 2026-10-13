@@ -26,6 +26,10 @@ def run_closed_backfill(
     missing = [key for key in required if evidence.get(key) is None]
     if missing:
         _fail(f"closed-run evidence missing: {', '.join(missing)}")
+    for field in ("folder_count", "page_count", "candidate_count"):
+        count = evidence[field]
+        if type(count) is not int or count < 0:
+            _fail(f"{field} must be a non-negative integer")
     if evidence["status"] != "closed":
         _fail("process discovery requires a closed backfill run")
     gates = (

@@ -128,3 +128,19 @@ validation remain in this track.
     - [ ] Record production, expansion, pause or closure decisions without implying tenant-wide completeness.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Assurance and executive decision' (Refer to workflow.md)
 - [ ] Task: Conductor - User Manual Verification (Refer to workflow.md)
+
+## Repository implementation and review — 2026-10-14
+
+- [x] Task: Reject duplicate flow action IDs and enforce the full checkpoint-safe action sequence; add regression and malformed-contract tests.
+- [x] Task: Reject negative, boolean and textual closed-run counts; add nine regression cases.
+- [x] Task: Perform conductor-review of these changes and inspect live-pilot readiness; see `docs/m365-corpus-review-20261014.md`.
+- [ ] Task: Bind closed-run evidence to authorised partitions and verify measured per-partition reconciliation and input/configuration hashes before accepting completeness.
+
+Verification: 219 tests passed at this working-tree snapshot; Ruff formatting,
+lint, strict Pyright, Bandit, dependency audit and Conductor validation passed.
+Line coverage is 94.38%; branch coverage is 87.55%, so the independent 90%
+branch target is still pending in the shared hardening track. Concurrent
+credentialing work was present and included in the full-suite snapshot, but is
+not part of this change. Hosted security checks were not executed here. Live
+approval, acquisition, owner validation and executive acceptance remain pending;
+this review does not complete the track or replace human verification.
