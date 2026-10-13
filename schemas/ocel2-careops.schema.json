@@ -4,14 +4,15 @@
   "title": "CareOps OCEL 2.0 envelope",
   "type": "object",
   "additionalProperties": false,
-  "required": ["ocel_version", "log_id", "objects", "events", "lineage", "schema_version"],
+  "required": ["ocel_version", "log_id", "objects", "events", "relations", "lineage", "schema_version"],
   "properties": {
     "ocel_version": {"const": "2.0"},
     "log_id": {"type": "string", "minLength": 1, "maxLength": 128},
     "lineage": {"type": "string", "minLength": 1, "maxLength": 500},
     "schema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
     "objects": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/object"}},
-    "events": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/event"}}
+    "events": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/event"}},
+    "relations": {"type": "array", "items": {"$ref": "#/$defs/relation"}}
   },
   "$defs": {
     "safeId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
@@ -28,6 +29,15 @@
         "timestamp_utc": {"type": "string", "format": "date-time"}, "source_system": {"type": "string", "minLength": 1},
         "observed_or_inferred": {"enum": ["observed", "inferred"]}, "confidence": {"type": "number", "minimum": 0, "maximum": 1},
         "object_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/safeId"}}, "qualifiers": {"type": "object"}
+      }
+    },
+    "relation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relation_id", "relation_type", "source_object_id", "target_object_id", "observed_or_inferred", "confidence"],
+      "properties": {
+        "relation_id": {"$ref": "#/$defs/safeId"}, "relation_type": {"type": "string", "minLength": 1},
+        "source_object_id": {"$ref": "#/$defs/safeId"}, "target_object_id": {"$ref": "#/$defs/safeId"},
+        "observed_or_inferred": {"enum": ["observed", "inferred"]}, "confidence": {"type": "number", "minimum": 0, "maximum": 1}
       }
     }
   }

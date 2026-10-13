@@ -1,7 +1,6 @@
 # Canonical OCEL 2.0 contract and process ontology
 
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/2
-- GHE issue: https://nswhealth.ghe.com/60217257/careops-process/issues/2
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 
 ## Specification

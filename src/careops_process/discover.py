@@ -75,7 +75,7 @@ def discover_families(  # noqa: C901
         labels = sorted({label for index in indexes for label in items[index].activity_labels})
         member_ids = tuple(sorted(items[index].item_id for index in indexes))
         confidence = (
-            1.0 if len(indexes) == 1 else min(1.0, 0.5 + 0.5 * (len(indexes) - 1) / len(indexes))
+            0.25 if len(indexes) == 1 else min(1.0, 0.5 + 0.5 * (len(indexes) - 1) / len(indexes))
         )
         families.append(
             DiscoveryFamily(
