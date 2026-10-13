@@ -1,0 +1,131 @@
+{
+  "$defs": {
+    "CapabilityCheck": {
+      "additionalProperties": false,
+      "description": "A minimised observation or reviewed control, bound to one pilot scope.",
+      "properties": {
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "unknown",
+            "observed",
+            "verified",
+            "failed",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "scope_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Scope Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Ref"
+        }
+      },
+      "required": [
+        "scope_ref",
+        "observed_at"
+      ],
+      "title": "CapabilityCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Strict capability input; contains no identities, URLs or raw CLI output.",
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "collected_at": {
+      "format": "date-time",
+      "title": "Collected At",
+      "type": "string"
+    },
+    "classification": {
+      "default": "unconfirmed",
+      "enum": [
+        "unconfirmed",
+        "low_sensitivity_metadata",
+        "protected"
+      ],
+      "title": "Classification",
+      "type": "string"
+    },
+    "co_owner_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Co Owner Count",
+      "type": "integer"
+    },
+    "backup_owner_confirmed": {
+      "default": false,
+      "title": "Backup Owner Confirmed",
+      "type": "boolean"
+    },
+    "checks": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CapabilityCheck"
+      },
+      "propertyNames": {
+        "enum": [
+          "delegated_identity",
+          "classification_approved",
+          "records_controls",
+          "continuity",
+          "licence_compatibility",
+          "connector_dlp_compatibility",
+          "least_privilege_access",
+          "dataverse_access",
+          "customization_rights",
+          "solution_import_rights",
+          "app_sharing_rights",
+          "multi_user_access",
+          "dataverse_auditing",
+          "required_connectors",
+          "existing_team_access",
+          "sharepoint_list_access",
+          "item_access_controls",
+          "fallback_auditability",
+          "standard_connectors",
+          "approvals_access",
+          "planner_access",
+          "fallback_multi_user_access"
+        ]
+      },
+      "title": "Checks",
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "scope_ref",
+    "collected_at"
+  ],
+  "title": "CapabilitySnapshot",
+  "type": "object"
+}

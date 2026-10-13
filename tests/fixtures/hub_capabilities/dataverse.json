@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "scope_ref": "scope-synthetic-pilot",
+  "collected_at": "2026-10-14T00:00:00+00:00",
+  "classification": "low_sensitivity_metadata",
+  "co_owner_count": 3,
+  "backup_owner_confirmed": true,
+  "checks": {
+    "app_sharing_rights": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-app_sharing_rights"
+    },
+    "classification_approved": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-classification_approved"
+    },
+    "connector_dlp_compatibility": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-connector_dlp_compatibility"
+    },
+    "continuity": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-continuity"
+    },
+    "customization_rights": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-customization_rights"
+    },
+    "dataverse_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-dataverse_access"
+    },
+    "dataverse_auditing": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-dataverse_auditing"
+    },
+    "delegated_identity": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-delegated_identity"
+    },
+    "least_privilege_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-least_privilege_access"
+    },
+    "licence_compatibility": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-licence_compatibility"
+    },
+    "multi_user_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-multi_user_access"
+    },
+    "records_controls": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-records_controls"
+    },
+    "required_connectors": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-required_connectors"
+    },
+    "solution_import_rights": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-solution_import_rights"
+    }
+  }
+}

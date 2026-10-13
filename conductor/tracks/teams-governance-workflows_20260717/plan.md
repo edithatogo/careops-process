@@ -1,5 +1,19 @@
 # Implementation Plan: IHG Governance and Executive Action Hub
 
+## Implementation evidence — 14 October 2026
+
+- Capability contracts and read-only Windows probe runner are implemented with
+  synthetic fixtures and fail-closed tests. See
+  [capability runbook](../../../docs/ihg-hub-capability-runbook.md).
+- Live unscoped discovery observed delegated PAC authentication and environment
+  discovery; Microsoft 365 CLI is logged out. Current environment resolution is
+  inconclusive. Selected-resource probing, effective sharing/write/audit controls,
+  licence/DLP, access and continuity remain unverified.
+- The user explicitly left operating-model confirmation pending. No pilot lane,
+  live approval, governance rules or production readiness are asserted.
+- Phase 1 live/owner gates remain open. Independent local contracts may proceed
+  using synthetic, configurable policies; they cannot activate a live pathway.
+
 ## Shared ALM dependency
 
 Reuse the solution validation, packaging, configuration templates and release
@@ -11,14 +25,14 @@ governance hub or approve its production use.
 
 ## Phase 1: IHG operating model and no-admin capability proof
 
-- [ ] Task: Define executable capability-probe contracts
-    - [ ] Add synthetic fixtures for environments, roles, Teams resources, connector availability, sharing and continuity outcomes.
-    - [ ] Test explicit outcomes for Dataverse lane, restricted existing-Team fallback and fail-closed state.
-    - [ ] Test that no Entra application, tenant-admin or service-principal prerequisite is introduced.
-- [ ] Task: Implement Windows-native user-scoped capability probes
+- [x] Task: Define executable capability-probe contracts
+    - [x] Add synthetic fixtures for environments, roles, Teams resources, connector availability, sharing and continuity outcomes.
+    - [x] Test explicit outcomes for Dataverse lane, restricted existing-Team fallback and fail-closed state.
+    - [x] Test that no Entra application, tenant-admin or service-principal prerequisite is introduced.
+- [~] Task: Implement Windows-native user-scoped capability probes
     - [ ] Inspect PAC environments, roles, solutions, tables, auditing and application-sharing capabilities.
     - [ ] Inspect existing IHG Team, SharePoint/List and Planner resources only through already-authorised delegated access.
-    - [ ] Produce a privacy-safe capability, sharing, continuity and tenant-gate report.
+    - [x] Produce a privacy-safe capability, sharing, continuity and tenant-gate report.
 - [ ] Task: Confirm the IHG Executive operating model
     - [ ] Record executive roles, secretariat, chair, advisers, information steward, decision owners, delegates and acting arrangements.
     - [ ] Record decision types, authority sources, quorum, conflict, out-of-session, ratification and district-escalation rules.

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "scope_ref": "scope-synthetic-pilot",
+  "collected_at": "2026-10-14T00:00:00+00:00",
+  "classification": "low_sensitivity_metadata",
+  "co_owner_count": 3,
+  "backup_owner_confirmed": true,
+  "checks": {
+    "approvals_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-approvals_access"
+    },
+    "classification_approved": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-classification_approved"
+    },
+    "connector_dlp_compatibility": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-connector_dlp_compatibility"
+    },
+    "continuity": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-continuity"
+    },
+    "delegated_identity": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-delegated_identity"
+    },
+    "existing_team_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-existing_team_access"
+    },
+    "fallback_auditability": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-fallback_auditability"
+    },
+    "fallback_multi_user_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-fallback_multi_user_access"
+    },
+    "item_access_controls": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-item_access_controls"
+    },
+    "least_privilege_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-least_privilege_access"
+    },
+    "licence_compatibility": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-licence_compatibility"
+    },
+    "planner_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-planner_access"
+    },
+    "records_controls": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-records_controls"
+    },
+    "sharepoint_list_access": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-sharepoint_list_access"
+    },
+    "standard_connectors": {
+      "status": "verified",
+      "scope_ref": "scope-synthetic-pilot",
+      "observed_at": "2026-10-14T00:00:00+00:00",
+      "evidence_ref": "synthetic-standard_connectors"
+    }
+  }
+}
