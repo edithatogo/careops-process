@@ -21,5 +21,5 @@
 ## [~] Track: Credentialing privacy-minimised event and assurance pack
 *Link: [./tracks/credentialing-process-assurance_20260829/](./tracks/credentialing-process-assurance_20260829/)*
 
-## [ ] Track: Conductor and Microsoft skills local setup
+## [~] Track: Conductor and Microsoft skills local setup
 *Link: [./tracks/conductor-local-repair_20261013/index.md](./tracks/conductor-local-repair_20261013/index.md)*

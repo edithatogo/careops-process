@@ -1,6 +1,6 @@
 # Conductor and Microsoft skills local setup
 
-Status: new
+Status: in progress
 
 - [Specification](spec.md)
 - [Implementation plan](plan.md)
