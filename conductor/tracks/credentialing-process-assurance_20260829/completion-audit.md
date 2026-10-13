@@ -1,5 +1,32 @@
 # Credentialing completion audit — 2026-10-14
 
+## Subsequent integration checkpoint
+
+Observed stage-time measurements are now implemented in
+`src/careops_process/credentialing_measurements.py`, with 37 regression tests
+in `tests/test_credentialing_measurements.py`. Executable integration revision
+`2fd218ffe53861c864b2ce251de13945b9e34fe0` and the coordinator's receipt in
+`docs/orchestration-checkpoint-20261014.md` supersede the earlier statement below
+that all delay/stage-time capability is absent. The receipt records one completed
+705-test run with 97.76% line and 95.09% branch coverage, plus lint, formatting,
+typing, Conductor and Bandit checks. This is recorded integration evidence,
+not an independent rerun by this audit or proof of intermittent-fault repair.
+
+Workload/effort, quality and evidence-bound human-review capabilities remain
+unfinished; their implementation belongs to the measurement extension's owning
+chat. Its committed design/planning and integration receipts supersede the old
+design-waiting state for that extension. They do not constitute approval of
+CHHHS policy, live data sources, pilot execution or maintainer acceptance.
+
+Runtime investigation has also progressed beyond a Pydantic-only hypothesis:
+standard-library-only probes fail on two Python installations. See the
+host-isolation checkpoint in `plan.md` and `review.md`. At the user's direction,
+BIOS settings are to be left alone. The reliability gate can instead be verified
+on a known-stable authorised host when one is available. No passing diagnostic
+CPU-affinity arm or single full-suite run closes that gate. The original full
+track scope and incomplete status are retained; historical evidence below must
+be read with these subsequent checkpoints.
+
 Source checkpoint: 7ecd397; latest executable change: f2c2eed. Working tree was
 clean before this audit. The full objective is implementation of this track,
 followed by Conductor review. Neither the scope nor success criterion is reduced

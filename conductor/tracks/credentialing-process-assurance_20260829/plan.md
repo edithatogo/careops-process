@@ -130,6 +130,10 @@ The measurement and human-review gaps in `review.md` remain open.
 
 ### Host-isolation checkpoint — 2026-10-14
 
+Subsequent user preference: leave BIOS settings alone. Verification on a
+known-stable authorised host is the alternative next step for the runtime gate;
+no firmware intervention is a prerequisite for continuing independent code work.
+
 The standard-library-only synthetic deepcopy/JSON probe also fails, without
 Pydantic, CareOps or test-framework imports. CPython 3.14.8 default initialization
 failed in 1/16 fresh processes; `-S` failed in 2/16. A separate Anaconda CPython
