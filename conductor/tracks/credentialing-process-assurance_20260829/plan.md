@@ -9,18 +9,49 @@
 - [x] Add a permissive licence and process-assurance review agent.
 - [x] Register this Conductor track.
 - [x] Add strict projection validation and normalization tests.
-- [ ] Add explicit credentialing ontology-registry validation tests.
+- [x] Add explicit credentialing ontology-registry validation tests.
 - [x] Add synthetic valid projection and invalid/deviation fixtures in tests.
 - [x] Add deep raw-field rejection, replay, duplicate and watermark tests.
-- [ ] Add credentialing-specific tombstone and minimized-dead-letter tests.
-- [ ] Add routine-renewal conformance model and metric dictionary.
-- [ ] Add small-cohort suppression and role-scoped semantic projection tests.
-- [ ] Add BPMN and rendered process diagrams.
+- [x] Add credentialing-specific tombstone and minimized-dead-letter tests.
+- [x] Add routine-renewal conformance model and metric dictionary.
+- [x] Add small-cohort suppression and role-scoped semantic projection tests.
+- [x] Add BPMN and rendered process diagrams.
 
-Reconciled against `src/careops_process/credentialing.py` and
-`tests/test_credentialing.py` on 2026-10-13. This records repository evidence,
-not live tenant execution or governance approval. Conformance, small-cohort
-suppression and role-scoped projections remain pending.
+Repository tranche implemented on 2026-10-14 in
+`src/careops_process/credentialing_assurance.py` and
+`tests/test_credentialing_assurance.py`, alongside the existing projection.
+The published schema now accepts nullable qualifiers emitted by the runtime;
+the ontology registers the existing duration bucket. This records synthetic
+repository evidence, not live tenant execution or governance approval.
+
+### Verification evidence (2026-10-14)
+
+- 52 scoped credentialing/ontology tests pass, including 27 new assurance tests.
+- Full shared-checkout suite: 352 tests pass, 91.37% overall coverage; the new
+  assurance module has 100% statement and branch coverage at this snapshot.
+- Scoped Ruff formatting/lint and strict Pyright pass.
+- Draft 2020-12 schema validation and runtime round trips pass; observed
+  confidence below one is rejected by the published schema.
+- Non-executable BPMN stage/reference integrity and SVG XML checks pass;
+  the PNG rendering was visually inspected.
+- Credentialing Bandit and scoped secret scan pass. Dependency audit reports
+  no known vulnerabilities (the unpublished local package is not auditable).
+- Offline Zizmor reports no findings, with one suppressed finding.
+- Independent read-only scoped review found no actionable issues.
+- Whole-checkout Conductor, lint and typing checks saw concurrent unrelated
+  hardening-track index/status and unused-import failures. Those files belong
+  to their respective track agents; this tranche does not claim global readiness.
+
+### Manual checkpoint and integration limits
+
+- [ ] Maintainer verifies the repository tranche using
+  `docs/credentialing-renewal-reference.md` and accepts the generic-model limits.
+- [ ] Integration owner reruns all required checks on the final shared revision.
+
+The track remains in progress. Durable ledger storage, concurrency, trusted
+authorisation/case mapping and cross-release privacy controls are production
+adapter responsibilities. Local pathway/authority mapping and every live
+pilot gate below remain pending. A reference match does not certify compliance.
 
 ## CHHHS silent-mode tranche
 
