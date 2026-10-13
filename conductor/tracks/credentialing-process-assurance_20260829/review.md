@@ -53,6 +53,19 @@ not the unresolved native-runtime finding.
 
 ### High — Reproducible native runtime failures
 
+**New isolation evidence (2026-10-14):** the standard-library-only synthetic
+deepcopy/JSON workload fails with CPython 3.14.8 both normally (1/16 processes)
+and with `-S` (2/16). It also produces native access violations on a separate
+CPython 3.13.15 installation (2/12). It imports neither Pydantic nor CareOps.
+A plain-Python serialization comparison still failed (2/24); therefore replacing
+`model_dump` is not a demonstrated remedy. Corrected processor parity events
+and a 12/12 passing process-local CPU-0 arm support a host-stability lead, not
+proof of the precise cause. The private diagnostic package contains exact
+scripts, interpreter builds, results, hashes and capture limitations. Machine
+operator firmware/hardware intervention and repeatable unpinned verification
+are now the concrete next actions. No product dependency or machine-wide
+setting was changed; the native-runtime finding remains open.
+
 - **File**: `src/careops_process/credentialing.py` (validation/serialization boundary).
 - **Context**: fresh subprocesses reproduce access violations and intermittent
   malformed model results. A minimal nested Pydantic model with no CareOps imports,

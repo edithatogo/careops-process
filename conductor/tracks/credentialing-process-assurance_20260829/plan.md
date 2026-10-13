@@ -127,3 +127,24 @@ The measurement and human-review gaps in `review.md` remain open.
 - [x] Validate assessment/report boundaries and restored inference — dcd50a2.
 - [x] Close direct merge and metric-summary boundary gaps — f2c2eed.
 - [ ] Resolve the independently reproduced native runtime failure.
+
+### Host-isolation checkpoint — 2026-10-14
+
+The standard-library-only synthetic deepcopy/JSON probe also fails, without
+Pydantic, CareOps or test-framework imports. CPython 3.14.8 default initialization
+failed in 1/16 fresh processes; `-S` failed in 2/16. A separate Anaconda CPython
+3.13.15 `-S` comparison produced access violations in 2/12 processes. Replacing
+native model serialization with plain-Python serialization failed in 2/24
+processes, so no serialization rewrite or dependency change is justified.
+
+The host reports corrected processor internal-parity WHEA events. A process-local
+CPU-0 standard-library arm passed 12/12, which is diagnostic evidence only.
+This supports a host-stability investigation; it does not establish the precise
+cause or a repair. The full private package preserves scripts, results, hashes,
+interpreter builds and source-capture limitations outside public Git.
+
+The machine operator should follow Intel's current default-settings/firmware
+guidance for the exact motherboard, then verify unchanged unpinned probes and
+the full suite on a serviced or known-stable authorised host. No firmware,
+machine-wide affinity or dependency change was made. Keep this runtime gate open;
+the approved-source, design, manual and pilot gates remain separate.
