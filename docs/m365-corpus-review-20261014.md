@@ -121,3 +121,19 @@ access, admitted scope, data-owner/IG decisions, storage/retention/rollback and
 actual reconciled/replayed corpus evidence. VUW is development testing only.
 No authentication polling, duplicate sign-in or unattended follow-up is required
 from this chat while human sign-in or recorded decisions are needed.
+
+
+## VUW connection-route update — 14 October 2026
+
+The Outlook receipt now records verified VUW Azure/Graph identity and Power
+Automate environment access, operator authorisation for the limited Inbox-only
+seven-day metadata development test outside Git, and selection of an existing
+Outlook connection in the developer environment. The initial unconfirmed-scope
+note is historical; this newer receipt does not make VUW an organisational pilot.
+
+The Graph mail-token route is unavailable. FlowAgent authentication and exact
+connection binding remain incomplete, with no mailbox extraction or connection
+identity verification yet established. Outlook owns that blocker. M365 does not
+start duplicate authentication or repeat answered scope requests. Full Queensland
+Health pilot decisions, corpus evidence, runtime remedy, owner validation and
+Executive acceptance remain independent gates.

@@ -212,7 +212,7 @@ The earlier seven-day Inbox suggestion was not confirmed. Queensland Health
 source/IG decisions and frozen scope/storage/retention/rollback remain pending.
 
 - [x] Task: Prepare a finite VUW development/integration test plan and Queensland Health pilot decision brief with a non-authorising draft record.
-- [ ] Task: Complete human VUW sign-in and verify authorised test capabilities through the Outlook work.
+- [~] Task: Complete VUW connection authentication/binding and verify authorised test capabilities through the Outlook work; Azure/Graph identity and Power Automate environment access are verified.
 - [ ] Task: Record the actual Queensland Health pilot decisions and scope before live acquisition.
 
 
@@ -228,3 +228,20 @@ cause and remedy remain unproven. VUW testing and the actual Queensland Health
 pilot remain separate. Human sign-in and authentic source/IG decisions are still
 required before the corresponding account/live work proceeds; no repeat login
 or unattended status polling is scheduled by this chat.
+
+
+## VUW connection-route handoff — 2026-10-14
+
+The later Outlook receipt records operator authorisation for a limited Inbox-only
+seven-day metadata development test outside Git and selection of the existing
+Outlook connection in the developer environment. Azure/Graph identity and Power
+Automate environment access are verified. This supersedes the earlier scope-
+unconfirmed note only for that limited VUW test; Queensland Health remains the
+actual pilot target with its own genuine decisions and evidence pending.
+
+The mail-token route is unavailable; the selected connector route still needs
+FlowAgent authentication, exact connection enumeration/binding and frozen
+scope/storage/retention controls. No mailbox extraction or deployed connector
+identity verification is claimed. Outlook owns those remaining steps. The M365
+consumer and report handoff remain ready; no duplicate auth, answered scope
+question or unattended login polling is started here.
