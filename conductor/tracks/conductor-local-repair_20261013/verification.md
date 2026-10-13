@@ -34,3 +34,34 @@ All 17 setup tests then passed, and strict typing reported no errors.
 
 The track stays in progress until these reviews are recorded. VUW account
 authentication and live platform verification remain a separate next stage.
+
+## Final review and checks
+
+The independent final review found one important validation gap: damaged skill
+entrypoints and missing or modified upstream resources could pass. Three tests
+reproduced the issue before the fix; an additional test covers inline Markdown
+examples so they are not mistaken for resource dependencies. The validator now
+checks generated entrypoint mappings, actual resource links and clean pinned
+source working trees. All 21 setup tests and the 177-test suite pass.
+
+Formatting, Ruff, strict typing, Bandit and dependency auditing pass. All 38
+selected repository and user-level skills have valid frontmatter and supporting
+source files. Frozen environment synchronisation also passes.
+
+A recursive Windows clone exposed PnP fixture paths longer than the default
+Git limit. Per-command `core.longpaths=true` restores a full checkout; the
+installation instructions now include it. Repository code uses Python 3.14
+through `uv`, not the older system Python.
+
+Final: fixed entrypoint/resource validation gap — three regression tests
+RED to GREEN; full suite 177 passed.
+
+Final: minor (deferred): malformed manifest path escapes fail with a traceback
+rather than a polished diagnostic; the valid installed manifest is unaffected.
+Final: minor (deferred): historical Outlook title includes a duplicated Track
+label; its links, status and metadata are valid.
+
+Ruling: preserved third-party sources unchanged and validated their real
+resource links while excluding inline examples — avoids interpreting templates
+as dependencies; cost if wrong: a nonstandard inline resource link may need
+explicit classification. Git working-tree checks still detect tracked deletion.

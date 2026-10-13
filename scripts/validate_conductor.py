@@ -16,7 +16,7 @@ from urllib.parse import unquote
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.install_repo_skills import read_manifest, within
+from scripts.install_repo_skills import entrypoint, read_manifest, within
 
 MARKS = {" ": "new", "~": "in_progress", "x": "completed"}
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
@@ -26,6 +26,7 @@ ENTRY = re.compile(r"(?:^## |^- )\[([ x~])\].*?\*Link:.*?\]\(([^)]+)\)", re.MULT
 def _links(path: Path, root: Path) -> list[str]:
     text = path.read_text(encoding="utf-8-sig")
     text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    text = re.sub(r"`[^`]+`", "", text)
     errors = []
     for link in LINK.findall(text):
         if "://" in link or link.startswith(("#", "mailto:")):
@@ -160,8 +161,34 @@ def _source_errors(root: Path, source: dict[str, Any], *, verify_git: bool) -> l
             staged = _git(root, "ls-files", "--stage", "--", source["path"])
             if not staged.startswith(f"160000 {commit} "):
                 errors.append(f"{source['path']}: Git submodule pointer differs from manifest")
+            if _git(path, "status", "--porcelain", "--untracked-files=no"):
+                errors.append(f"{source['path']}: pinned source resources are modified or missing")
         except ValueError as exc:
             errors.append(str(exc))
+    return errors
+
+
+def _skill_errors(root: Path, skill: dict[str, Any], source: dict[str, Any]) -> list[str]:
+    errors = []
+    upstream = within(within(root, source["path"]), skill["path"])
+    instructions = upstream / "SKILL.md"
+    if not instructions.is_file():
+        errors.append(f"{skill['name']}: upstream SKILL.md missing")
+    else:
+        errors.extend(_links(instructions, root))
+    entry = root / ".agents" / "skills" / skill["name"] / "SKILL.md"
+    if not entry.is_file():
+        return [*errors, f"{skill['name']}: repository entrypoint missing"]
+    expected = entrypoint(
+        skill["name"],
+        skill["description"],
+        f"../../plugins/{source['id']}/{skill['path']}",
+    )
+    if entry.read_text(encoding="utf-8") != expected:
+        errors.append(
+            f"{skill['name']}: entrypoint metadata or upstream mapping differs from manifest"
+        )
+    errors.extend(_links(entry, root))
     return errors
 
 
@@ -186,14 +213,7 @@ def _skills(root: Path, *, verify_git: bool) -> list[str]:
             errors.append(f"{skill['name']}: unknown skill source")
             continue
         source = source_map[skill["source"]]
-        upstream = within(within(root, source["path"]), skill["path"])
-        if not (upstream / "SKILL.md").is_file():
-            errors.append(f"{skill['name']}: upstream SKILL.md missing")
-        entry = root / ".agents" / "skills" / skill["name"] / "SKILL.md"
-        if not entry.is_file():
-            errors.append(f"{skill['name']}: repository entrypoint missing")
-        else:
-            errors.extend(_links(entry, root))
+        errors.extend(_skill_errors(root, skill, source))
     return errors
 
 

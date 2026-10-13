@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -174,6 +175,72 @@ def test_malformed_manifest_is_an_actionable_error(tmp_path: Path) -> None:
     manifest = root / ".agents" / "skills-manifest.json"
     manifest.write_text(json.dumps({"schema_version": 1, "sources": [{}], "skills": []}))
     assert any("manifest" in error for error in validate_conductor(root, verify_git=False))
+
+
+def test_damaged_entrypoint_fails_validation(tmp_path: Path) -> None:
+    """An existing file without skill metadata and upstream instructions is unusable."""
+    root = make_project(tmp_path)
+    entry = root / ".agents" / "skills" / "careops-example" / "SKILL.md"
+    entry.write_text("arbitrary text without a skill or link\n", encoding="utf-8")
+    assert validate_conductor(root, verify_git=False)
+
+
+def test_missing_upstream_reference_fails_validation(tmp_path: Path) -> None:
+    """Required upstream resource links must resolve."""
+    root = make_project(tmp_path)
+    reference = root / ".agents/plugins/example/skills/example/references/guide.md"
+    reference.unlink()
+    assert validate_conductor(root, verify_git=False)
+
+
+def test_inline_markdown_examples_are_not_resource_dependencies(tmp_path: Path) -> None:
+    """Documented examples must not be mistaken for required upstream resources."""
+    root = make_project(tmp_path)
+    instructions = root / ".agents/plugins/example/skills/example/SKILL.md"
+    instructions.write_text(
+        instructions.read_text() + "\nExample: `[new track](<relative example path>)`\n"
+    )
+    assert validate_conductor(root, verify_git=False) == []
+
+
+def test_modified_pinned_resource_fails_normal_git_validation(tmp_path: Path) -> None:
+    """Git pins do not excuse changes in the source working tree."""
+    root = make_project(tmp_path)
+    source = root / ".agents/plugins/example"
+    executable = shutil.which("git")
+    assert executable is not None
+
+    def git(directory: Path, *arguments: str) -> str:
+        result = subprocess.run(  # noqa: S603
+            [executable, "-C", str(directory), *arguments],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip()
+
+    git(source, "init")
+    git(source, "add", ".")
+    git(
+        source,
+        "-c",
+        "user.name=Setup Test",
+        "-c",
+        "user.email=test@example.invalid",
+        "commit",
+        "-m",
+        "Synthetic source",
+    )
+    commit = git(source, "rev-parse", "HEAD")
+    git(root, "init")
+    git(root, "update-index", "--add", "--cacheinfo", f"160000,{commit},.agents/plugins/example")
+    manifest_path = root / ".agents/skills-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["sources"][0]["commit"] = commit
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    assert validate_conductor(root) == []
+    (source / "skills/example/references/guide.md").write_text("Changed\n", encoding="utf-8")
+    assert validate_conductor(root)
 
 
 def test_validator_does_not_change_project_files(tmp_path: Path) -> None:

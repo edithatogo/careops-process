@@ -10,13 +10,16 @@ as a community project. Conductor remains a separate upstream source.
 ## Clone and validate
 
 ```powershell
-git clone --recurse-submodules https://github.com/edithatogo/careops-process.git
+git -c core.longpaths=true clone --recurse-submodules https://github.com/edithatogo/careops-process.git
 cd careops-process
 uv sync --frozen --group dev
 uv run python scripts/validate_conductor.py
 ```
 
-For an existing clone, run `git submodule update --init` first. Source updates
+For an existing Windows clone, run
+`git -c core.longpaths=true submodule update --init` first. PnP's upstream test
+fixtures include long paths; the per-command setting avoids Windows checkout
+failures without changing global Git configuration. Source updates
 are deliberate: inspect upstream changes, update the gitlink and manifest SHA
 together, then run validation. Do not use automatic submodule tracking updates
 as a substitute for reviewing an update.
