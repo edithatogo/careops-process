@@ -66,6 +66,10 @@ def _is_safe_code(value: object, limit: int) -> bool:
     )
 
 
+def _is_set_container(value: object) -> bool:
+    return isinstance(value, AbstractSet)
+
+
 def validate_measurement_scope(
     *,
     role: str,
@@ -96,7 +100,7 @@ def validate_measurement_scope(
     ):
         message = "Measurement minimum must be at least two distinct cases"
         raise CredentialingContractError(message)
-    if not isinstance(case_ids, AbstractSet):
+    if not _is_set_container(case_ids):
         message = "Measurement case grant container must be a set"
         raise CredentialingContractError(message)
     grants = frozenset(case_ids)
