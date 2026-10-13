@@ -21,14 +21,16 @@ jobs:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           enable-cache: true
           python-version: "3.14"
       - run: uv sync --frozen --group dev
-      - run: uv run ruff format --check .
+      - run: uv run ruff format --check --diff .
       - run: uv run ruff check .
       - run: uv run pyright
       - run: uv run pytest
       - run: uv run bandit -q -r src
-      - run: uv run pip-audit
+      - name: Upgrade audited packaging tool to the fixed release
+        run: uv pip install --python .venv/bin/python --upgrade "pip>=26.2"
+      - run: uv run --no-sync pip-audit

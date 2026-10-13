@@ -40,3 +40,17 @@ def test_naive_times_fail_closed() -> None:
         checkpoint.accept("fact-1", datetime(2026, 1, 1))  # noqa: DTZ001
     with pytest.raises(ValueError, match="timezone"):
         checkpoint.dead_letter("fact-1", "schema", recorded_at_utc=datetime(2026, 1, 1))  # noqa: DTZ001
+
+
+def test_checkpoint_identifier_sets_are_bounded() -> None:
+    """Checkpoint state stays within the configured Dataverse storage bound."""
+    checkpoint = IngestionCheckpoint(max_tracked_ids=2)
+    for index in range(3):
+        checkpoint.accept(f"fact-{index}", datetime(2026, 1, index + 1, tzinfo=UTC))
+    assert checkpoint.accepted_fact_ids == {"fact-1", "fact-2"}
+
+
+def test_checkpoint_rejects_invalid_bound() -> None:
+    """A zero-sized checkpoint is invalid rather than silently lossy."""
+    with pytest.raises(ValueError, match="positive"):
+        IngestionCheckpoint(max_tracked_ids=0)

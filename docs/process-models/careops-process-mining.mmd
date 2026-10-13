@@ -1,0 +1,9 @@
+flowchart LR
+  A[Approved source event] --> B[Minimize and pseudonymize]
+  B --> C[Watermark and idempotency checkpoint]
+  C --> D[Discover families and variants]
+  D --> E[Human review of uncertainty]
+  E --> F[Conformance performance and drift]
+  F --> G[Governed semantic projection]
+  G --> H[Improvement experiment review]
+  H --> I[Approved improvement evidence]

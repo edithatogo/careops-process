@@ -25,6 +25,7 @@ def test_active_learning_prioritizes_low_confidence() -> None:
     """The review queue is bounded and confidence ordered."""
     result = discover_families(items(), similarity_threshold=0.9)
     assert active_learning_queue(result, limit=1) == ["family-1"]
+    assert result[0].confidence == pytest.approx(0.25)
 
 
 def test_invalid_threshold_and_limit_fail_closed() -> None:

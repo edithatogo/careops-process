@@ -1,0 +1,7 @@
+{
+  "ontology_id": "careops-process",
+  "version": "1.0.0",
+  "objects": ["approval_request", "decision_subject", "source_object"],
+  "events": ["request_received", "approval_decided", "approval_escalated"],
+  "qualifiers": ["source_system", "observed_or_inferred", "confidence"]
+}

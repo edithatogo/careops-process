@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/contracts/power-automate-outlook-historical-backfill.json",
+  "title": "Cloud-only Outlook historical mailbox backfill contract",
+  "contract_version": "1.0.0",
+  "evidence_class": "live_corpus",
+  "privacy_mode": "minimized-facts-only",
+  "route": {
+    "platform": "Power Automate",
+    "connector": "Office 365 Outlook",
+    "connection": "existing approved workflow-owner connection",
+    "historical_action": "Get emails (V3)",
+    "analysis_action": "Do not analyse in the flow; emit minimized facts to Dataverse"
+  },
+  "completeness_contract": {
+    "scope": "all authorised folders in the workflow-owner mailbox",
+    "folder_inventory_required": true,
+    "include_nested_folders": true,
+    "date_filter": null,
+    "page_size": 1000,
+    "follow_next_link_until_exhausted": true,
+    "exhaustion_required_per_folder": true,
+    "checkpoint_key": "mailbox_id|folder_id|page_cursor|watermark",
+    "run_is_complete_only_when": [
+      "folder inventory is frozen and hashed",
+      "every admitted folder reaches end-of-pagination",
+      "all pages have a run manifest",
+      "source and projected counts reconcile",
+      "duplicate and rejected records are accounted for",
+      "rerun produces zero new identities for unchanged input"
+    ]
+  },
+  "folder_policy": {
+    "include": ["Inbox", "user-created folders", "archive folders explicitly authorised by owner"],
+    "exclude": ["Deleted Items", "Junk Email", "Recoverable Items", "system folders unless separately approved"],
+    "exclusion_must_be_recorded": true,
+    "empty_folder_is_valid_result": true
+  },
+  "projection": {
+    "required_fields": ["fact_id", "activity", "timestamp_utc", "source_system", "object_ids", "folder_id", "run_id"],
+    "allowed_source_metadata": ["id", "internetMessageId", "receivedDateTime", "conversationId", "hasAttachments", "importance", "parentFolderId"],
+    "forbidden_persistent_fields": ["body", "bodyPreview", "subject", "from", "sender", "to", "cc", "bcc", "attachments", "displayName", "phone"],
+    "pseudonymise": ["id", "internetMessageId", "conversationId", "folder_id"],
+    "destination": "Dataverse minimized event table"
+  },
+  "reconciliation": {
+    "manifest_fields": ["run_id", "folder_id", "folder_path_hash", "started_at_utc", "completed_at_utc", "pages_read", "candidate_count", "acquired_count", "duplicate_count", "rejected_count", "dead_letter_count", "min_timestamp_utc", "max_timestamp_utc", "content_hash", "next_link_exhausted", "checkpoint_state"],
+    "fail_closed_on": ["folder inventory drift", "unexhausted pagination", "unaccounted count difference", "privacy validation failure", "checkpoint regression", "unapproved destination"],
+    "final_status": "full_authorised_mailbox_backfill_only_after_all_folder_manifests_pass"
+  },
+  "operation": {
+    "idempotency": "source_message_id plus folder_id",
+    "retryable": ["408", "429", "5xx", "timeout"],
+    "never_advance_checkpoint_on_failure": true,
+    "never_store_raw_payload": true,
+    "human_decision_authority": false
+  }
+}
