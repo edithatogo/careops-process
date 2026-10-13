@@ -61,9 +61,43 @@ The machine-readable contract is
 
 ## Command-line Graph alternative
 
-`scripts/Invoke-GraphMailboxBackfill.ps1` provides the equivalent metadata-only
-extraction through Microsoft Graph pagination. It uses the active Azure CLI
-token and writes `mail-events.jsonl` plus a manifest; message bodies and
-attachments are excluded. It requires delegated Microsoft Graph `Mail.Read`
-consent for the signed-in operator. The current profile does not have that
-permission, so execution remains fail-closed until tenant consent is granted.
+`scripts/Invoke-GraphMailboxBackfill.ps1` is a minimized message-collection
+exporter, not a full-mailbox or Dataverse completeness certificate. It uses the
+existing Azure CLI delegated token and writes `mail-events.jsonl` and an
+`acquired` manifest. Its output omits subject, addresses, narrative, raw IDs and
+mailbox identity. Message, conversation, folder and mailbox references use
+domain-separated HMAC-SHA256 pseudonyms. A stable base64 key containing at least
+32 random bytes must be supplied in `CAREOPS_MAIL_PSEUDONYM_KEY` from an approved
+secret store. Never commit or print the key, and retain the same key for replay.
+
+Offline verification needs no account:
+
+```powershell
+pwsh -NoProfile -File tests/powershell/test_graph_mailbox_backfill.ps1
+```
+
+The exporter deduplicates identities, rejects malformed candidates, detects
+conflicting duplicates and unsafe/cyclic continuations, and retries transient
+HTTP failures/timeouts at most three times. Retry-After is respected up to the
+60-second local wait budget; longer waits fail closed. It stages both files and
+publishes their directory together, with rollback for a failed publication and
+a destination writer lock. It does not append to a previous run. Replay verifies
+the prior file hash, mailbox/window/key binding, identity set and projection
+content. Removed or changed facts cannot count as an unchanged replay.
+
+The dedicated output directory must be new, or contain only a matching v2
+exporter's two files. Legacy raw exports and unrelated files are rejected and
+left intact. Output publication handles recoverable exceptions; abrupt process
+termination can leave a lock or staging/backup directory. Recover under operator
+control after checking that no writer remains: inspect the prior manifest and
+file hash, restore a verified backup if needed, then remove the stale lock.
+Never automatically delete an unknown directory or replace a backup with partial
+output. Acquisition restarts from the first page; it has no durable page resume.
+
+For acquired manifest fields, report-consumer mapping and the separate closure
+gate, see [the acquired evidence interface](outlook-acquired-evidence.md). For
+the proposed VUW pilot and later Queensland Health rollout, see
+[the operator runbook](outlook-backfill-operator.md).
+
+The July access denial is historical evidence, not a current account-access
+assessment. No VUW or personal-account access was tested on 14 October 2026.
