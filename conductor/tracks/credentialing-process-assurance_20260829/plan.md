@@ -71,6 +71,16 @@ creation time; exception-thread metadata matches faulthandler. It records a core
 module read access violation during `model_dump`. Offline metadata inspection
 provides a native exception/build checkpoint, not root-cause proof or a fix.
 
+Further boundary follow-up (2026-10-14): direct merge revalidates/detaches both
+input models and metric summary revalidates before counting. Four regression
+cases failed before the fixes. 81 scoped tests pass; each credentialing module
+reaches 100% line and branch coverage in that scoped run (ontology also measured).
+Scoped lint/format, Pyright, Bandit and patch secret checks pass. The fresh full
+suite crashed in `test_arbitrary_deleted_stage_sets_never_reappear` with
+0xC0000005, yielding no completed full coverage report. Do not mark integration
+verification complete. Saved native instruction/register inspection and an
+early-GC-disabled failure comparison strengthen the runtime evidence, not a fix.
+
 The track remains in progress. Durable ledger storage, concurrency, trusted
 authorisation/case mapping and cross-release privacy controls are production
 adapter responsibilities. Local pathway/authority mapping and every live
@@ -110,3 +120,10 @@ The measurement and human-review gaps in `review.md` remain open.
 - [ ] Review, reduction, suspension, revocation, and appeal.
 - [ ] Register and roster reconciliation.
 - [ ] Controlled AI-assisted root-cause and improvement review.
+
+## Phase: Review Fixes
+
+- [x] Isolate constructor state and validate ingestion — 289dc3e.
+- [x] Validate assessment/report boundaries and restored inference — dcd50a2.
+- [x] Close direct merge and metric-summary boundary gaps — f2c2eed.
+- [ ] Resolve the independently reproduced native runtime failure.
