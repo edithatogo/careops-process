@@ -53,6 +53,12 @@ Git limit. Per-command `core.longpaths=true` restores a full checkout; the
 installation instructions now include it. Repository code uses Python 3.14
 through `uv`, not the older system Python.
 
+The fresh recursive clone of the committed branch passes setup validation and
+all 177 tests in an independently created, frozen Python 3.14 environment.
+The original checkout also passes frozen environment synchronisation. Final
+user-level verification resolves all 38 entrypoints to independent source copies.
+Hosted Actions have not run because this work has not been pushed.
+
 Final: fixed entrypoint/resource validation gap — three regression tests
 RED to GREEN; full suite 177 passed.
 
