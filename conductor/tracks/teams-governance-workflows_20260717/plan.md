@@ -1,5 +1,14 @@
 # Implementation Plan: IHG Governance and Executive Action Hub
 
+## Shared ALM dependency
+
+Reuse the solution validation, packaging, configuration templates and release
+controls from the
+[reliability and ALM hardening plan](../reliability-alm-hardening_20261014/plan.md).
+Canonical governance components, product-specific flows, deployment and pilot
+approval remain in this track; the shared hardening track does not implement the
+governance hub or approve its production use.
+
 ## Phase 1: IHG operating model and no-admin capability proof
 
 - [ ] Task: Define executable capability-probe contracts

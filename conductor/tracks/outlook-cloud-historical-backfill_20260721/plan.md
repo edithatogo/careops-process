@@ -1,5 +1,14 @@
 # Implementation Plan: Cloud-only complete historical Outlook mailbox backfill
 
+## Shared hardening prerequisite
+
+Before the next live mailbox run, complete the exporter privacy, date-window,
+replay and offline-test work in the
+[reliability and ALM hardening plan](../reliability-alm-hardening_20261014/plan.md).
+Existing completion markers are historical evidence, not proof that the current
+exporter satisfies these newly identified requirements. Full mailbox execution,
+reconciliation and owner approvals remain in this track.
+
 ## Phase 1: Contract and completeness gate — GitHub #31
 
 - [x] Task: Add test-first schema for folder inventory, backfill run and per-folder manifest.
@@ -47,3 +56,22 @@
 - [ ] Task: Reconcile Conductor, GitHub issues, live evidence and residual external gates.
 - [x] Task: Update the parent M365 corpus-discovery track with the closed Outlook lane status.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
+
+## Verification evidence — 2026-10-14
+
+Phase 1 automated verification passed: Conductor validation; all 179 tests
+with 90.88% overall coverage; Ruff formatting and lint; Pyright (zero errors);
+and Bandit over `src`. The Phase 1 manual checkpoint remains pending.
+These checks establish repository behaviour only, not live mailbox completeness.
+
+Before Phase 2 live execution, correct `scripts/Invoke-GraphMailboxBackfill.ps1`:
+its current projection persists subject, sender, recipient addresses and raw
+identifiers, contrary to the privacy-minimised specification. It also requires
+folder inventory, per-folder reconciliation and idempotent-rerun evidence before
+it can satisfy the full-mailbox acceptance gate. Do not execute this script
+against a live mailbox in its current form.
+
+Delegated consent, authorised mailbox scope and retention/destination approvals
+remain external gates. The July access-denial evidence is historical and does
+not establish the current tenant permission state. No live extraction was
+attempted during this verification.

@@ -1,5 +1,14 @@
 # Implementation Plan: Authorised M365 corpus-scale process discovery
 
+## Shared hardening prerequisite
+
+Use the exporter and assurance fixes from the
+[reliability and ALM hardening plan](../reliability-alm-hardening_20261014/plan.md)
+before the next live corpus extraction. Historical completion markers are
+preserved; they do not establish that the newly identified exporter and coverage
+requirements have been resolved. Complete-population acquisition and owner
+validation remain in this track.
+
 ## Phase 1: Correct the baseline and define the evidence boundary
 
 - [x] Task: Reclassify the four-record Dataverse run as a connectivity smoke test
