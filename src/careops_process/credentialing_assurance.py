@@ -25,6 +25,7 @@ from careops_process.credentialing import (
     CredentialingProjection,
     merge_credentialing_projections,
     summarise_credentialing_projection,
+    validate_credentialing_projection,
 )
 from careops_process.reliability import DeadLetter
 
@@ -72,6 +73,14 @@ class CredentialingLedger:
 
     def __post_init__(self) -> None:
         """Apply restored deletion memory before exposing a projection."""
+        self.projection = validate_credentialing_projection(self.projection)
+        self.tombstoned_event_ids = set(self.tombstoned_event_ids)
+        self.dead_letters = list(self.dead_letters)
+        self._require_provenance(self.projection)
+        self.inference_provenance = {
+            event_id: InferenceRun.model_validate(run.model_dump(mode="python"))
+            for event_id, run in self.inference_provenance.items()
+        }
         for event_id in tuple(self.tombstoned_event_ids):
             self.tombstone(event_id)
         self._require_provenance(self.projection)
@@ -90,15 +99,17 @@ class CredentialingLedger:
         if _SAFE_REFERENCE.fullmatch(event_id) is None:
             message = "Tombstone must use a safe event reference"
             raise CredentialingContractError(message)
+        retained = [fact for fact in self.projection.facts if fact.event_id != event_id]
+        replacement = self.projection
+        if len(retained) != len(self.projection.facts):
+            replacement = self.projection.model_copy(update={"facts": retained}, deep=True)
         self.tombstoned_event_ids.add(event_id)
         self.inference_provenance.pop(event_id, None)
-        self.projection = self.projection.model_copy(
-            update={"facts": [fact for fact in self.projection.facts if fact.event_id != event_id]},
-            deep=True,
-        )
+        self.projection = replacement
 
     def merge(self, incoming: CredentialingProjection) -> None:
         """Merge compatible batches after excluding permanently deleted facts."""
+        incoming = validate_credentialing_projection(incoming)
         filtered = incoming.model_copy(
             update={
                 "facts": [

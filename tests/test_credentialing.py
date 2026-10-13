@@ -79,10 +79,12 @@ def test_valid_projection_is_normalised_and_sorted() -> None:
     )
 
 
-def test_parsed_projection_is_returned_without_reinterpretation() -> None:
-    """An already validated projection remains the same object."""
+def test_parsed_projection_is_revalidated_as_a_detached_snapshot() -> None:
+    """A mutable parsed projection crosses the same validation boundary as a mapping."""
     projection = CredentialingProjection.model_validate(synthetic_payload())
-    assert validate_credentialing_projection(projection) is projection
+    validated = validate_credentialing_projection(projection)
+    assert validated == projection
+    assert validated is not projection
 
 
 @pytest.mark.parametrize(

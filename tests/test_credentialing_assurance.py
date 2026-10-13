@@ -15,6 +15,7 @@ from pydantic import ValidationError
 from careops_process.credentialing import (
     Activity,
     CredentialingContractError,
+    CredentialingProjection,
     validate_credentialing_projection,
 )
 from careops_process.credentialing_assurance import (
@@ -96,6 +97,76 @@ def test_tombstones_remove_events_and_block_replay_beyond_checkpoint_capacity() 
     ledger.merge(projection)
     assert deleted not in {fact.event_id for fact in ledger.projection.facts}
     assert len(ledger.projection.facts) == len(RENEWAL_STAGES) - 1
+
+
+def test_ledger_owns_a_detached_input_snapshot() -> None:
+    """Caller mutation cannot silently change retained facts or pathway qualifiers."""
+    projection = validate_credentialing_projection(renewal_payload())
+    ledger = CredentialingLedger(projection)
+    projection.facts[0].qualifiers.pathway_code = "caller-modified"
+    projection.facts.clear()
+    assert len(ledger.projection.facts) == EXPECTED_RENEWAL_EVENTS
+    assert ledger.projection.facts[0].qualifiers.pathway_code == "routine-renewal"
+
+
+def test_unrelated_tombstones_preserve_the_unaffected_snapshot() -> None:
+    """Deletion memory grows without rebuilding unaffected data for every unrelated ID."""
+    ledger = CredentialingLedger(validate_credentialing_projection(renewal_payload()))
+    before = ledger.projection
+    ledger.tombstone("unrelated-event")
+    assert "unrelated-event" in ledger.tombstoned_event_ids
+    assert ledger.projection is before
+
+
+def test_restored_tombstones_are_detached_from_caller() -> None:
+    """Clearing caller deletion memory cannot resurrect an event."""
+    projection = validate_credentialing_projection(renewal_payload())
+    deleted = projection.facts[0].event_id
+    tombstones = {deleted}
+    ledger = CredentialingLedger(projection, tombstoned_event_ids=tombstones)
+    tombstones.clear()
+    ledger.merge(projection)
+    assert deleted not in {fact.event_id for fact in ledger.projection.facts}
+
+
+def test_restored_provenance_is_detached_from_caller() -> None:
+    """Caller map and nested run mutations cannot alter retained provenance."""
+    payload = renewal_payload()
+    payload["facts"][0]["observed_or_inferred"] = "inferred"
+    projection = validate_credentialing_projection(payload)
+    run = InferenceRun(run_id="run-1", provider="synthetic", model="fixture", agent_version="v1")
+    provenance = {projection.facts[0].event_id: run}
+    ledger = CredentialingLedger(projection, inference_provenance=provenance)
+    run.provider = "changed"
+    provenance.clear()
+    assert ledger.inference_provenance[projection.facts[0].event_id].provider == "synthetic"
+
+
+def test_existing_projection_is_revalidated() -> None:
+    """Invalid assignments cannot bypass ingestion validation."""
+    projection = validate_credentialing_projection(renewal_payload())
+    projection.facts[0].confidence = 0.2
+    with pytest.raises(ValidationError):
+        validate_credentialing_projection(projection)
+    with pytest.raises(ValidationError):
+        CredentialingLedger(projection)
+
+
+def test_failed_tombstone_preserves_all_previous_state(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A failed preparation must leave deletion memory and facts consistent."""
+    ledger = CredentialingLedger(validate_credentialing_projection(renewal_payload()))
+    deleted = ledger.projection.facts[0].event_id
+    before = ledger.projection
+
+    def fail_copy(*_args: object, **_kwargs: object) -> object:
+        message = "injected copy failure"
+        raise RuntimeError(message)
+
+    monkeypatch.setattr(CredentialingProjection, "model_copy", fail_copy)
+    with pytest.raises(RuntimeError, match="injected copy failure"):
+        ledger.tombstone(deleted)
+    assert ledger.projection is before
+    assert deleted not in ledger.tombstoned_event_ids
 
 
 def test_dead_letter_never_retains_payload_or_validation_details() -> None:

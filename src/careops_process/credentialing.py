@@ -284,7 +284,7 @@ def validate_credentialing_projection(
 
     """
     if isinstance(payload, CredentialingProjection):
-        return payload
+        payload = payload.model_dump(mode="python")
     forbidden_path = _find_forbidden_key(payload)
     if forbidden_path is not None:
         message = f"Prohibited credentialing content field: {forbidden_path}"

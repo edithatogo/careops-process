@@ -62,6 +62,12 @@ pilot gate below remain pending. A reference match does not certify compliance.
 
 ## CHHHS silent-mode tranche
 
+Review follow-up (2026-10-14): constructor input isolation, mutable-model ingestion
+revalidation and atomic tombstone preparation now have regression evidence.
+74 scoped tests and 661 full repository tests passed; lint, formatting, type and
+Conductor checks passed. See `review.md` for requirement coverage and unresolved
+intermittent runtime evidence. External and manual gates remain open.
+
 - [ ] Map the routine-renewal pathway and current authority version.
 - [ ] Confirm approved pseudonymisation and event sources.
 - [ ] Establish baseline time, touch, quality, rework, exception, and effort
