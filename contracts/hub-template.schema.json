@@ -1,0 +1,264 @@
+{
+  "$defs": {
+    "EscalationRule": {
+      "additionalProperties": false,
+      "description": "Configure a named trigger and an authorised role using approved policy evidence.",
+      "properties": {
+        "trigger": {
+          "enum": [
+            "higher_risk",
+            "material",
+            "contested",
+            "cross_service",
+            "overdue",
+            "safety_signal"
+          ],
+          "title": "Trigger",
+          "type": "string"
+        },
+        "target_role": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Target Role",
+          "type": "string"
+        },
+        "threshold_policy_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Threshold Policy Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "trigger",
+        "target_role",
+        "threshold_policy_ref"
+      ],
+      "title": "EscalationRule",
+      "type": "object"
+    },
+    "TransitionRule": {
+      "additionalProperties": false,
+      "description": "Configure roles for a lifecycle edge without inventing a delegation.",
+      "properties": {
+        "from_state": {
+          "enum": [
+            "draft",
+            "submitted",
+            "triaged",
+            "under_review",
+            "decision_required",
+            "provisionally_decided",
+            "ratified",
+            "actions_open",
+            "assurance_review",
+            "closed",
+            "archived",
+            "withdrawn",
+            "rejected",
+            "returned",
+            "cancelled",
+            "superseded",
+            "consolidated"
+          ],
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "enum": [
+            "draft",
+            "submitted",
+            "triaged",
+            "under_review",
+            "decision_required",
+            "provisionally_decided",
+            "ratified",
+            "actions_open",
+            "assurance_review",
+            "closed",
+            "archived",
+            "withdrawn",
+            "rejected",
+            "returned",
+            "cancelled",
+            "superseded",
+            "consolidated"
+          ],
+          "title": "To State",
+          "type": "string"
+        },
+        "allowed_roles": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Allowed Roles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "from_state",
+        "to_state",
+        "allowed_roles"
+      ],
+      "title": "TransitionRule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Version pathway rules, authority, escalation, notifications and records controls.",
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "template_id": {
+      "enum": [
+        "pra_pitstop",
+        "research_governance",
+        "clinical_risk",
+        "executive_decision",
+        "policy_endorsement",
+        "operational_exception",
+        "review_action"
+      ],
+      "title": "Template Id",
+      "type": "string"
+    },
+    "version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Version",
+      "type": "string"
+    },
+    "authority_source_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Authority Source Ref"
+    },
+    "approval_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Ref"
+    },
+    "roles": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/TransitionRule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "escalation_rules": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/EscalationRule"
+      },
+      "title": "Escalation Rules",
+      "type": "array"
+    },
+    "outcomes": {
+      "default": [],
+      "items": {
+        "enum": [
+          "consultation",
+          "recommendation",
+          "endorsement",
+          "approval",
+          "noting",
+          "ratification",
+          "decline",
+          "return_for_further_work"
+        ],
+        "type": "string"
+      },
+      "title": "Outcomes",
+      "type": "array"
+    },
+    "decision_rule_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Rule Ref"
+    },
+    "decision_rule_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Rule Digest"
+    },
+    "notification_policy": {
+      "default": "none",
+      "enum": [
+        "none",
+        "digest",
+        "exceptions_only"
+      ],
+      "title": "Notification Policy",
+      "type": "string"
+    },
+    "records_policy_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Records Policy Ref"
+    },
+    "closure_requires_evidence": {
+      "const": true,
+      "default": true,
+      "title": "Closure Requires Evidence",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "template_id",
+    "version"
+  ],
+  "title": "WorkflowTemplate",
+  "type": "object"
+}

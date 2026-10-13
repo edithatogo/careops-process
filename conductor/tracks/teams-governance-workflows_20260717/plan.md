@@ -14,6 +14,22 @@
 - Phase 1 live/owner gates remain open. Independent local contracts may proceed
   using synthetic, configurable policies; they cannot activate a live pathway.
 
+## Synthetic core checkpoint
+
+Canonical schemas, version-pinned lifecycle/replay/dependency logic, collective
+policy enforcement at the common transition boundary, scoped triage/secretariat
+and executive portfolio/digest candidates are implemented locally. See
+[domain and decision contracts](../../../docs/ihg-hub-domain-contracts.md).
+Seven clinical/executive pathway identifiers remain unconfigured drafts; no
+IHG role, threshold, quorum or authority is inferred from them. JSON schemas
+require executable validation for cross-field and provenance rules.
+
+Important reviewer findings have failing reproductions followed by passing
+regressions. Remaining local work includes persistent template activation and
+migration/rollback, recovery/dead-letter and task-projection contracts, actual
+brief-source/agenda/minute orchestration, connector reconciliation and release
+assets. This checkpoint does not complete entire phases or live verification.
+
 ## Shared ALM dependency
 
 Reuse the solution validation, packaging, configuration templates and release
@@ -45,42 +61,42 @@ governance hub or approve its production use.
 
 ## Phase 2: Generic governance model and configurable pathways
 
-- [ ] Task: Define canonical schemas and lifecycle contracts
-    - [ ] Model governance matters, classification, authority, risk, pathway, consultation, decision, meeting, ratification, action, evidence and archive.
-    - [ ] Define stable identifiers, lifecycle transitions, replay keys, template versions and provenance.
-    - [ ] Add invalid, boundary, duplicate, stale, superseded and out-of-order transition tests.
-- [ ] Task: Define versioned workflow-template contracts
-    - [ ] Model roles, decision semantics, thresholds, escalation, notifications, records and closure rules as configuration.
-    - [ ] Add activation, migration, rollback and compatibility checks for template changes.
-    - [ ] Prevent silent changes to rules governing active matters.
-- [ ] Task: Implement connector-neutral workflow logic
-    - [ ] Implement the generic Governance Matter engine and linked-matter dependencies.
+- [x] Task: Define canonical schemas and lifecycle contracts
+    - [x] Model governance matters, classification, authority, risk, pathway, consultation, decision, meeting, ratification, action, evidence and archive.
+    - [x] Define stable identifiers, lifecycle transitions, replay keys, template versions and provenance.
+    - [x] Add invalid, boundary, duplicate, stale, superseded and out-of-order transition tests.
+- [~] Task: Define versioned workflow-template contracts
+    - [x] Model roles, decision semantics, thresholds, escalation, notifications, records and closure rules as configuration.
+    - [~] Add activation, migration, rollback and compatibility checks for template changes.
+    - [x] Prevent silent changes to rules governing active matters.
+- [~] Task: Implement connector-neutral workflow logic
+    - [x] Implement the generic Governance Matter engine and linked-matter dependencies.
     - [ ] Implement PRA/Pitstop and research-governance templates.
     - [ ] Implement executive decision, policy endorsement, operational exception, clinical-risk escalation and review-action templates.
-- [ ] Task: Implement privacy, authority and access validators
-    - [ ] Reject prohibited sensitive fields from collaboration projections and logs.
-    - [ ] Validate role, authority, classification, pathway and least-privilege compatibility.
+- [~] Task: Implement privacy, authority and access validators
+    - [x] Reject prohibited sensitive fields from collaboration projections and logs.
+    - [~] Validate role, authority, classification, pathway and least-privilege compatibility.
     - [ ] Add recoverable dead-letter records without sensitive payloads.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Generic governance model and configurable pathways' (Protocol adapted from workflow.md)
 
 ## Phase 3: Executive decision, meeting and secretariat workflow
 
-- [ ] Task: Define collective-decision contract tests
-    - [ ] Cover consultation, recommendation, endorsement, approval, noting, ratification, decline and return-for-information.
-    - [ ] Cover quorum, conflict declaration, recusal, delegates, acting roles and chair confirmation.
-    - [ ] Prove that an individual approval cannot be represented as a collective decision without the configured rule being satisfied.
-- [ ] Task: Implement triage and executive-attention routing
-    - [ ] Route matters to operational delegation, scheduled agenda, urgent out-of-session, assurance/noting or district escalation.
+- [x] Task: Define collective-decision contract tests
+    - [x] Cover consultation, recommendation, endorsement, approval, noting, ratification, decline and return-for-information.
+    - [x] Cover quorum, conflict declaration, recusal, delegates, acting roles and chair confirmation.
+    - [x] Prove that an individual approval cannot be represented as a collective decision without the configured rule being satisfied.
+- [~] Task: Implement triage and executive-attention routing
+    - [x] Route matters to operational delegation, scheduled agenda, urgent out-of-session, assurance/noting or district escalation.
     - [ ] Implement materiality, cross-service, contest, urgency and escalation-threshold rules.
-    - [ ] Provide an exception-focused executive queue and secretariat work queue.
-- [ ] Task: Implement agenda, brief, minute and ratification records
+    - [x] Provide an exception-focused executive queue and secretariat work queue.
+- [~] Task: Implement agenda, brief, minute and ratification records
     - [ ] Generate a structured agenda entry and one-page decision brief.
     - [ ] Record meeting, participants, conflicts, chair confirmation, outcome, minute reference and resulting actions.
     - [ ] Implement out-of-session expiry and later ratification where required.
-- [ ] Task: Implement executive portfolio and digest views
-    - [ ] Show decisions required, material risk, overdue actions, cross-service dependencies, ratification gaps and assurance exceptions.
-    - [ ] Generate configurable weekly digests without requiring Power BI/Fabric.
-    - [ ] Measure and constrain notification volume.
+- [~] Task: Implement executive portfolio and digest views
+    - [x] Show decisions required, material risk, overdue actions, cross-service dependencies, ratification gaps and assurance exceptions.
+    - [x] Generate configurable weekly digests without requiring Power BI/Fabric.
+    - [~] Measure and constrain notification volume.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Executive decision, meeting and secretariat workflow' (Protocol adapted from workflow.md)
 
 ## Phase 4: Power Platform solution and restricted fallback
