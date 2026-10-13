@@ -13,6 +13,11 @@ distinct-case threshold of at least two. This is a technical floor, not an
 approved deployment privacy policy. Use ledger-retained events; a projection
 alone does not preserve tombstone/provenance state.
 
+Case grants must be an actual set/frozenset (or an AbstractSet implementation).
+Strings, lists, mappings and iterators are rejected. The accepted set is detached
+once before validating reference contents, so validation cannot consume an iterator
+and silently change the reporting population.
+
 Each granted case contributes one outcome per interval. Only observed events
 are endpoints. Cases with no observed events, any observed pathway/authority
 mismatch, missing endpoints, repeated endpoints, tied times or reversed times

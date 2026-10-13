@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 from datetime import UTC, datetime, timedelta, timezone
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 import pytest
 from hypothesis import given
@@ -17,6 +17,9 @@ from careops_process.credentialing import (
     CredentialingProjection,
     validate_credentialing_projection,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
 
 STAGES = (
     "request_received",
@@ -307,3 +310,23 @@ def test_ungranted_case_variants_do_not_change_released_measurements() -> None:
         if "case-4" in fact.object_ids:
             fact.qualifiers.pathway_code = "different-pathway"
     assert _report(projection) == _report(_projection())
+
+
+@pytest.mark.parametrize(
+    "container",
+    [
+        "cases",
+        ["case-a", "case-b"],
+        iter(("case-a", "case-b")),
+        {"case-a": True, "case-b": True},
+        None,
+    ],
+)
+def test_case_grant_container_rejects_non_sets(container: object) -> None:
+    """Text, mappings and one-shot iterators cannot fabricate or lose grant populations."""
+    with pytest.raises(CredentialingContractError, match="set"):
+        measurements.validate_measurement_scope(
+            role="report_reader",
+            case_ids=cast("AbstractSet[str]", container),
+            minimum_cases=2,
+        )

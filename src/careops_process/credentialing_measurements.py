@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import re
 import statistics
+from collections.abc import Set as AbstractSet
 from dataclasses import dataclass
 from itertools import pairwise
 from typing import TYPE_CHECKING
@@ -17,8 +18,6 @@ from careops_process.credentialing import (
 from careops_process.credentialing_assurance import RENEWAL_STAGES
 
 if TYPE_CHECKING:
-    from collections.abc import Set as AbstractSet
-
     from careops_process.credentialing import CredentialingFact
 
 _SAFE_CODE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]*$")
@@ -77,7 +76,7 @@ def validate_measurement_scope(
 
     Args:
         role: Role resolved by the server-side authorisation layer.
-        case_ids: Authorised references classified as cases by the source adapter.
+        case_ids: A set of authorised references classified as cases by the adapter.
         minimum_cases: Deployment-approved distinct-case threshold, at least two.
 
     Returns:
@@ -97,10 +96,14 @@ def validate_measurement_scope(
     ):
         message = "Measurement minimum must be at least two distinct cases"
         raise CredentialingContractError(message)
-    if any(not _is_safe_code(case_id, 128) for case_id in case_ids):
+    if not isinstance(case_ids, AbstractSet):
+        message = "Measurement case grant container must be a set"
+        raise CredentialingContractError(message)
+    grants = frozenset(case_ids)
+    if any(not _is_safe_code(case_id, 128) for case_id in grants):
         message = "Measurement scope requires safe case references"
         raise CredentialingContractError(message)
-    return frozenset(case_ids), minimum_cases
+    return grants, minimum_cases
 
 
 def _case_interval(
