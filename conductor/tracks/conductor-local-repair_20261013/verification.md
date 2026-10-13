@@ -27,13 +27,15 @@ All 17 setup tests then passed, and strict typing reported no errors.
 
 ## Manual checkpoints
 
-- [ ] Human review of project configuration and guides.
-- [ ] Human review of migrated history and reconciled progress.
-- [ ] Human review of selected skill sources and prerequisites.
-- [ ] Final human verification of local implementation.
+- [x] Human review of project configuration and guides.
+- [x] Human review of migrated history and reconciled progress.
+- [x] Human review of selected skill sources and prerequisites.
+- [x] Final human verification of local implementation.
 
-The track stays in progress until these reviews are recorded. VUW account
-authentication and live platform verification remain a separate next stage.
+The user explicitly approved all four local checkpoints in this conversation
+on 14 October 2026 (Australia/Brisbane), answering "Approve all local checkpoints"
+to the pending review request. The track is completed. VUW account authentication
+and live platform verification remain a separate next stage.
 
 ## Final review and checks
 
@@ -81,4 +83,4 @@ diagnostic fix and pass afterwards. The complete suite passes 179 tests;
 setup validation, Ruff, formatting, strict typing and Bandit also pass.
 
 All planned implementation tasks are finished. The four human-review
-checkpoints remain unrecorded and must not be represented as approvals.
+checkpoints were subsequently approved by the user and recorded above.
