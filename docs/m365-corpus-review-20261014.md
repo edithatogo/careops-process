@@ -137,3 +137,19 @@ identity verification yet established. Outlook owns that blocker. M365 does not
 start duplicate authentication or repeat answered scope requests. Full Queensland
 Health pilot decisions, corpus evidence, runtime remedy, owner validation and
 Executive acceptance remain independent gates.
+
+
+## Connection discovery correction — 14 October 2026
+
+The developer environment was a proposed connection location, not a verified
+binding: later discovery found zero connections there. The user selected VUW
+STAFF Default for connection discovery. Outlook alone owns that lookup. VUW
+Azure/FlowAgent identities match the test account, but an appropriate usable
+Outlook connection has not been established by this receipt.
+
+Update the test prerequisite to discovery and exact binding in the newly selected
+environment. Do not repeat authentication, modify credentials, create a duplicate
+connection or assume permission to use another owner's connection. MFA remains
+human. This environment change does not approve extraction, change the actual
+Queensland Health pilot target or fill its pending owner/IG record. No direct
+notification/alert route is established by this work.

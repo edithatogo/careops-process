@@ -245,3 +245,13 @@ scope/storage/retention controls. No mailbox extraction or deployed connector
 identity verification is claimed. Outlook owns those remaining steps. The M365
 consumer and report handoff remain ready; no duplicate auth, answered scope
 question or unattended login polling is started here.
+
+
+## Connection discovery correction — 2026-10-14
+
+The proposed developer environment has zero connections. The user's selected
+next discovery scope is VUW STAFF Default, owned by Outlook. VUW identity and
+authentication progress do not establish a usable Outlook connection or a test
+extraction. Exact connection binding remains pending. No duplicate sign-in,
+credential change or connection lookup is performed here; MFA remains human.
+Queensland Health pilot authority and scope remain separate and pending.
