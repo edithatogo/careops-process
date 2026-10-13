@@ -54,6 +54,17 @@ pseudonymisation remain an external gate.
 - [ ] Maintainer verifies the repository tranche using
   `docs/credentialing-renewal-reference.md` and accepts the generic-model limits.
 - [ ] Integration owner reruns all required checks on the final shared revision.
+- [ ] Resolve reproduced native-runtime failures and demonstrate repeatability.
+
+Runtime follow-up (2026-10-14): ten fresh deletion/replay test processes yielded
+eight passes, one access violation and one Hypothesis FlakyFailure. A minimal
+nested Pydantic serialization probe also fails without repository/test imports
+or deepcopy. Disposable Pydantic 2.12.5, Python 3.13.15 and Python 3.14.7 comparisons
+still failed; no runtime fix is established and product dependencies are unchanged.
+Repository-wide lint/format, offline PowerShell tests, Bandit, dependency audit,
+offline Zizmor and scoped review-commit Gitleaks checks pass with limitations
+recorded in `review.md`. The earlier green full-suite result is not superseding
+the reproduced failures.
 
 The track remains in progress. Durable ledger storage, concurrency, trusted
 authorisation/case mapping and cross-release privacy controls are production

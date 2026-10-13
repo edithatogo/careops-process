@@ -1,19 +1,28 @@
-# Credentialing process assurance review — 2026-10-14
+# Review Report: Credentialing process assurance — 2026-10-14
 
 ## Summary
 
-Partial acceptance of the disconnected repository tranche. The track remains in
-progress; this review does not approve live ingestion or certify operating
-effectiveness. Independent read-only review identified three actionable defects;
-the implementer reproduced them and added passing regression tests after fixes.
+The track is not ready for completion: deterministic fixes pass regression tests,
+but native runtime failures are reproducible and required capabilities and pilot
+gates remain open.
 
 ## Verification Checks
 
-- Credentialing and ontology slice: 77 tests passed.
-- Fresh full repository run: 664 tests passed; combined coverage 97.06%, with
-  line and branch coverage separately above 90%.
-- Scoped Ruff lint and formatting, Pyright, and Conductor validation passed.
-- All fixtures are synthetic. No live source writes or pilot evaluation occurred.
+- [ ] **Plan Compliance**: Partial — minimum counters/reference/reporting are
+  implemented; measurement, later-pathway and manual/live gates remain open.
+- [x] **Style Compliance**: Pass — repository-wide Ruff lint and formatting pass;
+  Pyright and Conductor validation pass at dcd50a2.
+- [x] **New Tests**: Yes — deterministic boundary and restoration regressions.
+- [x] **Test Coverage**: Yes — line 97.70%, branch 94.91%, measured independently.
+- [ ] **Test Results**: Failed repeatability — the full suite passed 664 tests,
+  but a fresh ten-process deletion/replay run passed only eight; one access
+  violation and one Hypothesis FlakyFailure remain. Standalone probes also fail.
+
+Both offline PowerShell regression scripts pass. Bandit JSON audit: zero findings
+and parse errors (four configured skipped checks). Dependency audit: no known
+vulnerabilities, unpublished local package unauditable. Offline Zizmor: no findings,
+one suppression. Gitleaks: no leaks in the two review-fix commits. These scopes do
+not establish reliability or live effectiveness. All fixtures are synthetic.
 
 ## Findings
 
@@ -30,10 +39,34 @@ inference is removed before retained-event provenance checks; deleted run links
 are not required or retained. These follow-up defects were reproduced in failing
 tests before fixes.
 
-Unresolved runtime evidence: the independent reviewer observed a Hypothesis
-FlakyFailure inside standard-library deepcopy; an isolated rerun and the final
-full run passed. Earlier native Windows failures have no established root cause.
-These changes are not evidence that the runtime issue is resolved.
+### High — Reproducible native runtime failures
+
+- **File**: `src/careops_process/credentialing.py` (validation/serialization boundary).
+- **Context**: fresh subprocesses reproduce access violations and intermittent
+  malformed model results. A minimal nested Pydantic model with no CareOps imports,
+  custom validators, pytest or Hypothesis also fails; serialization-only runs fail
+  without deepcopy. The root cause remains unproven. Disabling cyclic GC, comparing
+  Pydantic 2.12.5, Python 3.13.15 and Python 3.14.7 did not eliminate failure.
+- **Suggestion**: keep completion gated; capture a native exception matched to the
+  minimal reproducer's PID/build before applying a speculative runtime fix.
+
+```diff
+- Treat a single passing full-suite run as sufficient runtime evidence.
++ Require resolution and repeatable verification of reproduced native failures.
+```
+
+### Medium — Full requested measurement and review capability is incomplete
+
+- **File**: `contracts/credentialing-assurance-measures.json` (line 78), track plan.
+- **Context**: the minimum event counters do not implement delay, workload/capacity,
+  quality evaluation or an evidence-bound human improvement-review workflow.
+- **Suggestion**: review the proposed completion design, implement and verify its
+  agreed stages, and keep live/source/manual gates open until evidenced.
+
+```diff
+- Accept minimum event counters as evidence for all assurance dimensions.
++ Verify each measurement and human-review requirement independently.
+```
 
 Present requirements: versioned ontology and projection contract, prohibited-field
 rejection, observed/inferred separation, provenance requirements, replay/deletion
