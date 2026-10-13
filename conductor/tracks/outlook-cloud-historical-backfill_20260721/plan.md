@@ -126,6 +126,8 @@ acceptance route; Graph/offline helpers do not replace its live verification.
 
 ## Continuation audit — approval boundary
 
+Verified continuation implementation commit: `4039eac`.
+
 The completion audit found that the Graph exporter previously relied on the
 operator runbook rather than validating pilot approval before token acquisition.
 That local gap is now repaired: `-PilotEntryPath` is required for acquisition,
