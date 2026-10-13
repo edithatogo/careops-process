@@ -1,30 +1,54 @@
-# careops-process
+# CareOps Process
 
-Privacy-preserving, object-centric process intelligence for CareOps.
+CareOps Process provides privacy-preserving, object-centric process intelligence
+for administrative and clinical-governance workflows.
 
-This repository contains schemas, synthetic fixtures, analytical code, and
-deployment automation. It must never contain mailbox exports, message content,
-personal information, credentials, tenant identifiers, or production event
-logs.
+The repository contains versioned schemas, synthetic fixtures, analytical code,
+process models, tests, and deployment automation. It must never contain mailbox
+exports, message content, patient or practitioner information, credentials,
+tenant identifiers, production event logs, or generated operational findings.
 
-The implemented baseline includes a versioned OCEL 2.0 contract, low-privilege
-M365/Dataverse fact projection, deterministic process-family discovery,
-conformance metrics, and human-reviewable improvement recommendations. All
-fixtures are synthetic; live mailbox, Fabric, and Graph Data Connect execution
-remains subject to the gates in `docs/feasibility.md`.
+## Core capabilities
 
-Reliability and evaluation controls include replay-safe checkpoints,
-tombstones, minimized dead-letter records, temporal leakage-safe splits,
-Jensen-Shannon label drift, and a governed semantic projection schema.
+- OCEL 2.0 event and object contracts;
+- low-privilege Microsoft 365 and Dataverse fact projection;
+- replay-safe checkpoints, deduplication, tombstones, and minimized dead-letter
+  records;
+- deterministic process-family and variant discovery;
+- conformance, delay, deviation, rework, and quality measures;
+- governed semantic projections; and
+- explainable, human-reviewable improvement recommendations.
 
-The connector-neutral [live pilot runbook](docs/live-pilot.md) defines the
-Power Automate/Dataverse handoff, checkpoint semantics, and tenant-gated
-acceptance evidence.
+The module observes and analyses processes. It never changes a workflow,
+approves a request, or makes a clinical, credentialing, employment, review, or
+appeal decision.
 
-The [track completion matrix](docs/track-completion-matrix.md) distinguishes
-verified repository capabilities from remaining tenant permissions. The
-governed pipeline also has a [BPMN 2.0 model](docs/process-models/careops-process-mining.bpmn)
-and matching [Mermaid visual](docs/process-models/careops-process-mining.mmd).
+## Modular domain packs
+
+The generic core is extended through versioned domain ontologies and event
+projection contracts. Domain packs are disabled or disconnected until an
+approved deployment profile supplies the source mapping, privacy classification,
+retention, access, and acceptance evidence.
+
+The first credentialing pack is documented in
+[`docs/credentialing-process-assurance.md`](docs/credentialing-process-assurance.md).
+It models credentialing requests, evidence, professional review, committee
+recommendations, delegated decisions, conditions, expiry, review, appeal, and
+register activation through privacy-minimised identifiers and events.
+
+The pack receives event facts from `careops-approve` and `careops-decisions`. It
+does not ingest raw credentials, CVs, referee reports, complaints, investigation
+records, patient records, committee papers, or decision free text.
+
+## AI and process mining
+
+AI or NLP may assist with process-family labels, event-classification proposals,
+anomaly summaries, root-cause hypotheses, and improvement drafts. These outputs
+must remain labelled as inferred, retain confidence and model provenance, and be
+reviewed by a human. Observed events and inferred hypotheses remain separate.
+
+No AI output may alter a source event, certify conformance, change a case,
+reassign work, or implement a recommendation automatically.
 
 ## Architecture
 
@@ -35,7 +59,8 @@ and matching [Mermaid visual](docs/process-models/careops-process-mining.mmd).
 - Mojo is an experimental Linux/WSL acceleration lane and must pass parity
   tests against the Python implementation.
 - Power Automate and Dataverse provide the low-privilege ingestion path.
-- Fabric/OneLake is the preferred managed-compute target when access is proven.
+- Fabric, OneLake, or another managed analytical target may be used only after
+  deployment-specific access, governance, and security gates pass.
 
 ## Bootstrap
 
@@ -46,5 +71,11 @@ uv run ruff check .
 uv run pyright
 ```
 
-See [Conductor](conductor/index.md) for the executable roadmap and
-[feasibility evidence](docs/feasibility.md) for current platform gates.
+See [Conductor](conductor/index.md), the
+[feasibility evidence](docs/feasibility.md), and the
+[live pilot runbook](docs/live-pilot.md).
+
+## Licence
+
+Original material in this repository is licensed under the MIT License.
+Third-party dependencies retain their own terms.
