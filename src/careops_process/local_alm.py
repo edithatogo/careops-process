@@ -27,10 +27,11 @@ if TYPE_CHECKING:
 _VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 _BOUND = re.compile(
     r"https?://[^\s\"<>]+\.(?:dynamics\.com|sharepoint\.com)|"
-    r"(?i:Bearer\s+\S+|[\"']?(?:client_secret|password|access_token|refresh_token|"
+    r"(?i:Bearer\s+\S+|[\"']?(?:client_?secret|password|access_token|refresh_token|"
     r"tenantid|environmentid|connectionid)[\"']?\s*[:=]\s*[\"']?[^\s\"'<>{}]+|"
     r"<(?:clientsecret|password|access_token|refresh_token|connectionid|tenantid|"
-    r"environmentid|defaultvalue|value)>\s*[^\s<]+)"
+    r"environmentid|defaultvalue|value)>\s*[^\s<]+)",
+    re.IGNORECASE,
 )
 
 

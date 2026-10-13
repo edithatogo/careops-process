@@ -192,6 +192,22 @@ def test_malformed_json_has_sanitized_diagnostics(solution: Path) -> None:
     assert malformed not in str(error.value)
 
 
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"endpoint": "HTTPS://SYNTHETIC.CRM6.DYNAMICS.COM/api/data/v9.2"},
+        {"clientSecret": "synthetic-forbidden-value"},
+    ],
+)
+def test_portability_checks_ignore_endpoint_and_secret_key_case(
+    solution: Path, payload: dict[str, str]
+) -> None:
+    """Case changes cannot bypass protected or environment-bound value rejection."""
+    (solution / "settings.json").write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="portable"):
+        local_alm.validate_solution(solution)
+
+
 def test_packaging_detects_source_mutation(solution: Path, tmp_path: Path) -> None:
     """Concurrent source edits cannot be labelled as the package's audited source."""
 
