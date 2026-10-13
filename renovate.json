@@ -2,5 +2,16 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>edithatogo/renovate-config"
+  ],
+  "enabledManagers": ["git-submodules"],
+  "automerge": false,
+  "platformAutomerge": false,
+  "packageRules": [
+    {
+      "description": "All updates require human review, including inherited digest/pin/patch rules",
+      "matchPackageNames": ["*"],
+      "automerge": false,
+      "platformAutomerge": false
+    }
   ]
 }

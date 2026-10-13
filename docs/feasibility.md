@@ -2,6 +2,12 @@
 
 Last reviewed: 2026-08-29
 
+For 14 October 2026 local assurance evidence, see
+[mining and independent coverage](mining-assurance.md),
+[CI and dependency controls](dependency-and-ci-operations.md), and
+[local ALM](local-alm.md). The dated feasibility boundary below is preserved;
+current tenant capabilities still require a new authorised receipt.
+
 This document records the reusable feasibility boundary for CareOps Process.
 Deployment-specific permissions and tool availability must be captured in a
 separate, non-sensitive environment receipt and reverified before each pilot.

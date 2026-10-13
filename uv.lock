@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = "==3.14.*"
 resolution-markers = [
     "sys_platform == 'win32'",
@@ -63,6 +63,7 @@ name = "careops-process"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "defusedxml" },
     { name = "polars" },
     { name = "pyarrow" },
     { name = "pydantic" },
@@ -76,7 +77,6 @@ mining = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
-    { name = "defusedxml" },
     { name = "hypothesis" },
     { name = "pip-audit" },
     { name = "pyright" },
@@ -87,7 +87,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pm4py", marker = "extra == 'mining'", specifier = "==2.7.23.1" },
+    { name = "defusedxml", specifier = ">=0.7.1" },
+    { name = "pm4py", marker = "extra == 'mining'", specifier = "==2.7.23.8" },
     { name = "polars", specifier = ">=1.33" },
     { name = "pyarrow", specifier = ">=21" },
     { name = "pydantic", specifier = ">=2.11" },
@@ -97,7 +98,6 @@ provides-extras = ["mining"]
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit", specifier = ">=1.8" },
-    { name = "defusedxml", specifier = ">=0.7.1" },
     { name = "hypothesis", specifier = ">=6.135" },
     { name = "pip-audit", specifier = ">=2.9" },
     { name = "pyright", specifier = ">=1.1.403" },
@@ -756,7 +756,7 @@ wheels = [
 
 [[package]]
 name = "pm4py"
-version = "2.7.23.1"
+version = "2.7.23.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cvxopt" },
@@ -768,13 +768,11 @@ dependencies = [
     { name = "pandas" },
     { name = "pytz" },
     { name = "scipy" },
-    { name = "setuptools" },
     { name = "tqdm" },
-    { name = "wheel" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3d/71/c405a595d570d49525c6ff8b47daab8f07e4a082114739d5fc77d4e6f5c5/pm4py-2.7.23.1.tar.gz", hash = "sha256:2d24797beba9cb161272171b4bf333050a8de54ef42f0c4d8e3bf55c7e3e6eed", size = 1138239, upload-time = "2026-07-01T10:34:42.159Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b7/31/53888bf820d865e6e2f3cc21f95542a59affd5454f3a0cc44c06d698c6b8/pm4py-2.7.23.8.tar.gz", hash = "sha256:03984a775276c6999ca318efcb1faf0f3ff1d33954fb22f0580cb42dff30816c", size = 1186117, upload-time = "2026-09-01T11:53:24.774Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/57/46f47efd8baa008ea5b9792b756ab8983dc9a1734c0ce857bc8fbcb6bbda/pm4py-2.7.23.1-py3-none-any.whl", hash = "sha256:43562631cec109faec1ab859f0c4e106ed64b5f4dd8004258939ef65db9c4f19", size = 2605259, upload-time = "2026-07-01T10:34:35.773Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/36/51b41f1eefe070a3905cfff2a64ca33dbb17defb1d5caecaaa986cf5e65b/pm4py-2.7.23.8-py3-none-any.whl", hash = "sha256:e97f7845bc440859fe46e88824bb773162d8799f1278b34907d0eb4c7d4be502", size = 2666577, upload-time = "2026-09-01T11:53:18.355Z" },
 ]
 
 [[package]]
@@ -1088,15 +1086,6 @@ wheels = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "83.0.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/34/26/f5d29e25ffdb535afef2d35cdb55b325298f96debd670da4c325e08d70f4/setuptools-83.0.0.tar.gz", hash = "sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef", size = 1154254, upload-time = "2026-07-04T15:31:22.699Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/40/e1e72872c6354b306daef1703549e8e83b4d43cfea356311bf722a043752/setuptools-83.0.0-py3-none-any.whl", hash = "sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3", size = 1008090, upload-time = "2026-07-04T15:31:20.885Z" },
-]
-
-[[package]]
 name = "six"
 version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1208,16 +1197,4 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz", hash = "sha256:63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63", size = 458972, upload-time = "2026-09-15T19:29:36.253Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl", hash = "sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3", size = 135717, upload-time = "2026-09-15T19:29:34.577Z" },
-]
-
-[[package]]
-name = "wheel"
-version = "0.47.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "packaging" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/39/62/75f18a0f03b4219c456652c7780e4d749b929eb605c098ce3a5b6b6bc081/wheel-0.47.0.tar.gz", hash = "sha256:cc72bd1009ba0cf63922e28f94d9d83b920aa2bb28f798a31d0691b02fa3c9b3", size = 63854, upload-time = "2026-04-22T15:51:27.727Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/1b/9e33c09813d65e248f7f773119148a612516a4bea93e9c6f545f78455b7c/wheel-0.47.0-py3-none-any.whl", hash = "sha256:212281cab4dff978f6cedd499cd893e1f620791ca6ff7107cf270781e587eced", size = 32218, upload-time = "2026-04-22T15:51:26.296Z" },
 ]

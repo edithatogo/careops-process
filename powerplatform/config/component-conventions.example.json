@@ -1,0 +1,19 @@
+{
+  "status": "design-example-not-solution-components",
+  "environmentVariable": {
+    "schemaName": "cop_SourceEndpoint",
+    "defaultValue": "",
+    "bindingLocation": "secrets/deployment-settings.<stage>.json"
+  },
+  "connectionReference": {
+    "logicalName": "cop_SourceConnection",
+    "connectionId": "",
+    "ownerEvidence": "record-in-private-release-approval"
+  },
+  "flow": {
+    "solutionAware": true,
+    "usesConnectionReferences": true,
+    "usesEnvironmentVariables": true,
+    "runtimeConnectionOwnershipVerified": false
+  }
+}
