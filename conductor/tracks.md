@@ -30,7 +30,7 @@
 - [x] **Track: Process intelligence semantic model and improvement loop**
   *Link: [./tracks/process-intelligence_20260715/index.md](./tracks/process-intelligence_20260715/index.md)*
 
-- [ ] **Track: Teams clinical-governance workflows**
+- [~] **Track: Teams clinical-governance workflows**
   *Link: [./tracks/teams-governance-workflows_20260717/index.md](./tracks/teams-governance-workflows_20260717/index.md)*
 
 - [ ] **Track: Local reliability and ALM hardening**

@@ -1,8 +1,8 @@
 {
   "track_id": "teams-governance-workflows_20260717",
   "type": "feature",
-  "status": "new",
+  "status": "in_progress",
   "created_at": "2026-07-17T09:33:27Z",
-  "updated_at": "2026-07-17T09:44:49Z",
+  "updated_at": "2026-10-13T14:43:56Z",
   "description": "Implement the multi-user IHG Governance and Executive Action Hub in Microsoft Teams using configurable governance pathways and user-scoped Power Platform capabilities, without requiring Entra or tenant-administrator access."
 }
