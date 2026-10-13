@@ -58,3 +58,22 @@ to report completion, blockers and scope changes to the coordinator.
 All unfinished tracks retain their original scope and incomplete state. Final
 integration, real app/flow authoring and validation, authentic source/policy
 evidence, multi-user pilot and manual acceptance remain unproven.
+
+## Subsequent coordination update
+
+The Outlook chat now records verified VUW login and Power Automate access. The
+user selected an existing Outlook connection and a developer environment. The
+Azure mail-token route was unavailable; the implementation owner is working
+with the selected connector route. These updates supersede the earlier pending
+authentication state, but do not establish completed acquisition or a pilot.
+
+The coordinator checked the direct user reply in the M365 chat: VUW is for
+testing, and an actual pilot is intended for Queensland Health. The Outlook
+draft runbook still used pilot terminology for VUW, so the coordinator sent
+this exact clarification to both owners and requested reconciliation while
+preserving any genuinely approved later connection or extraction scope.
+
+The measurement extension's design and task plan are committed as `3c1d4c0` in
+its isolated worktree. Implementation is underway and not yet integrated.
+Review feedback requests explicit handling of repeated or contradictory
+case evaluations, distinct-case suppression and partial effort observations.
