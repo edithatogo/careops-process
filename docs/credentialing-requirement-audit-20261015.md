@@ -55,3 +55,26 @@ maintainer/governance manual decisions required by the original plan.
 No missing approval can be inferred from the user's instruction to implement.
 No source, role, authority, privacy threshold, pilot result or acceptance record
 is fabricated to close the objective.
+
+## Subsequent shared pathway checkpoint
+
+The coordinator committed recovered source-linked pathway comparison as
+`9ff80f8` after preserving corrupt drafts and fixing the reproduced
+`activity_after_terminal` regression. Read-only review inspected its source,
+schema and synthetic tests; this chat independently ran all 36 pathway tests
+with `--no-cov`, which passed. No new actionable defect was identified.
+
+This advances requirement 8 beyond the isolated checkpoint above: independent
+supplied references can now describe changed scope, mutual recognition,
+temporary approval, conditions/supervision, review/appeal and register
+reconciliation. The code provides a strict comparator and versioned reference
+interface, not source-approved clinical pathway content. Actual local stage,
+authority, terminal-outcome and source mappings still need acceptance.
+
+The coordinator's separate full shared run reports 799 tests passed. Its private
+dataset is `careops-pathway-integration-c78f2b12c9fe4b7b9d6c633c1497d8b8`, with
+4212/4305 covered lines and 1238/1302 covered branches. This is attributed shared
+integration evidence; it neither repairs nor replaces this worktree's corrupt
+full-run artifacts, and it does not establish repeatable host/runtime reliability.
+Final hosted checks, source/policy approvals, live/silent-mode evidence and
+manual acceptance remain outside that test result.
