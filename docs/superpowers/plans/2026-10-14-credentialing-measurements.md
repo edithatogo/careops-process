@@ -62,28 +62,28 @@ and optional tuple `measures`. Each frozen `StageTimeMeasure` has
 `interval_id`, `eligible_case_count`, tuple `excluded_case_counts`,
 `median_hours`, `p75_hours`, `p90_hours`, `p95_hours`.
 
-- [ ] Write hand-calculated tests: four complete cases with stage hours
+- [x] Write hand-calculated tests: four complete cases with stage hours
   1,2,3,4 give median 2.5 and nearest-rank p75=3,p90=4,p95=4; counts reconcile.
-- [ ] Add missing/repeated/tied/reversed/mismatched qualifier/inferred-only,
+- [x] Add missing/repeated/tied/reversed/mismatched qualifier/inferred-only,
   overlapping links, invalid policy, empty population and rare-cell suppression tests.
-- [ ] Run the new module tests with `--no-cov -q`; observe missing implementation failure.
-- [ ] Implement adjacent renewal intervals plus request-to-completion,
+- [x] Run the new module tests with `--no-cov -q`; observe missing implementation failure.
+- [x] Implement adjacent renewal intervals plus request-to-completion,
   recommendation-to-decision, communication-to-activation and decision-to-activation.
   Deduplicate interval pairs. Validate/detach projection, then derive each
   case's mutually exclusive outcome from observed evidence only.
-- [ ] Run tests, scoped lint/format and Pyright; document current native limitation.
-- [ ] Commit the independently tested module and record evidence in the ledger.
+- [x] Run tests, scoped lint/format and Pyright; document current native limitation.
+- [x] Commit the independently tested module and record evidence in the ledger.
 
 ## Task 2: Observed workload and quality
 
 **Files:** create `src/careops_process/credentialing_observations.py`,
 `tests/test_credentialing_observations.py`,
-`contracts/credentialing-observations.json`; extend the new manual.
+`contracts/credentialing-observation.schema.json`; extend the new manual.
 
 **Interfaces:** frozen `WorkObservation` and `EvaluationObservation` share
 `observation_id`, `case_id`, `source_system`, UTC `recorded_at_utc`, and
 contract version 0.1.0. Work adds strict nonnegative integer
-`manual_touch_count`, `active_work_minutes`. Evaluation adds strict booleans
+`manual_touch_count`, `active_work_minutes` and strict `effort_complete`. Evaluation adds strict booleans
 `alert_raised`, `requirement_present`, and `evaluation_reference_version`.
 `parse_observation(payload: Mapping[str, object]) -> WorkObservation | EvaluationObservation`
 rejects uncontrolled keys/types and canonicalizes aware dates.
@@ -91,24 +91,25 @@ rejects uncontrolled keys/types and canonicalizes aware dates.
 kind/ID identity and exact-record equality.
 `report_effort(...role, case_ids, minimum_cases) -> EffortReport` and
 `report_quality(...role, case_ids, minimum_cases, reference_version) -> QualityReport`
-consume Task 1 scope validation. Frozen output records omit identifying data.
+consume Task 1 scope validation. Quality counts one consistent case/reference,
+not repeated observation rows. Frozen output records omit identifying data.
 `MeasurementWindow` specifies aware start/end, source/cohort definition versions
 and strict completeness attestation. `compare_effort(...baseline_window,
 current_window, baseline_case_ids, current_case_ids, role, minimum_cases)`
 returns `EffortComparison` with an arithmetic per-case difference only when
 sources/cohorts/windows and observed populations are comparable.
 
-- [ ] Test strict rejection, dates, independent duplicate/conflict replay,
+- [x] Test strict rejection, dates, independent duplicate/conflict replay,
   missing observations versus actual zero and rare missing-case suppression.
-- [ ] Test quality counts with two contributing cases per nonzero TP/FP/TN/FN
+- [x] Test quality counts with two contributing cases per nonzero TP/FP/TN/FN
   cell: FP/(FP+TN), FN/(FN+TP); zero denominators yield None.
-- [ ] Test out-of-grant observations, incompatible evaluation references,
+- [x] Test out-of-grant observations, incompatible evaluation references,
   noncomparable windows, missing effort, and equal source/cohort versions.
-- [ ] Observe missing-implementation failures; implement frozen validation,
+- [x] Observe missing-implementation failures; implement frozen validation,
   replay, reporting and comparison without event-count/effort substitution.
-- [ ] Publish strict draft-2020-12 observation schema; verify independent
+- [x] Publish strict draft-2020-12 observation schema; verify independent
   positive/negative fixtures with explicit RFC3339 checker availability.
-- [ ] Run task tests/lint/type checks and commit with the ledger receipt.
+- [x] Run task tests/lint/type checks and commit with the ledger receipt.
 
 ## Task 3: Evidence-bound human improvement review
 
