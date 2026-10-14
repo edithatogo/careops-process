@@ -5,9 +5,11 @@ process-discovery pilot is intended only for the user's Queensland Health accoun
 
 ## VUW testing
 
-VUW Azure/Graph identity and Power Automate environment access are now verified
-in the Outlook receipt. Finish the remaining connection-service authentication
-and exact selected connection binding before claiming end-to-end test capability. Use synthetic or explicitly designated non-sensitive test data to
+VUW identity, Power Automate environment access and usable encrypted token
+transport are verified in the Outlook receipt. The authorized development
+connection in VUW-AI-TEST is Connected. The private scope/configuration and
+destination proposal is prepared; disposal timing still awaits the operator's
+decision before the bounded test. Use synthetic or explicitly designated non-sensitive test data to
 exercise connection, contracts, minimized projection, pagination/checkpoints,
 source/destination reconciliation, replay and report publication. Record this
 as development/integration test evidence, with synthetic/smoke-test labels.
@@ -15,7 +17,7 @@ as development/integration test evidence, with synthetic/smoke-test labels.
 The initial seven-day Inbox suggestion was unconfirmed when this boundary was
 first recorded. The later Outlook receipt records operator authorisation for
 an Inbox-only seven-day metadata development test stored locally outside Git,
-and selection of an existing Outlook connection in the developer environment.
+and subsequent creation of a development Outlook connection in VUW-AI-TEST.
 That limited test is smoke-test evidence, not the corpus-scale pilot. Exact
 connection/scope/configuration and applicable retention controls still need to
 be bound before execution. Login authority is not
@@ -41,12 +43,16 @@ renaming a real-data run as testing.
 
 The M365 chat prepared a VUW test plan, a Queensland Health pilot decision brief
 and a deliberately unapproved pilot-entry JSON under its local `outputs/`.
-The VUW pilot-labelled draft is superseded. Outlook owns the remaining
-connection-service authentication and test binding; no duplicate sign-in should
-be started. FlowAgent authentication/connection enumeration is still incomplete
-in the latest receipt, and no mailbox extraction or connection identity
-verification is established by it. Once human authentication or source/IG
-decisions are needed, stop rather than scheduling or repeatedly polling.
+The VUW pilot-labelled draft is superseded. Outlook owns the test connection,
+scope-bound acquisition and measured evidence. Secure token transport is now
+usable; the old encrypted cache was preserved and encryption stayed enabled.
+The remaining concrete test decision is disposal of local derived evidence and
+the pseudonym key seven days after completion, or another operator-selected
+period. The private proposal remains unapproved for that control. No mailbox
+read, source/destination reconciliation or replay evidence exists yet. M365
+will consume those facts and receipts after delivery, without duplicate
+authentication or acquisition. Once a human decision is needed, stop rather
+than scheduling or repeatedly polling.
 The coordinator owns final shared integration verification.
 
 
