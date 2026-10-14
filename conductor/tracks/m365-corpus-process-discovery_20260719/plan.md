@@ -255,3 +255,19 @@ authentication progress do not establish a usable Outlook connection or a test
 extraction. Exact connection binding remains pending. No duplicate sign-in,
 credential change or connection lookup is performed here; MFA remains human.
 Queensland Health pilot authority and scope remain separate and pending.
+
+
+## Completed VUW connection scan — 14 October 2026
+
+The Outlook completion audit now records checks of all seven accessible VUW
+environments, including the final VUW-AI-TEST browser check using the existing
+session. No existing Outlook connection was found for this operator. This
+supersedes the earlier pending-discovery prerequisite. No mailbox data was read
+and no new connection was created.
+
+The next VUW test dependency is the operator's environment choice for a new
+Office 365 Outlook connection, already requested in the Outlook chat. Outlook
+owns creation and exact binding after that choice; this chat does not duplicate
+the request or repeat authentication. Browser login to Queensland Health is
+reported by the user, but its actual pilot scope and owner/IG decisions remain
+pending. The full corpus track remains in progress.
