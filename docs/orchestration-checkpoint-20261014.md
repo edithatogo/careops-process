@@ -104,3 +104,24 @@ host/runtime fault or prove the remaining workload, quality and human-review
 interfaces. Those tasks are still being implemented in the isolated worktree.
 Hosted checks, real source/policy approvals and full track acceptance remain
 pending.
+
+## Git-index recovery checkpoint
+
+On continuation, Git reported a bad index signature. The shared checkout's
+43,744-byte index contained only zero bytes. The coordinator preserved the
+damaged index outside Git and built a replacement from committed `HEAD`
+(`6eed7708a62f87ca75605704ee0d459061de8d08`) using a separate index file.
+The replacement reported no working-file differences before installation.
+It was installed under Git's exclusive index lock without changing working
+files, branch pointers or commits. Git status, connectivity verification and
+full object-integrity verification subsequently passed.
+
+Any staged selection stored only in the zeroed index is unrecoverable. No
+staged snapshot can be inferred from its contents. This recovery restores
+repository operations, not a proof of the cause or repair of the underlying
+host/storage failure. The damaged index hash and byte copy remain private.
+
+Both credentialing and measurement chats resumed with overlapping worktree
+intent. The coordinator requested one writer for the unfinished observation
+module, its tests and schema, and retained a private draft copy pending that
+ownership handoff. Final shared integration remains coordinator-owned.
