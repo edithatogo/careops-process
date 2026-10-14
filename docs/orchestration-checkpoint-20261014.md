@@ -126,6 +126,27 @@ The shared checkout contains separately owned unfinished pathway files, so a
 new final full-suite receipt awaits their committed checkpoint. The historical
 705-test receipt is not evidence for this later executable revision.
 
+## Human measurement-review integration — 15 October continuation
+
+Source checkpoint `5bfd37e` was reviewed and integrated as `d4c0c3f`.
+The coordinator independently ran 22 human-review tests before integration
+and 95 combined stage-time, observation and human-review tests afterward;
+all passed with `--no-cov`. Review binds a candidate to observed source facts,
+released aggregates and measurement policy. Acceptance records measurement
+review only, not source writes or operational approval.
+
+Ruff initially panicked while reading cached package-root data containing
+null bytes. The coordinator preserved the cache and reran scoped lint/format
+with `--no-cache`; those checks passed. Scoped strict Pyright, Bandit and
+Conductor validation also passed. This is source-validation evidence only;
+the prior Git-index corruption and intermittent runtime failures remain
+unresolved host/storage reliability evidence.
+
+The measurement owner was authoritatively interrupted after committing this
+checkpoint and was asked to resume remaining Task 4 verification and review
+documentation. The pathway owner remains active on separate files. Final
+full-suite and hosted verification awaits their stable handoffs.
+
 ## Git-index recovery checkpoint
 
 On continuation, Git reported a bad index signature. The shared checkout's
