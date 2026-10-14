@@ -169,3 +169,27 @@ owns creation and exact binding after that choice; this chat does not duplicate
 the request or repeat authentication. Browser login to Queensland Health is
 reported by the user, but its actual pilot scope and owner/IG decisions remain
 pending. The full corpus track remains in progress.
+
+
+## VUW connection setup and downstream checks — 15 October 2026
+
+Outlook supplied a private binding and screenshot confirming the CareOps VUW
+development test connection is Connected in VUW-AI-TEST. Its evidence class is
+development_connection_setup. The previous connection-creation decision blocker
+is cleared. Outlook remains the connection/acquisition owner and is continuing
+the authorised limited VUW test. No mailbox facts, frozen source inventory,
+destination snapshot or independent replay were supplied with this receipt.
+
+Current-tree downstream verification passed: 46 tests across bound evidence,
+Outlook reconciliation integration, closed-run CLI and atomic report publication
+with --no-cov. This verifies local consumer behaviour, not live acquisition,
+whole-repository coverage or Queensland Health pilot completion. The live test
+artifacts are required before executing the report pipeline against VUW data.
+
+The shared Outlook receipt `test-connection-20261015.md` confirms 62 offline
+Outlook tests and exporter regressions passed. Its identity check matches VUW,
+but Flow token identity is absent and token-cache decryption previously failed
+with WinError13. Browser connection setup is verified; usable automation
+transport is not. Outlook owns the supported-transport investigation. Retain
+setup-only labels until real minimized acquisition and independent evidence
+arrive; no duplicate browser sign-in or cache-encryption weakening is needed.
