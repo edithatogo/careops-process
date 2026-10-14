@@ -51,3 +51,17 @@ Office 365 Outlook operation/schema discovery succeeds, including GetEmailsV3
 and HttpRequest. This supersedes the earlier transport blocker. The M365 agent
 was notified. No mailbox read was needed for diagnosis or schema discovery;
 the minimized metadata acquisition and its measured evidence remain pending.
+
+## Bound test controls
+
+Existing private records were inspected. They contain the connected binding
+and earlier unapproved proposals, but no approved retention/disposal decision.
+A new private test-controls proposal records the fixed seven-day Inbox window,
+verified connection, metadata allowlist, local-only destination, operator's
+source-test authorization and rollback restricted to this run's derived files.
+It proposes disposal of derived evidence and the pseudonym key seven days
+after completion. Retention and configuration-freeze flags remain false;
+execution has not started. The operator was asked only for that remaining
+retention/disposal decision. Source authorization is recorded as the operator's
+assertion, not independently verified institutional authority. No Queensland
+Health approval is inferred.
