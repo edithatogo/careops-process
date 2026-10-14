@@ -50,6 +50,10 @@ not prove real source completeness, case mapping or authority approval.
 Native runtime reliability remains separately under investigation; a passing
 component test is not evidence that the known process crash is fixed.
 
-Workload/quality observations and evidence-bound human review are subsequent
-tasks in the isolated implementation plan. Do not infer them from event counts
-or label this first component the completed credentialing assurance pack.
+Observed workload, case-level quality and evidence-bound human review now have
+local executable contracts; see [the observation/review manual](credentialing-observations.md)
+and [metric dictionary addendum](credentialing-measurement-dictionary.md).
+Full-worktree reliability verification and live/pilot acceptance remain open;
+see [the scoped review receipt](credentialing-measurement-review-20261015.md).
+Do not infer work from event counts or label this extension the completed
+credentialing assurance pack.

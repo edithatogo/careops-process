@@ -74,6 +74,16 @@ def test_observation_wire_roundtrip_and_strict_units() -> None:
     assert work.manual_touch_count == 1
 
 
+@pytest.mark.parametrize("kind", ["workload", "evaluation"])
+def test_fractional_export_roundtrip_preserves_microseconds(kind: str) -> None:
+    """Both wire variants preserve observed fractional seconds without rounding."""
+    item = _work("case-0") if kind == "workload" else _evaluation("case-0", "tp")
+    fractional = replace(item, recorded_at_utc=item.recorded_at_utc.replace(microsecond=123456))
+    payload = observations.observation_payload(fractional)
+    assert payload["recorded_at_utc"] == "2026-06-01T00:00:00.123456+00:00"
+    assert observations.parse_observation(payload) == fractional
+
+
 @pytest.mark.parametrize(
     ("key", "value"),
     [

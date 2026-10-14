@@ -142,12 +142,33 @@ the metric dictionary addendum (do not overwrite shared runtime-owner findings).
 
 - [ ] Run the entire test suite once in this worktree with its own coverage
   file; retain native failures and do not retry merely for a green claim.
-- [ ] Run meaningful property/privacy tests, schema verification, Ruff,
+- [x] Run meaningful property/privacy tests, schema verification, Ruff,
   Pyright, Bandit, dependency/secret/workflow checks; report precise scopes.
-- [ ] Request one fresh read-only review of the isolated task range.
+- [x] Request one fresh read-only review of the isolated task range.
   Fix actionable findings with regression evidence.
-- [ ] Publish immutable commit/base/path/verification receipts for the
+- [x] Publish immutable commit/base/path/verification receipts for the
   coordinator to read and integrate. Do not merge/push/deploy or change login.
-- [ ] Retain CHHHS mapping, approved source data, live pilot, later policy
+- [x] Retain CHHHS mapping, approved source data, live pilot, later policy
   pathways, durable adapter controls, native reliability and manual acceptance
   as actual remaining gates. The full Conductor track stays in progress.
+
+## Task 4 receipt — 15 October 2026
+
+The full-suite attempt is inconclusive: its captured output and coverage XML
+contain zero-filled regions, and no trustworthy terminal result survives. The
+Python process is no longer live. That checkbox remains open; no repeat full run
+was used to replace this evidence.
+
+97 owned measurement/observation/review tests pass. Repository lint/format with
+Ruff cache bypass, strict Pyright, Bandit and Conductor pass; dependency, scoped
+secret, offline workflow and both PowerShell suites pass with precise limits in
+`docs/credentialing-measurement-review-20261015.md`. A fresh read-only review found
+no actionable code defects; its stale-documentation finding was corrected.
+The dictionary addendum records which original measures still remain open.
+
+Implementation commits after the already-integrated stage-time fixes are
+`a2a1e3b28ad4e1b208cfd71fd38701b9492cfab7` and
+`5bfd37e5abadcb0b77fa1e3a5f042d283662bac9`. Final shared integration remains with
+the coordinator. Native/host reliability, later original measures/pathways, live
+adapters and approved pilot/manual evidence remain unresolved. The full track
+and goal are not marked complete.
