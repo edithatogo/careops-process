@@ -1,11 +1,18 @@
 # Outlook backfill operator runbook
 
+Update, 15 October 2026: the authorized Office 365 Outlook connection was
+created in VUW-AI-TEST and verified Connected. See the
+[development connection receipt](../conductor/tracks/outlook-cloud-historical-backfill_20260721/test-connection-20261015.md).
+The connection-creation decision below is historical; the current next gate is
+usable automation transport and the private scope-bound acquisition record.
+
 Current state, 14 October 2026: local synthetic exporter tests pass. The operator
 authorized the proposed VUW Inbox-only seven-day metadata test stored locally
 outside Git and selected an existing Power Automate Outlook connection.
 VUW Azure/Graph identity and Power Automate environment access are verified;
-the operator selected their Developer environment; connection binding remains
-pending. Azure CLI's
+all seven accessible VUW environments were checked, with no existing Outlook
+connection found for the operator. A new test connection awaits the operator's
+environment/creation decision. Azure CLI's
 Graph token lacks mail-read permission, and Mail.ReadBasic acquisition returned
 AADSTS65002. Use the selected connector route rather than repeating Azure login.
 Frozen configuration, retention and approval evidence still require recording.
@@ -40,9 +47,15 @@ check ended before authentication completed, but subsequent cached sign-in
 was verified to match Azure's VUW identity. Both the Outlook-filtered and full
 connection lists returned empty for the selected Developer environment.
 The operator then selected VUW STAFF Default; both its Outlook-filtered and
-full connection lists also returned empty. The next step is an operator decision
-to create a test connection or inspect another environment, not repeating
-authentication. If later sign-in is needed, use
+full connection lists also returned empty. Following the operator's instruction
+to iterate through every environment, find-only discovery checked the other
+four environments and found no Outlook connection. The final VUW-AI-TEST check
+was completed in the browser, which explicitly showed no connections. CLI
+token-cache decryption failed even after one successful fresh browser device
+sign-in; the browser check completed discovery without weakening encryption.
+The next step is the pending operator decision to create a VUW test connection
+in VUW-AI-TEST or their Developer environment. Do not repeat the completed scan.
+If later sign-in is needed, use
 one live request's own browser flow; never reuse the completed Azure code.
 If human authentication is required while the operator is away, stop checks
 and preserve a precise handoff rather than repeatedly polling or restarting.

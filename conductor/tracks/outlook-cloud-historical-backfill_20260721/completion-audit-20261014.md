@@ -56,6 +56,27 @@ confirms the earlier empty-list result through the alternate discovery route.
 Creating a new connection
 or selecting another environment awaits the operator's decision. No mailbox
 metadata has been acquired.
+
+The operator subsequently authorized iterating through every VUW environment.
+Find-only discovery (creation disabled) returned NotFound in VUW-PipelineHost-AU,
+Centre Of Excellence Makers, Centre of Excellence - Starter Kit and VUW-AI-DEV.
+Together with the earlier verified STAFF Default and personal Developer checks,
+six environments have returned no Outlook connection. VUW-AI-TEST remains
+unverified: the continuation failed to decrypt Azure's Power Automate token
+cache (WinError 13). One fresh device login was completed in the browser with
+the agent entering its code and selecting the existing VUW session; subsequent
+token acquisition still returned the same decryption error. Browser sign-in
+success does not establish usable CLI token access. Do not represent this
+interrupted scan as a verified absence across all seven environments.
+
+The remaining VUW-AI-TEST check was subsequently completed through the Power
+Automate browser interface using the existing VUW session. Its selected
+environment header and Connections page explicitly show no connections.
+All seven accessible VUW environments have therefore been checked: six through
+find-only discovery and the seventh through the browser. No existing Outlook
+connection was found for this operator. No connection was created. Creating a
+VUW development test connection requires the operator's next decision; it is
+not established by the completed discovery scan.
 The private frozen configuration, retention decision and approval evidence must
 still be recorded before acquisition. Account identifiers, device codes and
 authentication screenshots are excluded from this repository record.
@@ -66,6 +87,13 @@ route or its live verification. The remaining approved-source adapter and
 destination binding must be validated in the selected authorised environment.
 
 ## Remaining handover
+
+Update, 15 October 2026: the operator authorized creating the VUW-AI-TEST
+Outlook test connection. Creation completed and Connected was verified in the
+browser. See the [connection receipt](test-connection-20261015.md) for current
+test results, M365 coordination and the remaining acquisition/transport gates.
+The earlier missing-connection decision is resolved. No live mailbox evidence
+or pilot completeness is established by connection creation.
 
 The operator must supply the actual approved scope/retention/destination
 record and authenticated source connection before a live run can proceed.
