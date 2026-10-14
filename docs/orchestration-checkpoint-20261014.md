@@ -105,6 +105,27 @@ interfaces. Those tasks are still being implemented in the isolated worktree.
 Hosted checks, real source/policy approvals and full track acceptance remain
 pending.
 
+## Observed-effort and quality integration receipt
+
+Source checkpoint `a2a1e3b` was reviewed and integrated as
+`f3809e77391bb3eadc71c6519b8b5d2bf5cb95f7`. The coordinator independently ran
+36 observation tests before integration and 73 combined stage-time/observation
+tests afterward. All passed with `--no-cov`. Scoped Ruff lint/format, strict
+Pyright, Bandit and Conductor validation passed.
+
+The review checked exact-replay/conflicting-replay handling, distinct-case
+quality denominators, tied partial-effort completeness, unknown versus observed
+zero effort, rare-cell whole-report suppression and matched-window comparison.
+An initially suspected schema-escaping issue was disproved against the exact
+committed JSON and withdrawn before integration; no schema fix was required.
+
+The observation module exports no source writer or clinical decision operation.
+Trusted grants, source/cohort definitions and completeness attestations remain
+adapter responsibilities. Human-review and pathway implementation continues.
+The shared checkout contains separately owned unfinished pathway files, so a
+new final full-suite receipt awaits their committed checkpoint. The historical
+705-test receipt is not evidence for this later executable revision.
+
 ## Git-index recovery checkpoint
 
 On continuation, Git reported a bad index signature. The shared checkout's
