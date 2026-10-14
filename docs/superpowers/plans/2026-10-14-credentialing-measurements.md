@@ -127,13 +127,13 @@ decided_at_utc, current_evidence_digest) -> ImprovementProposal` requires a trus
 process-owner/assurance-reviewer role; accepts accepted/rejected/needs-more-evidence
 once, only for the unchanged evidence digest. Accepted means measurement review.
 
-- [ ] Test deterministic digest/ID, genuine threshold breach, no proposals
+- [x] Test deterministic digest/ID, genuine threshold breach, no proposals
   from suppressed/empty reports, changed threshold/evidence causing new IDs.
-- [ ] Test unknown roles, unsafe review references, naive review times,
+- [x] Test unknown roles, unsafe review references, naive review times,
   invalid decision, stale evidence and repeated terminal review rejection.
-- [ ] Observe failures; implement controlled explanations and pure review
+- [x] Observe failures; implement controlled explanations and pure review
   transitions. Run end-to-end with AI disabled and no operational adapter.
-- [ ] Run tests/lint/type checks and commit with the ledger receipt.
+- [x] Run tests/lint/type checks and commit with the ledger receipt.
 
 ## Task 4: Integration evidence and independent review
 

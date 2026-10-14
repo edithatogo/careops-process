@@ -39,3 +39,32 @@ Frozen records are revalidated and detached when merged, before aggregation.
 There is no source writer, scheduled acquisition, deployment or AI dependency.
 Synthetic fixtures prove local contracts only. Actual Queensland Health source
 bindings, approved definitions, privacy policy and pilot acceptance remain open.
+
+## Human measurement review
+
+`credentialing_improvements.propose_stage_improvements` recomputes the stage-time
+report and emits deterministic `investigate_stage_delay` candidates only for
+released p95 values above an explicit versioned threshold. Fixed alternative
+explanations preserve uncertainty: source coverage, legitimate variants, clock
+quality and case mix. These are investigation hypotheses, not recommendations to
+alter credentials, clinical services or staffing.
+
+The evidence fingerprint binds the granted observed facts and source/contract
+versions, case grants, authority mapping, released report and threshold policy.
+It changes when observed evidence or policy changes, even if aggregates happen
+to stay equal. Input row ordering does not affect identity. Fingerprints contain
+no reversible payload, but remain controlled review metadata, not public proof
+of source authenticity. Retain source/proposal linkage in the protected store.
+
+`review_proposal` validates retained immutable fields and permits one accepted,
+rejected or needs-more-evidence disposition from a trusted process owner or
+assurance reviewer, with an opaque actor reference and an aware timestamp.
+The input remains unchanged. Every disposition terminates this proposal's review;
+changed evidence or policy creates a new proposal. Acceptance is explicitly
+`measurement_review_only`, and does not activate a workflow or change a source.
+
+A live adapter must authenticate the reviewer, resolve current grants and policy,
+recompute the current proposal fingerprint, and persist the transition atomically.
+The supplied `current_evidence_digest` must come from that trusted recomputation,
+not from the client's retained proposal. These pure functions do not establish
+identity, database concurrency, signatures or deployment approval. AI is not used.
