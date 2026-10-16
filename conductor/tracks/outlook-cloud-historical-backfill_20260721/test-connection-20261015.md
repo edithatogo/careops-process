@@ -65,3 +65,69 @@ execution has not started. The operator was asked only for that remaining
 retention/disposal decision. Source authorization is recorded as the operator's
 assertion, not independently verified institutional authority. No Queensland
 Health approval is inferred.
+
+## Completed bounded metadata test — 16 October 2026
+
+The coordinator relayed direct human approval to dispose of both the derived
+test evidence and pseudonym key seven days after completion and proceed.
+That decision and its coordinator-chat provenance were recorded privately.
+The original fixed observation window was preserved: 7 October 2026 14:56:44
+UTC inclusive through 14 October 2026 14:56:44 UTC exclusive. No rolling window
+or additional folder was substituted. The configuration was frozen and hashed
+before source acquisition; retention approval is no longer pending.
+
+The existing connection was verified Connected with the expected VUW identity
+through FlowAgent's documented connection check. A first private preflight
+attempt used an incorrect connection-status endpoint and returned HTTP 404
+before any mailbox request or evidence directory creation. It was corrected
+to use that documented service check. No authentication loop or permission
+expansion was required.
+
+The bounded acquisition used the existing Office 365 Outlook connection's
+HttpRequest operation, with its actual service swagger/runtime contract. Only
+source GET requests were made. The request selected the seven approved metadata
+fields; identifiers were pseudonymized in memory using a unique test key.
+No cloud flow or raw-payload run history was created. The key is protected with
+Windows DPAPI outside Git and is not shared with any other run.
+
+| Measured check | Result |
+| --- | --- |
+| Source-reported count for the bounded query | 30 |
+| Initial candidates / acquired / duplicate / rejected / dead letter | 30 / 30 / 0 / 0 / 0 |
+| Initial pages / final continuation | 1 / exhausted |
+| Local canonical destination records read back | 30 |
+| Second source acquisition / pages | 30 / 1 exhausted |
+| Replay new identities / content drift | 0 / none |
+
+A separate Python process validated the persisted records against the strict
+repository CollectorMailFact and CanonicalMailFact models, recalculated
+configuration/approval/content hashes, compared the actual destination readback
+and replay, and verified the exact disposal file allowlist. The adapter's
+synthetic guard checks also passed for metadata privacy, wrong folder/window,
+unsafe continuations and deterministic pseudonyms.
+
+The evidence remains `smoke_test`: a single bounded Inbox and a local JSONL
+destination. The second acquisition is a separate source read, not independent
+population ground truth. The source count comes from the same service. There
+is no full-mailbox, nested-folder, Dataverse, Queensland Health pilot or
+Executive-validation claim. These results do not close the original track.
+
+Completion: **2026-10-16T03:02:12.371001Z**. Approved disposal deadline:
+**2026-10-23T03:02:12.371001Z** (23 October, 13:02 Brisbane time).
+The private run directory contains its measured manifests, initial/replay
+facts and page ledgers, canonical destination, frozen controls and independent
+verification. Its disposal manifest lists exactly 14 derived files including
+the unique DPAPI-protected pseudonym key; no legal hold is recorded. Root and
+M365 received private artifact paths, counts, completion/deadline and evidence
+limits. Its downstream check also passed strict fact/page schemas, hashes,
+counts, destination equality and unchanged replay; it correctly rejected using
+the scoped Inbox descriptor as a full folder-inventory closure contract.
+
+Root confirmed creation of the active Codex follow-up
+`dispose-bounded-vuw-test-evidence`, scheduled for 23 October at 13:03 Brisbane
+time, immediately after the precise seven-day deadline. It pins the 14-file
+allowlist, unique encrypted key, manifest timestamps and path/shared-key/
+legal-hold safeguards, and requires final absence verification and a minimal
+receipt. No duplicate scheduler was created by Outlook. Disposal is scheduled,
+not completed; execution requires Codex to be available and is not guaranteed
+while offline.

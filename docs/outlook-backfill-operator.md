@@ -1,5 +1,14 @@
 # Outlook backfill operator runbook
 
+Update, 16 October 2026: the approved bounded VUW Inbox metadata test completed.
+Thirty minimized records reconciled to local destination readback; a separate
+source replay was unchanged with zero new identities. The exact original
+window was preserved. See the completed section of the
+[test receipt](../conductor/tracks/outlook-cloud-historical-backfill_20260721/test-connection-20261015.md)
+for evidence limits and the approved disposal deadline. Earlier pending
+retention/transport notes below are historical. Full-mailbox/Dataverse and
+Queensland Health pilot acceptance remain unverified.
+
 Update, 15 October 2026: the authorized Office 365 Outlook connection was
 created in VUW-AI-TEST and verified Connected. See the
 [development connection receipt](../conductor/tracks/outlook-cloud-historical-backfill_20260721/test-connection-20261015.md).
