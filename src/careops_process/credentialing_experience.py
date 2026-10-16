@@ -167,7 +167,7 @@ class ExperienceInstrument:
             _fail("Unsupported experience contract version")
         questions: list[ExperienceQuestion] = []
         for value in _tuple(self.questions):
-            if not isinstance(value, ExperienceQuestion):
+            if type(value) is not ExperienceQuestion:
                 _fail("Experience instrument requires supplied question definitions")
             questions.append(replace(value))
         if not questions or len({value.question_code for value in questions}) != len(questions):
@@ -238,7 +238,7 @@ class ExperienceSnapshot:
             _fail("Experience responses cannot exceed invitations")
         questions: list[ExperienceQuestionCounts] = []
         for value in _tuple(self.questions):
-            if not isinstance(value, ExperienceQuestionCounts):
+            if type(value) is not ExperienceQuestionCounts:
                 _fail("Experience snapshot requires explicit question aggregates")
             question = replace(value)
             if question.answered_count > responded:
@@ -252,19 +252,20 @@ class ExperienceSnapshot:
 
 
 def _cohort(value: object) -> ExperienceCohort:
-    if not isinstance(value, ExperienceCohort):
+    # replace preserves runtime subclasses; only concrete contracts may be reconstructed.
+    if type(value) is not ExperienceCohort:
         _fail("Experience reporting requires a frozen cohort/window binding")
     return replace(value)
 
 
 def _snapshot(value: object) -> ExperienceSnapshot:
-    if not isinstance(value, ExperienceSnapshot):
+    if type(value) is not ExperienceSnapshot:
         _fail("Experience reporting requires one snapshot, never a summed collection")
     return replace(value)
 
 
 def _instrument(value: object) -> ExperienceInstrument:
-    if not isinstance(value, ExperienceInstrument):
+    if type(value) is not ExperienceInstrument:
         _fail("Experience reporting requires a supplied instrument definition")
     return replace(value)
 

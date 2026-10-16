@@ -117,3 +117,13 @@ verified active. Scoped Ruff lint/format, strict Pyright, Bandit, Conductor
 validation and a redacted one-commit Gitleaks scan pass. No broad test loop or
 live/host reliability verification is claimed. Final shared integration belongs
 to the coordinator and must use the combined authoritative revision.
+
+## Concrete record boundary repair
+
+Contract boundaries reject subclasses of cohort, snapshot, instrument, question
+and question-count records before reconstruction. Python dataclass replacement
+preserves runtime subclasses, whose overridden post-initialization can skip
+validation. Rejecting those unsupported records prevents invalid totals, windows,
+versions and selection modes from entering exports, merges, digests or reports.
+The wire schema is unchanged. Fifteen adversarial regressions failed before this
+repair and pass afterward; the focused experience suite now contains 51 tests.

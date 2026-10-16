@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
-from dataclasses import asdict, replace
+from dataclasses import asdict, fields, replace
 from datetime import UTC, datetime, timedelta
 from typing import Any, cast
 
@@ -378,3 +379,96 @@ def test_distinct_person_partitions_never_release_a_singleton_cell(
     else:
         assert result.metrics is not None
         assert result.metrics.responded_count + result.metrics.nonresponded_count == invited
+
+
+def _skip_post_init(_self: object) -> None:
+    pass
+
+
+def _bypass(value: Any, **changes: Any) -> Any:  # noqa: ANN401 - adversarial dynamic subclass fixture
+    base = cast("type[Any]", type(value))
+    subtype = type("ValidationBypass", (base,), {"__post_init__": _skip_post_init})
+    values = {field.name: getattr(value, field.name) for field in fields(value) if field.init}
+    return subtype(**{**values, **changes})
+
+
+@pytest.mark.parametrize("boundary", ["export", "merge", "report"])
+@pytest.mark.parametrize("record", ["snapshot", "cohort", "question_counts"])
+def test_subclass_validation_bypass_cannot_enter_snapshot_boundaries(
+    boundary: str,
+    record: str,
+) -> None:
+    """Overrides cannot admit impossible response totals, windows or category partitions."""
+    value = snapshot()
+    bound = cohort()
+    if record == "snapshot":
+        value = _bypass(value, responded_count=10)
+    elif record == "cohort":
+        bound = _bypass(bound, window_end_utc=bound.window_start_utc)
+        object.__setattr__(value, "cohort", bound)
+    else:
+        bad_question = _bypass(value.questions[0], answered_count=3)
+        object.__setattr__(value, "questions", (bad_question,))
+    with pytest.raises(CredentialingContractError):
+        _snapshot_boundary(boundary, value, bound)
+
+
+def _snapshot_boundary(
+    boundary: str, value: experience.ExperienceSnapshot, bound: experience.ExperienceCohort
+) -> None:
+    if boundary == "export":
+        experience.experience_snapshot_payload(value)
+    elif boundary == "merge":
+        experience.merge_experience_snapshots((), (value,))
+    else:
+        experience.report_experience(
+            value,
+            instrument(),
+            role="report_reader",
+            granted_cohort_refs={"synthetic-cohort"},
+            minimum_respondents=2,
+            expected_cohort=bound,
+        )
+
+
+@pytest.mark.parametrize("boundary", ["export", "digest", "report"])
+@pytest.mark.parametrize("record", ["instrument", "question_definition"])
+def test_subclass_validation_bypass_cannot_redefine_instrument_contract(
+    boundary: str,
+    record: str,
+) -> None:
+    """Unsupported profile versions and multiselect cannot hide behind matching fingerprints."""
+    configured = instrument()
+    wire = experience.experience_instrument_payload(configured)
+    if record == "instrument":
+        configured = _bypass(configured, contract_version="9.9.9")
+        wire["contract_version"] = "9.9.9"
+    else:
+        bad_question = _bypass(configured.questions[0], selection_mode="multi_select")
+        object.__setattr__(configured, "questions", (bad_question,))
+        cast("list[dict[str, object]]", wire["questions"])[0]["selection_mode"] = "multi_select"
+    value = snapshot(
+        instrument_digest=hashlib.sha256(
+            json.dumps(wire, sort_keys=True, separators=(",", ":")).encode(),
+        ).hexdigest()
+    )
+    with pytest.raises(CredentialingContractError):
+        _instrument_boundary(boundary, configured, value)
+
+
+def _instrument_boundary(
+    boundary: str, configured: experience.ExperienceInstrument, value: experience.ExperienceSnapshot
+) -> None:
+    if boundary == "export":
+        experience.experience_instrument_payload(configured)
+    elif boundary == "digest":
+        experience.experience_instrument_digest(configured)
+    else:
+        experience.report_experience(
+            value,
+            configured,
+            role="report_reader",
+            granted_cohort_refs={"synthetic-cohort"},
+            minimum_respondents=2,
+            expected_cohort=cohort(),
+        )
