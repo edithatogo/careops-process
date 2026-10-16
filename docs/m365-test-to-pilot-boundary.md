@@ -1,5 +1,17 @@
 # Account and stage boundary — user direction, 14 October 2026
 
+## Current prerequisite — 16 October 2026
+
+The VUW-AI-TEST Outlook connection is Connected and secure Power Automate
+transport is verified. Earlier discovery and transport notes below are
+historical. The remaining test decision is the disposal period requested by
+Outlook; retention and configuration freeze are not approved in the latest
+receipt. Outlook owns acquisition after that decision. No mailbox facts or
+measured destination/replay evidence have been delivered. Do not repeat login,
+connection discovery or the pending disposal question. Queensland Health pilot
+scope, approvals and empirical acceptance remain separate and open.
+
+
 The user clarified: VUW is to be leveraged for testing, not piloting. An actual
 process-discovery pilot is intended only for the user's Queensland Health account.
 
