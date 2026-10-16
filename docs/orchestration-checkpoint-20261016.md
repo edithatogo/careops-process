@@ -25,4 +25,14 @@ The coordinator owns shared integration. Owners report completion, blockers and 
 
 Host stability remains unresolved; BIOS and machine settings are unchanged. Independent exact-revision verification requires authenticated hosted CI or an authorized known-stable computer. Current local checks cannot clear this machine's own reliability gate.
 
+## Subsequent integration and independent verification
+
+Git transport and the GitHub connector were authenticated even though `gh` was signed out. The coordinator published draft [PR 73](https://github.com/edithatogo/careops-process/pull/73). Published head `6d87b91` received an independent Linux receipt: 866 tests, both offline PowerShell suites, quality/coverage/security/dependency checks, and actual CodeQL upload passed. This verifies that code revision on the hosted runner; it does not repair this computer.
+
+The pinned secret-scanning action scanned only the first PR commits page. The repair adds an explicit full fetched-history scan with the same pinned scanner and three individually verified historical-prose fingerprints. Published repair head `a068a92` passed the explicit hosted full-history step. See the [hosted receipt](../conductor/tracks/reliability-alm-hardening_20261014/hosted-verification-20261016.md); later revisions need their own hosted checks.
+
+Renewal prevalence was delivered as `7bc11f1`, with supplied effective deadlines, explicit as-of state, separate missing/unknown/censored/not-yet-due populations and privacy suppression. Root reviewed it and ran 228 combined credentialing tests successfully. Agenda replacement was reviewed and integrated as `0c29c97` with review receipt `73f4515`; 133 combined governance tests passed. It preserves replacement history, revision/replay semantics, deadline restrictions and stale-minute protection. Scoped Ruff and Conductor checks pass. These component checks do not establish live mappings, deployed behavior or whole-track acceptance.
+
+The coordinator is publishing the combined reviewed snapshot for a fresh hosted run. Owners were asked to stop further shared changes while that exact revision is verified. Original unfinished scope remains open.
+
 Approved clinical/pathway/source/privacy mappings, actual retrospective and prospective evidence, the selected Teams lane/resources and authority model, multi-user and continuity acceptance, Queensland Health owner/IG decisions and human checkpoints remain distinct requirements. Neither the VUW smoke test nor local metric/meeting contracts complete those tracks.
