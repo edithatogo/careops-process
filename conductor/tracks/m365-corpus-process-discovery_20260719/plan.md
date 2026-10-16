@@ -289,9 +289,17 @@ whole-repository coverage or Queensland Health pilot completion. The live test
 artifacts are required before executing the report pipeline against VUW data.
 
 The shared Outlook receipt `test-connection-20261015.md` confirms 62 offline
-Outlook tests and exporter regressions passed. Its identity check matches VUW,
-but Flow token identity is absent and token-cache decryption previously failed
-with WinError13. Browser connection setup is verified; usable automation
-transport is not. Outlook owns the supported-transport investigation. Retain
-setup-only labels until real minimized acquisition and independent evidence
-arrive; no duplicate browser sign-in or cache-encryption weakening is needed.
+Outlook tests and exporter regressions passed. Its supported transport recovery
+now verifies successful Power Automate token acquisition, matching Azure/Flow/
+Connectivity VUW identities and connector schema discovery. The earlier cache
+decryption blocker is resolved; encryption remains enabled.
+
+As verified on 16 October 2026, the remaining VUW test prerequisite is the
+retention/disposal decision already requested by Outlook: disposal of derived
+evidence and the pseudonym key seven days after completion, or another approved
+period. The private controls bind the Inbox window, connection, metadata
+allowlist, local destination and rollback. Retention and configuration-freeze
+flags remain false. No mailbox facts or destination/replay evidence exist in
+this receipt. Outlook owns execution after that decision; no duplicate login,
+status polling or acquisition is required here. Queensland Health pilot gates
+remain open.
