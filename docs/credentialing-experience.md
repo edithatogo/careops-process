@@ -100,3 +100,20 @@ source provenance, control corrections and prevent cross-release differencing.
 No survey was conducted; no source connector, person mapping, dependency,
 notification, scheduler, source writer or deployment was added. Local tests do
 not establish experience improvement, host repair or pilot/manual acceptance.
+
+## Reviewed checkpoint
+
+Source commit: `91e1ac5b7e210fca74de152846dd4b9eb26dd7d8`, based on isolated head
+`4812ee0b767385d1df43b987115eccc5fa3cb5f1`. A fresh independent read-only reviewer
+found no actionable correctness, privacy or semantic issue and independently ran
+the 36 focused experience tests successfully. It checked frozen source/cohort/
+instrument bindings, whole-release suppression, source attestation, denominators,
+replay conflicts, nested revalidation and structural schema/parser agreement.
+
+Independent Draft 2020-12 validation agrees with the runtime on two valid exports
+and twelve invalid field, boolean/fractional-count, terminal-newline, calendar,
+offset and multiselect fixtures. The RFC3339 calendar checker was explicitly
+verified active. Scoped Ruff lint/format, strict Pyright, Bandit, Conductor
+validation and a redacted one-commit Gitleaks scan pass. No broad test loop or
+live/host reliability verification is claimed. Final shared integration belongs
+to the coordinator and must use the combined authoritative revision.
