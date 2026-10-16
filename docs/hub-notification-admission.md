@@ -122,3 +122,23 @@ rejection. Integration accepts the existing `build_digest` output unchanged.
 Focused notification and existing digest-view tests pass together (60 tests).
 These checks do not prove persistent concurrency, provider behavior, host
 reliability or live delivery.
+
+## Reviewed checkpoint
+
+Owned implementation commits, in order, based on isolated head
+`ef14f36dce15a9e5afb40ab68173cfb72a43bf37`:
+
+- `fa2569f17663403a3d84ba19c2176758110ae704`: initial admission ledger.
+- `51f17bccac3a6fac383714ed1ed43ad35193a09a`: evaluated idle windows, inverse
+  receipt cross-links and historical capacity checks.
+- `806cf7d58cefac672ef8f853122b42fefe7fff39`: immutable reservation fingerprint
+  binding on every linked receipt.
+
+Independent read-only review identified the idle-window and immutable reservation
+binding gaps; reproducing regressions failed before each repair. Final review
+found both resolved with no further actionable findings within the documented
+synthetic scope, and independently passed all 60 focused notification/view tests.
+Scoped Ruff lint/format, strict Pyright, Bandit, Conductor validation, Git
+whitespace and redacted three-commit Gitleaks checks pass. No dependency change,
+broad local native-runtime test loop, push, deployment or live delivery occurred.
+Coordinator integration and combined authoritative CI remain separate.
