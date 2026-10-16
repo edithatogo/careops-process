@@ -89,3 +89,12 @@ strict revisions, full history restoration, recomputed-digest chain tampering,
 interleaved additions/replacements, cutoff/deadline controls, stale minutes and
 input immutability. This focused receipt does not replace final shared integration
 checks or resolve the independently observed host/runtime reliability problem.
+
+Source checkpoint: `d8f61cf8e295c72cbe8a53e50dcb440c021ec840`, based on isolated
+head `9c8d7fe2af5ae6f4f185e09dc387dce47edb0729`. Scoped Ruff lint/format, strict
+Pyright, Bandit and a redacted one-commit Gitleaks scan pass. A fresh independent
+read-only reviewer found no actionable issue in this diff. It inspected replay,
+history/revision reconstruction, pinned context and timing controls; it did not
+independently rerun tests. Most malformed-receipt fixtures reject invalid digests;
+the recomputed-digest chain fixture separately exercises structural validation.
+Final shared integration and live/host acceptance remain outside this receipt.
