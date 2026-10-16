@@ -80,6 +80,15 @@ The [new workflow audit](https://github.com/edithatogo/careops-process/actions/r
 also passed. Python quality and CodeQL were still running at the initial bounded
 check; final results are recorded below when observed.
 
+Final exact-head checks subsequently completed successfully: [Python quality](https://github.com/edithatogo/careops-process/actions/runs/38844551211/job/116791990508),
+[CodeQL analysis](https://github.com/edithatogo/careops-process/actions/runs/38844551005/job/116791989663),
+secret scan and workflow audit. The separate CodeQL result check reports no new
+alerts in changed code. Optional PM4Py remains skipped. This receipt is for
+`a068a92`, not later documentation commits or unfinished owner changes.
+New-head logs confirm 866 tests passed, both PowerShell regression suites
+passed, dependency audit reported no known vulnerabilities, and SARIF results
+were successfully uploaded with analysis upload complete.
+
 The [public Outlook receipt](../outlook-cloud-historical-backfill_20260721/test-connection-20261015.md)
 supersedes the earlier VUW retention/acquisition blocker. The user approved the
 bounded Inbox metadata test and disposal controls. Thirty records were acquired,
