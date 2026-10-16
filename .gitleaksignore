@@ -1,0 +1,9 @@
+# Historical operator prose: retention/disposal rules and rollback ownership.
+# Verified as ordinary documentation, not a credential. Suppress this finding only.
+1554aaf3f0b908f8a2bbdad065d33ffb5900eff6:docs/outlook-backfill-operator.md:generic-api-key:14
+# Historical testing-matrix prose describing publication and evidence integrity.
+# Verified as ordinary documentation, not a credential.
+b6fad6eb198c4f095c6741982c48c1bc96000136:docs/test-category-review.md:generic-api-key:22
+# Historical pilot-control prose listing retention/disposal and rollback decisions.
+# Verified as ordinary documentation, not a credential.
+cd934bc2cffee562c433201fb31356459af7054d:docs/m365-test-to-pilot-boundary.md:generic-api-key:24
