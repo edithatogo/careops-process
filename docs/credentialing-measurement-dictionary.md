@@ -20,6 +20,9 @@ counters, approve deployment parameters or establish a live baseline.
 | Source-attested population overdue renewal prevalence | Same fraction only with complete case evidence, attested source coverage and nonzero matured denominator | Explicitly accounted censoring/not-yet-due cases are exclusions; missing evidence or unconfirmed coverage prevents a population rate |
 | Observed review completion and on-time rates | Completed (on-time plus late) / matured obligations; on-time completed / the same matured denominator including outstanding | One kind/definition/as-of; missing, unknown, censored and future obligations remain separate; privacy counts distinct contributing cases, not obligations |
 | Source-attested population review completion and on-time rates | Same fractions only with complete obligation evidence, attested source coverage and nonzero matured denominator | Source-owner definitions and deadlines remain explicit inputs; administrative completion does not establish clinical-condition satisfaction |
+| Temporary episode conversion and conversion-by-expiry | Converted (by-expiry plus after-expiry) / matured episodes; by-expiry converted / the same denominator including unconverted states | Missing/unknown/censored/future episode cells reconcile; source-active past deadline is distinct from source-observed expiry |
+| Observed temporary expiry transition timing | Before/at/after effective expiry among observed expired episodes with complete start/deadline/transition evidence | Own eligible/excluded denominator, independent of maturity; early expiry remains visible; no unauthorised-practice conclusion |
+| Temporary review completion and on-time rates | Known completed reviews / matured known obligations; known on-time reviews / the same denominator including outstanding | Required-review enumeration and source coverage must be attested for full-population rates; unknown required counts are never zero |
 | Stage-delay investigation candidate | Released p95 strictly above a finite positive versioned threshold | Bound to current observed evidence, case grants, authority and policy; alternatives preserve uncertainty; human acceptance is measurement review only |
 
 Every nonzero released case cell must meet the configured approved threshold,
@@ -33,7 +36,6 @@ First-submission assessment semantics and boundaries are documented in
 capability does not establish an approved first-time-complete baseline.
 
 Still unimplemented or unproven by this extension:
-temporary conversion/expiry rates,
 practitioner/staff experience measures and causal capacity
 released to higher-value work. Later pathway references alone cannot establish
 these measures. Actual approved baseline, retrospective and silent-mode evidence
@@ -46,3 +48,11 @@ mapping. Local executable arithmetic is not an approved renewal baseline.
 [Review-completion semantics](credentialing-review-quality.md) preserve separate
 obligation denominators and distinct-case privacy. Local completion/on-time
 rates do not establish approved condition/supervision definitions or a baseline.
+
+[Temporary conversion, expiry and review semantics](credentialing-temporary-quality.md)
+use explicit episode/review grants, source-supplied deadlines and observed
+transitions. Episode conversion and review completion use their own matured
+denominators; expiry timing uses a separate observed-transition denominator.
+Unknown required-review population prevents full-review rates without inventing
+an unknown-count zero. All privacy thresholds count distinct cases. These local
+contracts do not establish an approved temporary-approval baseline or policy.
