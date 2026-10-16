@@ -89,3 +89,19 @@ tests or claim a full-suite pass. Its minor finding was a stale paragraph in
 contracts as future work; that paragraph now links to the current manual,
 dictionary and this receipt. Live authorization/recomputation and atomic
 persistence remain explicit adapter obligations.
+
+## Schema parity follow-up — 16 October
+
+Independent Draft 2020-12 validation reproduced a concrete lexical mismatch:
+the observation schema accepted `case_id` with a terminal newline, while the
+runtime rejected it. A regular-expression `$` anchor can match before that final
+newline. Nine failing regression fixtures covered both schema variants' source,
+case, observation and timestamp fields plus the evaluation reference version.
+
+Published patterns now add a negative lookahead for any remaining character,
+requiring the true end of input without Python-specific regex anchors. All nine
+fixtures pass. Independent schema/runtime validation agrees on two valid
+fractional-second payloads and all nine invalid terminal-newline payloads.
+The observation and lexical-schema slice passes 47 tests; scoped Ruff and strict
+Pyright pass. No runtime, dependency, live binding or policy was changed.
+This corrects the schema contract; it does not resolve host reliability.
