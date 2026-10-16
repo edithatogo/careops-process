@@ -213,6 +213,7 @@ class CommandReceipt:
     window_fingerprint: str
     evidence_ref: str | None = None
     evidence_fingerprint: str | None = None
+    reservation_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
         """Validate retained replay identity and bounded result metadata."""
@@ -245,6 +246,12 @@ class CommandReceipt:
             _code(self.evidence_ref)
         if self.evidence_fingerprint is not None:
             _hash(self.evidence_fingerprint)
+        _require(
+            (self.reservation_fingerprint is not None) == (self.reservation_ref is not None),
+            "receipt reservation history fingerprint invalid",
+        )
+        if self.reservation_fingerprint is not None:
+            _hash(self.reservation_fingerprint)
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -412,6 +419,10 @@ class AdmissionResult:
         return not self.replayed and self.receipt.decision in {"reserved", "retry"}
 
 
+def _reservation_fingerprint(value: Reservation) -> str:
+    return _fingerprint(asdict(replace(value, evidence=())))
+
+
 def _history_bindings(
     windows: tuple[NotificationWindow, ...],
     reservations: tuple[Reservation, ...],
@@ -436,7 +447,9 @@ def _history_bindings(
         reference = receipt.reservation_ref
         reservation = by_reservation[reference]  # Existence checked by ledger reconstruction.
         _require(
-            reservation.window_start == receipt.window_start, "receipt reservation history mismatch"
+            reservation.window_start == receipt.window_start
+            and receipt.reservation_fingerprint == _reservation_fingerprint(reservation),
+            "receipt reservation history mismatch",
         )
         if receipt.decision == "reserved":
             _require(reference not in admitted, "duplicate admission history")
@@ -510,6 +523,11 @@ def _finish(
         revision=ledger.revision + 1,
         window_start=window.start,
         window_fingerprint=_fingerprint(asdict(window)),
+        reservation_fingerprint=None
+        if reservation_ref is None
+        else _reservation_fingerprint(
+            next(r for r in ledger.reservations if r.reservation_ref == reservation_ref)
+        ),
     )
     updated = replace(
         ledger,
@@ -616,6 +634,7 @@ def reserve_notification(
         fingerprint=fingerprint,
         decision="reserved",
         reservation_ref=reservation.reservation_ref,
+        reservation_fingerprint=_reservation_fingerprint(reservation),
         revision=ledger.revision + 1,
         window_start=command.window.start,
         window_fingerprint=_fingerprint(asdict(command.window)),
@@ -665,6 +684,7 @@ def reconcile_notification(
         fingerprint=fingerprint,
         decision="reconciled",
         reservation_ref=old.reservation_ref,
+        reservation_fingerprint=_reservation_fingerprint(old),
         revision=ledger.revision + 1,
         window_start=old.window_start,
         window_fingerprint=_fingerprint(

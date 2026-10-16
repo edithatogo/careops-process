@@ -550,7 +550,9 @@ def test_evaluated_idle_window_is_retained_before_next_interval(*, empty: bool) 
 def test_reservation_requires_retained_admission_receipt() -> None:
     """A receipt cannot lose its admission decision while leaving an orphan reservation."""
     value = n.reserve_notification(ledger(), reserve()).ledger
-    changed = replace(value.receipts[0], decision="disabled", reservation_ref=None)
+    changed = replace(
+        value.receipts[0], decision="disabled", reservation_ref=None, reservation_fingerprint=None
+    )
     object.__setattr__(value, "receipts", (changed,))
     with pytest.raises(n.NotificationContractError, match="history"):
         n.reserve_notification(value, reserve(1, revision=1))
@@ -601,3 +603,23 @@ def test_pinned_window_and_evidence_effect_fingerprints_detect_inconsistent_rest
     object.__setattr__(evidence, "complete_attempts", True)
     with pytest.raises(n.NotificationContractError, match="receipt history"):
         n.reserve_notification(unknown, reserve(1, revision=2))
+
+
+@pytest.mark.parametrize(
+    ("field", "bad"),
+    [
+        ("message_ref", "other-message"),
+        ("provider_intent_ref", "other-intent"),
+        ("policy_ref", "policy-v2"),
+        ("candidate_fingerprint", "a" * 64),
+    ],
+)
+def test_immutable_reservation_effect_is_bound_to_its_admission_receipt(
+    field: str,
+    bad: str,
+) -> None:
+    """Valid-looking replacement identities cannot redefine a retained charged message."""
+    first = n.reserve_notification(ledger(), reserve()).ledger
+    object.__setattr__(first.reservations[0], field, bad)
+    with pytest.raises(n.NotificationContractError, match="reservation history"):
+        n.reserve_notification(first, reserve(1, revision=1))

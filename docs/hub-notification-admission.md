@@ -85,7 +85,8 @@ subclasses and forced mutations cannot bypass validation. Strict booleans,
 bounded integer/code metadata, unique identities, reconciled revisions,
 continuous windows and capacity totals are checked. Each window must have a
 receipt binding its fingerprint. Each reservation must have exactly one earlier
-admission receipt; each evidence item must have one ordered reconciliation
+admission receipt binding all immutable reservation fields (including frozen
+content and provider identity); each evidence item must have one ordered reconciliation
 receipt binding its reference and fingerprint. Retained retry/terminal decisions
 are checked against the state derived at that receipt revision, including quota
 usage at every historical admission rather than only final released totals. Candidates accept only the
@@ -118,6 +119,6 @@ pinned quotas, policy changes, window boundaries/history, terminal states,
 ambiguous retries, full-command replay and collisions, independent namespaces,
 stale revisions/evidence, approved metadata, and concrete subclass/mutation
 rejection. Integration accepts the existing `build_digest` output unchanged.
-Focused notification and existing digest-view tests pass together (56 tests).
+Focused notification and existing digest-view tests pass together (60 tests).
 These checks do not prove persistent concurrency, provider behavior, host
 reliability or live delivery.
