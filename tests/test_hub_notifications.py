@@ -514,3 +514,90 @@ def test_new_command_kind_cannot_reuse_reserved_command_reference() -> None:
     first = n.reserve_notification(ledger(), reserve()).ledger
     with pytest.raises(n.NotificationContractError, match="collision"):
         n.reconcile_notification(first, replace(reconcile(first), command_ref="reserve-0"))
+
+
+@pytest.mark.parametrize("empty", [False, True])
+def test_evaluated_idle_window_is_retained_before_next_interval(*, empty: bool) -> None:
+    """Disabled and empty intervals pin their limits and preserve observed continuity."""
+    command = reserve()
+    if empty:
+        command = replace(
+            command,
+            candidate=ExecutiveDigest(
+                digest_key="empty",
+                items=(),
+                omitted_count=0,
+            ),
+        )
+    else:
+        command = replace(command, enabled=False)
+    idle = n.reserve_notification(ledger(), command).ledger
+    next_window = n.NotificationWindow(
+        start=command.window.end, end=command.window.end + timedelta(days=1), limit=1
+    )
+    admitted = n.reserve_notification(
+        idle,
+        replace(
+            reserve(1, revision=1),
+            now=next_window.start,
+            window=next_window,
+        ),
+    )
+    assert admitted.attempt_permitted
+    assert admitted.ledger.windows == (command.window, next_window)
+
+
+def test_reservation_requires_retained_admission_receipt() -> None:
+    """A receipt cannot lose its admission decision while leaving an orphan reservation."""
+    value = n.reserve_notification(ledger(), reserve()).ledger
+    changed = replace(value.receipts[0], decision="disabled", reservation_ref=None)
+    object.__setattr__(value, "receipts", (changed,))
+    with pytest.raises(n.NotificationContractError, match="history"):
+        n.reserve_notification(value, reserve(1, revision=1))
+
+
+def test_delivery_evidence_requires_retained_reconciliation_receipt() -> None:
+    """Changing a reconciliation result cannot leave release evidence without its receipt."""
+    first = n.reserve_notification(ledger(), reserve()).ledger
+    value = n.reconcile_notification(
+        first, reconcile(first, outcome="confirmed_not_delivered")
+    ).ledger
+    changed = replace(
+        value.receipts[-1], decision="retry", evidence_ref=None, evidence_fingerprint=None
+    )
+    object.__setattr__(value, "receipts", (value.receipts[0], changed))
+    with pytest.raises(n.NotificationContractError, match="history"):
+        n.reserve_notification(value, reserve(1, revision=2))
+
+
+def test_restored_history_cannot_hide_an_earlier_over_capacity_admission() -> None:
+    """Final released totals do not excuse an impossible earlier charged history."""
+    first = n.reserve_notification(ledger(), reserve()).ledger
+    released = n.reconcile_notification(first, reconcile(first, outcome="confirmed_not_delivered"))
+    second = n.reserve_notification(released.ledger, reserve(1, revision=2)).ledger
+    third = n.reserve_notification(second, reserve(2, revision=3)).ledger
+    receipts = third.receipts
+    reordered = (
+        receipts[0],
+        replace(receipts[2], revision=2),
+        replace(receipts[3], revision=3),
+        replace(receipts[1], revision=4),
+    )
+    object.__setattr__(third, "receipts", reordered)
+    with pytest.raises(n.NotificationContractError, match="capacity history"):
+        n.reserve_notification(third, reserve(3, revision=4))
+
+
+def test_pinned_window_and_evidence_effect_fingerprints_detect_inconsistent_restore() -> None:
+    """Changing a retained effect alone cannot silently change its original receipt result."""
+    first = n.reserve_notification(ledger(), reserve()).ledger
+    object.__setattr__(first.windows[0], "limit", 3)
+    with pytest.raises(n.NotificationContractError, match="window history"):
+        n.reserve_notification(first, reserve(1, revision=1))
+    first = n.reserve_notification(ledger(), reserve()).ledger
+    unknown = n.reconcile_notification(first, reconcile(first)).ledger
+    evidence = unknown.reservations[0].evidence[0]
+    object.__setattr__(evidence, "outcome", "confirmed_not_delivered")
+    object.__setattr__(evidence, "complete_attempts", True)
+    with pytest.raises(n.NotificationContractError, match="receipt history"):
+        n.reserve_notification(unknown, reserve(1, revision=2))

@@ -209,12 +209,18 @@ class CommandReceipt:
     decision: Decision
     reservation_ref: str | None
     revision: int
+    window_start: datetime
+    window_fingerprint: str
+    evidence_ref: str | None = None
+    evidence_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
         """Validate retained replay identity and bounded result metadata."""
         _code(self.command_ref)
         _hash(self.fingerprint)
         _integer(self.revision, minimum=1)
+        object.__setattr__(self, "window_start", _time(self.window_start))
+        _hash(self.window_fingerprint)
         _require(
             self.decision
             in {"reserved", "retry", "terminal", "capacity", "disabled", "empty", "reconciled"},
@@ -227,6 +233,18 @@ class CommandReceipt:
             == (self.decision in {"reserved", "retry", "terminal", "reconciled"}),
             "receipt reservation binding invalid",
         )
+        _require(
+            (self.evidence_ref is not None) == (self.decision == "reconciled"),
+            "receipt evidence history binding invalid",
+        )
+        _require(
+            (self.evidence_fingerprint is not None) == (self.evidence_ref is not None),
+            "receipt evidence fingerprint history invalid",
+        )
+        if self.evidence_ref is not None:
+            _code(self.evidence_ref)
+        if self.evidence_fingerprint is not None:
+            _hash(self.evidence_fingerprint)
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -302,6 +320,7 @@ class NotificationLedger:
         _require(len({r.command_ref for r in receipts}) == len(receipts), "command collision")
         _require(len(receipts) == self.revision, "ledger revision/history mismatch")
         object.__setattr__(self, "receipts", tuple(receipts))
+        _history_bindings(tuple(windows), tuple(reservations), tuple(receipts))
         _require(self.revision != 0 or not (windows or reservations), "missing admission history")
         _require((self.evaluated_at is None) == (self.revision == 0), "missing evaluation history")
         if self.evaluated_at is not None:
@@ -393,6 +412,71 @@ class AdmissionResult:
         return not self.replayed and self.receipt.decision in {"reserved", "retry"}
 
 
+def _history_bindings(
+    windows: tuple[NotificationWindow, ...],
+    reservations: tuple[Reservation, ...],
+    receipts: tuple[CommandReceipt, ...],
+) -> None:
+    by_window = {w.start: w for w in windows}
+    by_reservation = {r.reservation_ref: r for r in reservations}
+    observed_windows: set[datetime] = set()
+    admitted: set[str] = set()
+    evidence_counts: dict[str, int] = {}
+    states: dict[str, str] = {}
+    charged = dict.fromkeys(by_window, 0)
+    for receipt in receipts:
+        window = by_window.get(receipt.window_start)
+        _require(
+            window is not None and receipt.window_fingerprint == _fingerprint(asdict(window)),
+            "receipt window history mismatch",
+        )
+        observed_windows.add(receipt.window_start)
+        if receipt.reservation_ref is None:
+            continue
+        reference = receipt.reservation_ref
+        reservation = by_reservation[reference]  # Existence checked by ledger reconstruction.
+        _require(
+            reservation.window_start == receipt.window_start, "receipt reservation history mismatch"
+        )
+        if receipt.decision == "reserved":
+            _require(reference not in admitted, "duplicate admission history")
+            admitted.add(reference)
+            states[reference] = "reserved"
+            evidence_counts[reference] = 0
+            charged[receipt.window_start] += 1
+            _require(
+                charged[receipt.window_start] <= by_window[receipt.window_start].limit,
+                "pinned capacity history exceeded",
+            )
+            continue
+        _require(reference in admitted, "receipt precedes admission history")
+        if receipt.decision == "reconciled":
+            index = evidence_counts[reference]
+            _require(index < len(reservation.evidence), "missing delivery evidence history")
+            evidence = reservation.evidence[index]
+            _require(
+                states[reference] not in _TERMINAL
+                and evidence.evidence_ref == receipt.evidence_ref
+                and receipt.evidence_fingerprint == _fingerprint(asdict(evidence)),
+                "reconciliation receipt history mismatch",
+            )
+            evidence_counts[reference] += 1
+            states[reference] = evidence.outcome
+            if evidence.outcome == "confirmed_not_delivered":
+                charged[receipt.window_start] -= 1
+        else:
+            _require(
+                (receipt.decision == "terminal") == (states[reference] in _TERMINAL),
+                "retry/terminal receipt history mismatch",
+            )
+    _require(observed_windows == set(by_window), "window missing receipt history")
+    _require(admitted == set(by_reservation), "reservation missing admission receipt history")
+    _require(
+        all(evidence_counts[r.reservation_ref] == len(r.evidence) for r in reservations),
+        "evidence missing reconciliation receipt history",
+    )
+
+
 def _begin(
     ledger: NotificationLedger,
     command: ReserveCommand | ReconcileCommand,
@@ -412,23 +496,27 @@ def _begin(
 
 def _finish(
     ledger: NotificationLedger,
-    command: ReserveCommand | ReconcileCommand,
+    command: ReserveCommand,
     fingerprint: str,
     decision: Decision,
     reservation_ref: str | None,
 ) -> AdmissionResult:
+    window = command.window
     receipt = CommandReceipt(
         command_ref=command.command_ref,
         fingerprint=fingerprint,
         decision=decision,
         reservation_ref=reservation_ref,
         revision=ledger.revision + 1,
+        window_start=window.start,
+        window_fingerprint=_fingerprint(asdict(window)),
     )
     updated = replace(
         ledger,
         revision=receipt.revision,
         receipts=(*ledger.receipts, receipt),
         evaluated_at=command.now,
+        windows=ledger.windows if window in ledger.windows else (*ledger.windows, window),
     )
     return AdmissionResult(ledger=updated, receipt=receipt)
 
@@ -484,7 +572,7 @@ def reserve_notification(
         )
         _require(command.window in ledger.windows, "pinned retry window mismatch")
         decision: Decision = "terminal" if old.status in _TERMINAL else "retry"
-        if not command.enabled:
+        if not command.enabled and decision != "terminal":
             decision = "disabled"
         return _finish(
             ledger,
@@ -529,6 +617,8 @@ def reserve_notification(
         decision="reserved",
         reservation_ref=reservation.reservation_ref,
         revision=ledger.revision + 1,
+        window_start=command.window.start,
+        window_fingerprint=_fingerprint(asdict(command.window)),
     )
     updated = replace(
         ledger,
@@ -576,6 +666,12 @@ def reconcile_notification(
         decision="reconciled",
         reservation_ref=old.reservation_ref,
         revision=ledger.revision + 1,
+        window_start=old.window_start,
+        window_fingerprint=_fingerprint(
+            asdict(next(w for w in ledger.windows if w.start == old.window_start))
+        ),
+        evidence_ref=command.evidence.evidence_ref,
+        evidence_fingerprint=_fingerprint(asdict(command.evidence)),
     )
     updated = replace(
         ledger,

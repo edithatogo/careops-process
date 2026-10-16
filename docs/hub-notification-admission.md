@@ -45,8 +45,9 @@ to silently skip them. No retention/pruning/reset operation is provided.
 
 Policy references and the builder's policy-dependent digest keys do not define
 quota identity. Policy changes cannot enlarge or repartition a retained window.
-Windows are first retained when an eligible reservation is admitted; disabled
-or empty candidates retain rejection receipts without creating reservations.
+Every evaluated window is retained atomically with its receipt, including
+disabled or empty intervals. Those intervals create no reservations, but pin
+their window and limit so the next adjacent interval can proceed.
 
 Message, reservation and provider intent IDs are globally unique within the
 ledger. An existing message may retry only with the same reservation, provider
@@ -82,7 +83,12 @@ Public operations reconstruct exact concrete records, including all nested
 history, windows, receipts, evidence, digest and portfolio items. Unsupported
 subclasses and forced mutations cannot bypass validation. Strict booleans,
 bounded integer/code metadata, unique identities, reconciled revisions,
-continuous windows and capacity totals are checked. Candidates accept only the
+continuous windows and capacity totals are checked. Each window must have a
+receipt binding its fingerprint. Each reservation must have exactly one earlier
+admission receipt; each evidence item must have one ordered reconciliation
+receipt binding its reference and fingerprint. Retained retry/terminal decisions
+are checked against the state derived at that receipt revision, including quota
+usage at every historical admission rather than only final released totals. Candidates accept only the
 executive portfolio's fixed attention-reason vocabulary. Ledger history stores
 candidate fingerprints, not digest items, matter narrative or message bodies.
 
@@ -95,6 +101,10 @@ authorization. Never create a new empty ledger after a missing/corrupt load or
 change its namespace/origin to bypass prior history. Structural validation can
 detect inconsistent partial history; it cannot distinguish a completely forged
 or rolled-back but internally consistent ledger from genuine persisted state.
+Command and effect fingerprints are consistency checks, not signatures. Original
+command payloads are not retained, so a coordinated rewrite of state and receipts
+(or a changed command-result assertion with all structural links preserved)
+cannot be authenticated locally; trusted tamper-resistant persistence is required.
 
 No provider, scheduler, delivery adapter, source writer, dependency or live
 tenant configuration is added. Actual notification dispatch, persistent CAS,
@@ -108,6 +118,6 @@ pinned quotas, policy changes, window boundaries/history, terminal states,
 ambiguous retries, full-command replay and collisions, independent namespaces,
 stale revisions/evidence, approved metadata, and concrete subclass/mutation
 rejection. Integration accepts the existing `build_digest` output unchanged.
-Focused notification and existing digest-view tests pass together (50 tests).
+Focused notification and existing digest-view tests pass together (56 tests).
 These checks do not prove persistent concurrency, provider behavior, host
 reliability or live delivery.
