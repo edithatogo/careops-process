@@ -62,8 +62,36 @@ These local results do not replace a hosted run of the corrected workflow.
 - Existing Actions emit Node 20 migration warnings and CodeQL v3 deprecation
   warnings. These did not fail the observed checks; review pinned upgrades
   separately, without mixing them into the scan correction.
-- Human checkpoints, VUW retention decision/acquisition/replay, non-production
-  solution checking/binding/import/export/recovery, optional infrastructure,
-  live governance approvals and final track acceptance remain open.
+- Human checkpoints, full-mailbox/Dataverse and Queensland Health evidence,
+  non-production solution checking/binding/import/export/recovery, optional
+  infrastructure, governance approvals and final track acceptance remain open.
+
+## Corrected workflow and bounded VUW follow-up
+
+Coordinator published repair `a068a92f630a343c020f34c8087b3a612d5c91bf`.
+The [new secret-scan job](https://github.com/edithatogo/careops-process/actions/runs/38844551023/job/116791990365)
+passed on its merge ref `6293543` against the same base. Logs verify scanner
+8.24.3, the original 30-commit PR scan, comments disabled, and the additional
+explicit `gitleaks git --redact --log-opts=--all` step. The latter scanned 147
+hosted fetched commits and reported no leaks. Local and hosted fetched-ref sets
+differ, so their scan counts need not be identical. This closes the reproduced
+PR-range defect for this revision; it does not certify future heads.
+The [new workflow audit](https://github.com/edithatogo/careops-process/actions/runs/38844551162/job/116791990243)
+also passed. Python quality and CodeQL were still running at the initial bounded
+check; final results are recorded below when observed.
+
+The [public Outlook receipt](../outlook-cloud-historical-backfill_20260721/test-connection-20261015.md)
+supersedes the earlier VUW retention/acquisition blocker. The user approved the
+bounded Inbox metadata test and disposal controls. Thirty records were acquired,
+strictly validated in a separate process, read back from the local canonical
+destination, and compared with a separate replay: zero new identities and no
+content drift. Source count remains the same service's claim, and the destination
+is local JSONL. Evidence is `smoke_test`, not full-mailbox, Dataverse or Queensland
+Health pilot acceptance. No repeat source read is needed for this receipt.
+
+Disposal deadline is 23 October 2026 at 13:02:12 Brisbane time. The coordinator's
+existing 13:03 follow-up covers the exact 14-file allowlist and unique encrypted
+pseudonym key. Disposal is scheduled, not yet executed; no duplicate schedule
+was created here. Final absence and receipt still need verification then.
 
 No PR merge, platform deployment, permission broadening or firmware change occurred.
