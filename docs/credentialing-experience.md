@@ -127,3 +127,10 @@ validation. Rejecting those unsupported records prevents invalid totals, windows
 versions and selection modes from entering exports, merges, digests or reports.
 The wire schema is unchanged. Fifteen adversarial regressions failed before this
 repair and pass afterward; the focused experience suite now contains 51 tests.
+
+Repair source commit: `a191ecd9139455b9712b5fb1bc8cfa308eb62508`. A fresh
+independent read-only review found no actionable issues, confirmed all five
+concrete-type boundaries and unchanged wire schema, and independently passed
+all 51 focused tests. Scoped Ruff, strict Pyright, Bandit, Conductor validation,
+Git whitespace checks and a redacted one-commit Gitleaks scan pass. Shared
+integration and combined authoritative verification remain coordinator-owned.
