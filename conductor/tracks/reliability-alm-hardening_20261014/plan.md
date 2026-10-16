@@ -56,7 +56,7 @@ repository evidence, hosted GitHub evidence and live VUW evidence separately.
 ## Phase 6: Hosted and VUW verification after local work
 
 - [ ] Task: Complete the separately agreed VUW CLI setup and verify account, authorised environments, tools, roles and consent; record unavailable capabilities.
-- [ ] Task: Publish reviewed changes when authorised and verify required Actions, offline PowerShell checks and actual CodeQL analysis/SARIF upload.
+- [x] Task: Publish reviewed changes when authorised and verify required Actions, offline PowerShell checks and actual CodeQL analysis/SARIF upload. Draft PR 73, exact code head `e72b26c`: all expected hosted workflows passed, including 1,290 tests, both PowerShell suites and confirmed CodeQL upload. See [local readiness](../../../docs/local-readiness-20261016.md). This does not complete the other live/human gates or merge the PR.
 - [ ] Task: Verify the selected updater configuration in hosted runs and confirm that duplicate ecosystem responsibility is removed.
 - [ ] Task: Run an authorised low-sensitivity exporter smoke test, compare date-window/replay behaviour with local evidence, and reconcile manifests without committing live data.
 - [ ] Task: Validate solution checking, configuration binding, import/export and rollback in an authorised non-production environment when permissions allow.
