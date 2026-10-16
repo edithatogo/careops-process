@@ -117,7 +117,7 @@ remain open. There is no AI call or workflow/source mutation.
 
 ## Scoped verification — 16 October 2026
 
-The owned suite passes 92 tests using explicit `--assert=plain`, with 338/338
+The owned suite passes 98 tests using explicit `--assert=plain`, with 338/338
 statements and 102/102 branches covered in an isolated module dataset. Scoped
 Ruff lint/formatting, strict Pyright with the project interpreter, Bandit and
 whitespace checks pass. Both Draft 2020-12 schemas pass positive roundtrips and
@@ -129,6 +129,13 @@ preserved overridden validators. Two regression tests failed before the fix.
 Snapshot/report boundaries now reconstruct declared concrete contract types;
 policy, scope and nested population-flag regressions pass. Read-only recheck
 found no remaining actionable issues.
+
+The final subclass matrix additionally covers episode and review snapshot
+export/merge/report, both concrete policies/scopes, and exact-type episode/review
+grant guards before replacement and after retained-scope mutation. Grant
+subclasses are rejected even with otherwise valid fields, so their overridden
+validators never reach the exact-type-only `replace` path. This regression
+expansion changes tests and this receipt only; product source is unchanged.
 
 The first ordinary pytest attempt, before the module existed, hit a native
 access violation in assertion rewriting. One plain-assert diagnostic then

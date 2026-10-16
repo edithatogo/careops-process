@@ -703,3 +703,86 @@ def test_scope_subclasses_cannot_skip_role_validation() -> None:
         report_temporary_episodes([], scope=malformed, policy=policy())
     with pytest.raises(CredentialingContractError):
         report_temporary_reviews([], scope=nested, policy=review_policy())
+
+
+class _UncheckedReviewSnapshot(TemporaryReviewSnapshot):
+    """Synthetic review adapter record that skips validation."""
+
+    def __post_init__(self) -> None:
+        """Skip validation to exercise concrete reconstruction."""
+
+
+class _UncheckedEpisodeGrant(TemporaryEpisodeGrant):
+    """Synthetic grant subtype that must never reach dataclass replacement."""
+
+    def __post_init__(self) -> None:
+        """Skip validation to exercise the exact-type grant guard."""
+
+
+class _UncheckedReviewGrant(TemporaryReviewGrant):
+    """Synthetic nested grant subtype that skips validation."""
+
+    def __post_init__(self) -> None:
+        """Skip validation to exercise the exact-type grant guard."""
+
+
+@pytest.mark.parametrize("boundary", ["payload", "merge", "report"])
+def test_review_snapshot_subclass_validated_at_every_boundary(boundary: str) -> None:
+    """Review export, merge and report all rebuild the declared concrete record."""
+    original = review("a")
+    trusted = review_scope([original])
+    altered = _UncheckedReviewSnapshot(**asdict(original))
+    object.__setattr__(altered, "coverage_complete", 1)
+    with pytest.raises(CredentialingContractError):  # noqa: PT012 - three public boundaries
+        if boundary == "payload":
+            temporary_review_payload(altered)
+        elif boundary == "merge":
+            merge_temporary_reviews([], [altered])
+        else:
+            report_temporary_reviews([altered], scope=trusted, policy=review_policy())
+
+
+def test_episode_snapshot_subclass_validated_at_report_boundary() -> None:
+    """Episode reporting rebuilds subclass records as well as export/merge."""
+    original = episode("a")
+    trusted = episode_scope([original])
+    altered = _UncheckedEpisode(**asdict(original))
+    object.__setattr__(altered, "coverage_complete", 1)
+    with pytest.raises(CredentialingContractError):
+        report_temporary_episodes([altered], scope=trusted, policy=policy())
+
+
+def test_grant_subclasses_rejected_before_replacement() -> None:
+    """Only exact declared grant types may reach replace, even with valid fields."""
+    episode_grant = _UncheckedEpisodeGrant(episode_id="a", case_id="a")
+    review_grant = _UncheckedReviewGrant(episode_id="a", case_id="a", review_obligation_id="r")
+    with pytest.raises(CredentialingContractError):
+        TemporaryReportScope(role="report_reader", granted_episodes=(episode_grant,))
+    with pytest.raises(CredentialingContractError):
+        TemporaryReviewReportScope(
+            role="report_reader", granted_episodes=(episode_grant,), granted_reviews=()
+        )
+    with pytest.raises(CredentialingContractError):
+        TemporaryReviewReportScope(
+            role="report_reader",
+            granted_episodes=(TemporaryEpisodeGrant(episode_id="a", case_id="a"),),
+            granted_reviews=(review_grant,),
+        )
+
+
+def test_grant_subclasses_rejected_after_scope_mutation() -> None:
+    """Report-time scope reconstruction repeats the exact-type nested grant guards."""
+    episodes = episode_scope([episode("a")])
+    reviews = review_scope([review("a")])
+    object.__setattr__(
+        episodes, "granted_episodes", (_UncheckedEpisodeGrant(episode_id="a", case_id="a"),)
+    )
+    object.__setattr__(
+        reviews,
+        "granted_reviews",
+        (_UncheckedReviewGrant(episode_id="a", case_id="a", review_obligation_id="a"),),
+    )
+    with pytest.raises(CredentialingContractError):
+        report_temporary_episodes([], scope=episodes, policy=policy())
+    with pytest.raises(CredentialingContractError):
+        report_temporary_reviews([], scope=reviews, policy=review_policy())
