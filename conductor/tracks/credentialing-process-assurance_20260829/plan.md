@@ -152,3 +152,17 @@ guidance for the exact motherboard, then verify unchanged unpinned probes and
 the full suite on a serviced or known-stable authorised host. No firmware,
 machine-wide affinity or dependency change was made. Keep this runtime gate open;
 the approved-source, design, manual and pilot gates remain separate.
+
+### Local first-submission measurement checkpoint — 2026-10-16
+
+Commit `e72fe67` adds explicit first-submission quality observations, strict
+schema, replay/conflict handling, observed and source-attested population rates,
+coverage/missingness reconciliation and whole-report small-cell suppression.
+See [the scoped receipt and manual](../../../docs/credentialing-submission-quality.md).
+All 56 owned tests pass with 100% scoped module statement/branch coverage;
+lint, typing, Bandit, schema parity and independent review pass. The integration
+owner separately reports 103 passing tests across the new-measure/schema/
+observation slice. These are component/integration-slice receipts, not a new full
+suite, stable-host verification, real baseline or pilot result. Existing
+approved-source, authority, privacy, baseline, silent-mode and human acceptance
+tasks remain unchecked.
