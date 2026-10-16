@@ -23,6 +23,8 @@ counters, approve deployment parameters or establish a live baseline.
 | Temporary episode conversion and conversion-by-expiry | Converted (by-expiry plus after-expiry) / matured episodes; by-expiry converted / the same denominator including unconverted states | Missing/unknown/censored/future episode cells reconcile; source-active past deadline is distinct from source-observed expiry |
 | Observed temporary expiry transition timing | Before/at/after effective expiry among observed expired episodes with complete start/deadline/transition evidence | Own eligible/excluded denominator, independent of maturity; early expiry remains visible; no unauthorised-practice conclusion |
 | Temporary review completion and on-time rates | Known completed reviews / matured known obligations; known on-time reviews / the same denominator including outstanding | Required-review enumeration and source coverage must be attested for full-population rates; unknown required counts are never zero |
+| Observed destination-work minutes and coverage | Source-observed integer minutes by supplied versioned activity/purpose, one frozen worker cohort/window; means use observed workers | Complete joint-person atoms govern suppression; missing workers remain unknown; these are observations, not released-capacity proof |
+| Protected attributed-redeployment claim and judgment | Explicit same-measured-population minute claim, bound to recomputed effort/source evidence and external evaluation artifacts | Claim amounts/states are omitted from public projections; human judgment and hash syntax cannot establish causality or authenticate evidence |
 | Stage-delay investigation candidate | Released p95 strictly above a finite positive versioned threshold | Bound to current observed evidence, case grants, authority and policy; alternatives preserve uncertainty; human acceptance is measurement review only |
 
 Every nonzero released case cell must meet the configured approved threshold,
@@ -56,3 +58,8 @@ denominators; expiry timing uses a separate observed-transition denominator.
 Unknown required-review population prevents full-review rates without inventing
 an unknown-count zero. All privacy thresholds count distinct cases. These local
 contracts do not establish an approved temporary-approval baseline or policy.
+
+[Capacity evidence boundaries](credentialing-capacity-evidence.md) keep observed
+total redeployment minutes separate from per-case effort differences and protected
+attribution claims. The original causal released-capacity requirement remains
+partial pending credible evaluation, source evidence and human/governance acceptance.
