@@ -17,7 +17,35 @@ secretariat/chair, expected meeting revision and agenda deadline. Late additions
 need a chair-exception reference. Entries retain the canonical matter revision,
 review cycle, current decision IDs, template digest and original addition time.
 Exact duplicate retry preserves the original entry even after its deadline;
-changed case or brief snapshots require an explicit replacement workflow.
+changed case or brief snapshots require `replace_agenda_entry`.
+
+The synthetic replacement command requires an existing entry, strict expected
+revision (booleans rejected), opaque replacement ID, configured actor, current
+canonical matter and newly supplied brief references. It returns a new meeting
+with one active entry per matter and append-only `replacements` history. Every
+receipt retains its previous/new snapshots, complete synthetic canonical-matter
+request, actor, expected revision and command digest. The digest also binds the
+exact meeting context. This is controlled governance metadata, not a public
+brief or proof of reference authenticity.
+
+Replacements must advance content, preserve the pinned template/version and
+collective-policy fingerprint, and never move canonical revision/review cycle
+backward. An unchanged snapshot is rejected without consuming a replacement ID;
+a changed chair-exception pointer alone is not a content refresh. Policy/template
+rebinding needs a separate governed operation. Every new add, replacement and
+minute must follow retained event chronology. A late pre-meeting replacement
+needs the existing explicit chair-exception reference. Replacement is refused
+at/after the scheduled meeting and after that matter has been minuted, including
+backdated requests. Existing minute records are never rewritten.
+
+Exact historical replay includes the original request timestamp and expected
+revision, returns the current meeting unchanged, and cannot undo a later refresh
+or minute. Changed content under the same replacement ID is a collision. Timestamps
+are normalized to UTC. Restoration validates receipt digests, meeting-context
+binding, predecessor/successor chains, active snapshots, deadlines, chronology and
+revision counts. The default empty replacement history preserves the meaning of
+old serialized meetings with no replacement records. Original inputs remain
+unchanged, and retained inputs are revalidated before mutation.
 
 `record_minutes` requires the current canonical matter as well as the scoped
 agenda, rule and voting session. Matter, decision, review cycle, revision,
@@ -50,7 +78,14 @@ cases check current classification and after-deadline duplicate replay. Tests,
 lint and strict typing pass before this slice's scoped commit.
 
 Remaining implementation work includes authenticated protected-record resolution,
-approved deadline/cadence/urgency configuration, explicit agenda snapshot
-replacement, persistent meeting event storage and calendar/Teams delivery. The
+approved deadline/cadence/urgency configuration, persistent meeting event storage
+and calendar/Teams delivery. The
 IHG authority/quorum/conflict/ratification model and pilot scope remain pending;
 these synthetic records are not live meeting or policy verification.
+
+The agenda-refresh follow-up has 33 new cases plus 20 existing meeting cases
+passing locally. Categories include exact replay/collisions, unchanged refresh,
+strict revisions, full history restoration, recomputed-digest chain tampering,
+interleaved additions/replacements, cutoff/deadline controls, stale minutes and
+input immutability. This focused receipt does not replace final shared integration
+checks or resolve the independently observed host/runtime reliability problem.

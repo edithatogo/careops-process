@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import UTC
+import json
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Literal, Self
 
 from pydantic import AwareDatetime, Field, StrictBool, model_validator
@@ -24,7 +25,7 @@ from careops_process.hub_domain import (
 )
 
 if TYPE_CHECKING:
-    from datetime import datetime
+    from collections.abc import Mapping
 
 
 class BriefReferences(MetadataRecord):
@@ -80,6 +81,53 @@ class MinuteDecision(MetadataRecord):
     gaps: tuple[str, ...]
 
 
+class AgendaReplacement(MetadataRecord):
+    """Retain the full synthetic refresh request and both immutable agenda snapshots."""
+
+    replacement_id: OpaqueReference
+    meeting_id: OpaqueReference
+    scope_ref: OpaqueReference
+    meeting_context_digest: Digest
+    actor_ref: OpaqueReference
+    expected_revision: Revision
+    request_matter: GovernanceMatter
+    previous_entry: AgendaEntry
+    next_entry: AgendaEntry
+    command_digest: Digest
+
+    @model_validator(mode="after")
+    def validate_replacement(self) -> Self:
+        """Bind retained request identity to the exact refreshed canonical snapshot."""
+        previous, following = self.previous_entry, self.next_entry
+        _brief_binding(self.request_matter, following.brief, following.brief.scope_ref)
+        expected = _agenda_snapshot(
+            self.request_matter,
+            following.brief,
+            following.added_at,
+            following.chair_exception_ref,
+        )
+        if (
+            following != expected
+            or previous.matter_id != following.matter_id
+            or previous.brief.scope_ref != following.brief.scope_ref
+            or following.matter_revision < previous.matter_revision
+            or following.review_cycle < previous.review_cycle
+            or following.added_at < previous.added_at
+            or following.template_digest != previous.template_digest
+            or following.brief.template_version != previous.brief.template_version
+            or following.brief.decision_rule_digest != previous.brief.decision_rule_digest
+            or _same_snapshot(previous, following)
+        ):
+            message = "replacement snapshot, policy, template or chronology is inconsistent"
+            raise ValueError(message)
+        if self.command_digest != _command_digest(
+            self.model_dump(mode="json", exclude={"command_digest"}),
+        ):
+            message = "replacement command digest differs from retained request"
+            raise ValueError(message)
+        return self
+
+
 class MeetingAgenda(MetadataRecord):
     """Keep immutable agenda and minute snapshots inside an explicit synthetic operating context."""
 
@@ -96,6 +144,7 @@ class MeetingAgenda(MetadataRecord):
     revision: Revision = 0
     entries: tuple[AgendaEntry, ...] = ()
     decisions: tuple[MinuteDecision, ...] = ()
+    replacements: tuple[AgendaReplacement, ...] = ()
 
     @model_validator(mode="after")
     def validate_meeting_record(self) -> Self:
@@ -103,7 +152,7 @@ class MeetingAgenda(MetadataRecord):
         if self.agenda_deadline > self.scheduled_at:
             message = "agenda deadline must not follow the meeting"
             raise ValueError(message)
-        if self.revision != len(self.entries) + len(self.decisions):
+        if self.revision != len(self.entries) + len(self.decisions) + len(self.replacements):
             message = "meeting revision must match recorded events"
             raise ValueError(message)
         if (
@@ -118,6 +167,7 @@ class MeetingAgenda(MetadataRecord):
             if entry.brief.scope_ref != self.scope_ref or entry.brief.matter_id != entry.matter_id:
                 message = "agenda entry binding differs from meeting scope or matter"
                 raise ValueError(message)
+        _validate_replacement_history(self)
         previous_time = self.scheduled_at
         for decision in self.decisions:
             entry = next(
@@ -134,6 +184,7 @@ class MeetingAgenda(MetadataRecord):
                 or decision.authority_ref != self.authority_ref
                 or decision.policy_digest != entry.brief.decision_rule_digest
                 or decision.recorded_at < previous_time
+                or decision.recorded_at < entry.added_at
                 or decision.collective_confirmed != (not decision.gaps)
             ):
                 message = "inconsistent minute binding, chronology or confirmation"
@@ -146,8 +197,130 @@ def _check_actor(meeting: MeetingAgenda, actor_ref: str, now: datetime) -> None:
     if actor_ref not in {*meeting.secretariat_refs, meeting.chair_ref}:
         message = "meeting actor is outside configured secretariat and chair"
         raise ValueError(message)
-    if now.tzinfo is None or now.utcoffset() is None:
+    _require_aware(now)
+
+
+def _require_aware(value: object) -> None:
+    if not isinstance(value, datetime) or value.tzinfo is None or value.utcoffset() is None:
         message = "meeting event requires timezone-aware time"
+        raise ValueError(message)
+
+
+def _strict_revision(value: object) -> None:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        message = "meeting expected revision must be a strict nonnegative integer"
+        raise ValueError(message)
+
+
+def _chronology(meeting: MeetingAgenda, now: datetime) -> None:
+    times = [entry.added_at for entry in meeting.entries]
+    times.extend(decision.recorded_at for decision in meeting.decisions)
+    if times and now < max(times):
+        message = "meeting chronology cannot precede retained events"
+        raise ValueError(message)
+
+
+def _command_digest(payload: Mapping[str, object]) -> str:
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode(),
+    ).hexdigest()
+
+
+def _meeting_context_digest(meeting: MeetingAgenda) -> str:
+    return _command_digest(
+        meeting.model_dump(
+            mode="json",
+            exclude={"entries", "decisions", "replacements", "revision"},
+        )
+    )
+
+
+def _same_snapshot(previous: AgendaEntry, following: AgendaEntry) -> bool:
+    excluded = {"added_at", "chair_exception_ref"}
+    return previous.model_dump(exclude=excluded) == following.model_dump(exclude=excluded)
+
+
+def _agenda_snapshot(
+    matter: GovernanceMatter,
+    brief: BriefReferences,
+    now: datetime,
+    chair_exception_ref: str | None,
+) -> AgendaEntry:
+    return AgendaEntry(
+        matter_id=matter.matter_id,
+        matter_revision=matter.revision,
+        review_cycle=matter.review_cycle,
+        decision_refs=tuple(
+            item.decision_id
+            for item in matter.decisions
+            if item.review_cycle == matter.review_cycle
+        ),
+        added_at=now.astimezone(UTC),
+        template_digest=matter.template_digest,
+        brief=brief,
+        chair_exception_ref=chair_exception_ref,
+    )
+
+
+def _original_agenda_entries(meeting: MeetingAgenda) -> dict[str, AgendaEntry]:
+    originals = {entry.matter_id: entry for entry in meeting.entries}
+    for event in reversed(meeting.replacements):
+        if originals.get(event.next_entry.matter_id) != event.next_entry:
+            message = "replacement history does not chain to the active snapshot"
+            raise ValueError(message)
+        originals[event.previous_entry.matter_id] = event.previous_entry
+        _check_actor(meeting, event.actor_ref, event.next_entry.added_at)
+        if (
+            event.meeting_id != meeting.meeting_id
+            or event.scope_ref != meeting.scope_ref
+            or event.meeting_context_digest != _meeting_context_digest(meeting)
+            or event.previous_entry.brief.scope_ref != meeting.scope_ref
+            or event.next_entry.added_at >= meeting.scheduled_at
+            or (
+                event.next_entry.added_at > meeting.agenda_deadline
+                and event.next_entry.chair_exception_ref is None
+            )
+        ):
+            message = "replacement history violates scope, deadline or meeting cutoff"
+            raise ValueError(message)
+    return originals
+
+
+def _validate_replacement_history(meeting: MeetingAgenda) -> None:
+    if not meeting.replacements:
+        return
+    events = {event.expected_revision + 1: event for event in meeting.replacements}
+    if (
+        len(events) != len(meeting.replacements)
+        or len({event.replacement_id for event in meeting.replacements})
+        != len(meeting.replacements)
+        or tuple(events) != tuple(sorted(events))
+    ):
+        message = "replacement history has duplicate or out-of-order identities or revisions"
+        raise ValueError(message)
+    originals = _original_agenda_entries(meeting)
+    additions = iter(originals[entry.matter_id] for entry in meeting.entries)
+    current: dict[str, AgendaEntry] = {}
+    previous_time = None
+    for revision in range(1, len(meeting.entries) + len(meeting.replacements) + 1):
+        event = events.get(revision)
+        if event is None:
+            entry = next(additions, None)
+            if entry is None:
+                message = "replacement history claims an impossible meeting revision"
+                raise ValueError(message)
+        else:
+            if current.get(event.previous_entry.matter_id) != event.previous_entry:
+                message = "replacement expected revision precedes its original snapshot"
+                raise ValueError(message)
+            entry = event.next_entry
+        if previous_time is not None and entry.added_at < previous_time:
+            message = "agenda history chronology is not monotonic"
+            raise ValueError(message)
+        previous_time = entry.added_at
+        current[entry.matter_id] = entry
+    if current != {entry.matter_id: entry for entry in meeting.entries}:
+        message = "restored agenda entries differ from replacement history"
         raise ValueError(message)
 
 
@@ -174,22 +347,13 @@ def add_agenda_entry(  # noqa: PLR0913
     chair_exception_ref: str | None = None,
 ) -> MeetingAgenda:
     """Append an approved-reference agenda entry with explicit deadline and revision controls."""
+    meeting = MeetingAgenda.model_validate(meeting.model_dump())
+    matter = GovernanceMatter.model_validate(matter.model_dump())
+    brief = BriefReferences.model_validate(brief.model_dump())
+    _strict_revision(expected_revision)
     _check_actor(meeting, actor_ref, now)
     _brief_binding(matter, brief, meeting.scope_ref)
-    entry = AgendaEntry(
-        matter_id=matter.matter_id,
-        matter_revision=matter.revision,
-        review_cycle=matter.review_cycle,
-        decision_refs=tuple(
-            item.decision_id
-            for item in matter.decisions
-            if item.review_cycle == matter.review_cycle
-        ),
-        added_at=now,
-        template_digest=matter.template_digest,
-        brief=brief,
-        chair_exception_ref=chair_exception_ref,
-    )
+    entry = _agenda_snapshot(matter, brief, now, chair_exception_ref)
     existing = next((item for item in meeting.entries if item.matter_id == matter.matter_id), None)
     if existing is not None:
         if existing != entry.model_copy(update={"added_at": existing.added_at}):
@@ -199,6 +363,7 @@ def add_agenda_entry(  # noqa: PLR0913
     if expected_revision != meeting.revision:
         message = "stale meeting revision"
         raise ValueError(message)
+    _chronology(meeting, now)
     if now > meeting.agenda_deadline and chair_exception_ref is None:
         message = "agenda deadline requires explicit chair exception"
         raise ValueError(message)
@@ -206,6 +371,89 @@ def add_agenda_entry(  # noqa: PLR0913
         {
             **meeting.model_dump(),
             "entries": (*meeting.entries, entry),
+            "revision": meeting.revision + 1,
+        }
+    )
+
+
+def replace_agenda_entry(  # noqa: PLR0913 - explicit synthetic command and revision boundary
+    meeting: MeetingAgenda,
+    matter: GovernanceMatter,
+    brief: BriefReferences,
+    *,
+    replacement_id: str,
+    actor_ref: str,
+    expected_revision: int,
+    now: datetime,
+    chair_exception_ref: str | None = None,
+) -> MeetingAgenda:
+    """Refresh an unminuted pre-meeting snapshot, retaining verifiable request history.
+
+    Exact historical command replay returns the current state, never the earlier
+    snapshot. Unchanged snapshot requests are rejected without consuming an ID.
+    Policy/template rebinding requires a separate governed operation.
+    """
+    meeting = MeetingAgenda.model_validate(meeting.model_dump())
+    matter = GovernanceMatter.model_validate(matter.model_dump())
+    brief = BriefReferences.model_validate(brief.model_dump())
+    _strict_revision(expected_revision)
+    _check_actor(meeting, actor_ref, now)
+    _brief_binding(matter, brief, meeting.scope_ref)
+    existing = next(
+        (event for event in meeting.replacements if event.replacement_id == replacement_id),
+        None,
+    )
+    previous = (
+        existing.previous_entry
+        if existing is not None
+        else next(
+            (entry for entry in meeting.entries if entry.matter_id == matter.matter_id),
+            None,
+        )
+    )
+    if previous is None:
+        message = "replacement requires an existing agenda entry"
+        raise ValueError(message)
+    following = _agenda_snapshot(matter, brief, now, chair_exception_ref)
+    request: dict[str, object] = {
+        "replacement_id": replacement_id,
+        "meeting_id": meeting.meeting_id,
+        "scope_ref": meeting.scope_ref,
+        "meeting_context_digest": _meeting_context_digest(meeting),
+        "actor_ref": actor_ref,
+        "expected_revision": expected_revision,
+        "request_matter": matter.model_dump(mode="json"),
+        "previous_entry": previous.model_dump(mode="json"),
+        "next_entry": following.model_dump(mode="json"),
+    }
+    digest = _command_digest(request)
+    if existing is not None:
+        if digest != existing.command_digest:
+            message = "replacement replay collision differs from the original command"
+            raise ValueError(message)
+        return meeting
+    if expected_revision != meeting.revision:
+        message = "stale meeting revision"
+        raise ValueError(message)
+    if any(decision.matter_id == matter.matter_id for decision in meeting.decisions):
+        message = "replacement cannot rewrite a minuted matter"
+        raise ValueError(message)
+    _chronology(meeting, now)
+    if now >= meeting.scheduled_at:
+        message = "replacement must precede the scheduled meeting"
+        raise ValueError(message)
+    if now > meeting.agenda_deadline and chair_exception_ref is None:
+        message = "agenda deadline requires explicit chair exception"
+        raise ValueError(message)
+    event = AgendaReplacement.model_validate({**request, "command_digest": digest})
+    return MeetingAgenda.model_validate(
+        {
+            **meeting.model_dump(),
+            "entries": tuple(
+                following if entry.matter_id == matter.matter_id else entry
+                for entry in meeting.entries
+            ),
+            "replacements": (*meeting.replacements, event),
             "revision": meeting.revision + 1,
         }
     )
@@ -239,6 +487,8 @@ def record_minutes(  # noqa: PLR0913
     now: datetime,
 ) -> MeetingAgenda:
     """Assemble a minuted outcome from a scoped collective session without canonical writes."""
+    meeting = MeetingAgenda.model_validate(meeting.model_dump())
+    _strict_revision(expected_revision)
     _check_actor(meeting, actor_ref, now)
     entry = next((item for item in meeting.entries if item.matter_id == session.matter_id), None)
     canonical_decision = next(
@@ -290,6 +540,7 @@ def record_minutes(  # noqa: PLR0913
     if expected_revision != meeting.revision or now < meeting.scheduled_at:
         message = "stale revision or meeting has not been held"
         raise ValueError(message)
+    _chronology(meeting, now)
     if meeting.decisions and now < meeting.decisions[-1].recorded_at:
         message = "minute chronology cannot precede earlier records"
         raise ValueError(message)
