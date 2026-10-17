@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Never, cast
+from typing import TYPE_CHECKING, Never, Protocol, cast
 from uuid import UUID, uuid5
 
 from careops_process.outlook_reconciliation import CanonicalMailFact
@@ -113,3 +113,68 @@ def parse_readback(row: Mapping[str, object]) -> CanonicalMailFact:
     except ValueError, TypeError, AttributeError, KeyError:
         message = "invalid_destination_fact"
         raise ValueError(message) from None
+
+
+class Records(Protocol):
+    """Supported SDK record operations; construction/authentication belongs to the host."""
+
+    def retrieve(
+        self, table: str, record_id: str, *, select: list[str]
+    ) -> Mapping[str, object] | None:
+        """Return None only for confirmed 404; raise for all other failures."""
+        ...
+
+    def create(self, table: str, data: dict[str, str]) -> object:
+        """Create using the supplied primary key."""
+        ...
+
+
+def read_fact(records: Records, org_id: str, primary_key: str) -> CanonicalMailFact | None:
+    """Validate the exact requested primary key and service-added organization lookup."""
+    _guid(org_id)
+    _guid(primary_key)
+    selected = [column for _, column in FIELD_MAPPING]
+    result = records.retrieve("cop_processevent", primary_key, select=[PRIMARY_KEY, *selected])
+    if result is None:
+        return None
+    row = dict(result)
+    allowed = {*selected, PRIMARY_KEY, "_organizationid_value", "@odata.context", "@odata.etag"}
+    if (
+        set(row) - allowed
+        or row.get(PRIMARY_KEY) != primary_key
+        or row.get("_organizationid_value") != org_id
+    ):
+        _invalid()
+    return parse_readback({column: row[column] for column in selected})
+
+
+def ensure_synthetic_fact(
+    records: Records, org_id: str, run_id: str, fact: CanonicalMailFact
+) -> str:
+    """Create or reconcile one synthetic row; never overwrite changed content.
+
+    The host must verify service identity before calling. This function does not
+    attest source approval, authenticate a caller, or certify service provenance.
+    Each row commits independently; a failed batch can retain earlier rows.
+    """
+    payload = serialize_fact(fact)
+    primary_key = row_id(org_id, run_id, fact.id)
+    expected = parse_readback(payload)
+    try:
+        previous = read_fact(records, org_id, primary_key)
+        if previous is not None:
+            if previous != expected:
+                _invalid()
+            return "existing"
+        try:
+            records.create("cop_processevent", {PRIMARY_KEY: primary_key, **payload})
+        except Exception:  # noqa: BLE001 - ambiguous create requires readback, never resend
+            if read_fact(records, org_id, primary_key) != expected:
+                _invalid()
+            return "reconciled"
+        if read_fact(records, org_id, primary_key) != expected:
+            _invalid()
+    except Exception:  # noqa: BLE001 - provider bodies must not escape this boundary
+        message = "destination_write_unconfirmed"
+        raise ValueError(message) from None
+    return "created"

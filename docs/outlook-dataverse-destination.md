@@ -48,3 +48,38 @@ that provenance or unlock live-corpus closure.
 Initial local evidence: ten tests pass, including five failing-before-code codec
 tests. Scoped Ruff formatting/lint and strict Pyright pass. Actual synthetic
 create/readback/replay and service timestamp representation remain to be tested.
+
+## Actual Developer rehearsal — 17 October 2026
+
+The coordinator granted a serialized ingestion-row-only writer slot after
+Reliability's completed baseline and bounded metadata-recovery handoff. Using
+the official Dataverse Client SDK 1.1.0, managed Azure CLI credentials and an
+explicit Developer endpoint, the operator verified current WhoAmI organization
+and user against the private baseline before writes. No auth profile was changed.
+
+Two synthetic mail facts with distinct synthetic conversation references were
+created under one fixed run UUID. The first attempt stopped after one create:
+the service included `_organizationid_value` despite the selected columns.
+That response failed the initial strict field allowlist. After explicitly
+validating the returned organization lookup against the expected organization,
+the next attempt read the existing row and created only the second row.
+Both full payloads read back exactly; an unchanged replay read both existing
+primary keys and created zero new rows. The TimeZoneIndependent column returned
+the supplied whole-second UTC `Z` values exactly; compact object JSON also matched.
+This is an observed partial-attempt recovery, not an atomic two-row transaction.
+
+The private script/inputs/service receipt are in the ignored `artifacts/alm`
+directory. They contain synthetic rows and private environment identifiers;
+none contain the retained 30-record mailbox test. The writer slot was explicitly
+released to coordination and Governance. The two rows are temporarily retained
+for M365's independent authenticated service readback; exact-key cleanup is
+pending that verification and its serialized cleanup slot.
+
+The reusable `Records` protocol, `read_fact` and `ensure_synthetic_fact` functions
+use the supported SDK interface. They never overwrite conflicting existing
+payloads; ambiguous creates reconcile by reading the same primary key without
+resending. The host must verify service identity before invoking the writer.
+Local protocol tests cover lost acknowledgements, changed content and partial
+readback. The first actual service rehearsal used a private bounded SDK script;
+it does not by itself verify the reusable writer or independently authenticate
+M365 provenance. Neither result completes TEST deployment or live-corpus closure.

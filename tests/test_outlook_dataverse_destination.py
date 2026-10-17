@@ -82,3 +82,64 @@ def test_readback_unexpected_fields_are_rejected() -> None:
     value["subject"] = "synthetic unexpected content"
     with pytest.raises(ValueError, match="invalid_destination_fact"):
         d.parse_readback(value)
+
+
+class MemoryRecords:
+    """Model independently committed rows and a lost acknowledgement."""
+
+    def __init__(self, *, lose_ack: bool = False) -> None:
+        """Initialize isolated synthetic storage."""
+        self.rows: dict[str, dict[str, str]] = {}
+        self.creates = 0
+        self.lose_ack = lose_ack
+
+    def retrieve(self, table: str, record_id: str, *, select: list[str]) -> dict[str, str] | None:
+        """Return an SDK-shaped selected record."""
+        assert table == "cop_processevent"
+        assert d.PRIMARY_KEY in select
+        return self.rows.get(record_id)
+
+    def create(self, table: str, data: dict[str, str]) -> object:
+        """Commit before optionally losing the response."""
+        assert table == "cop_processevent"
+        self.creates += 1
+        self.rows[data[d.PRIMARY_KEY]] = {**data, "_organizationid_value": ORG}
+        if self.lose_ack:
+            message = "synthetic private provider response"
+            raise TimeoutError(message)
+        return data[d.PRIMARY_KEY]
+
+
+def test_create_and_replay_never_create_twice() -> None:
+    """A repeated run uses the same primary key."""
+    records = MemoryRecords()
+    assert d.ensure_synthetic_fact(records, ORG, RUN, fact()) == "created"
+    assert d.ensure_synthetic_fact(records, ORG, RUN, fact()) == "existing"
+    assert records.creates == 1
+
+
+def test_ambiguous_create_reconciles_without_resend() -> None:
+    """A lost acknowledgement is resolved by actual same-key readback."""
+    records = MemoryRecords(lose_ack=True)
+    assert d.ensure_synthetic_fact(records, ORG, RUN, fact()) == "reconciled"
+    assert records.creates == 1
+
+
+def test_changed_existing_content_never_overwrites() -> None:
+    """Conflicting content fails with a fixed diagnostic."""
+    records = MemoryRecords()
+    d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    records.rows[d.row_id(ORG, RUN, FACT_ID)]["cop_timestamputc"] = "2025-01-01T00:00:00Z"
+    with pytest.raises(ValueError, match="destination_write_unconfirmed"):
+        d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    assert records.creates == 1
+
+
+def test_partial_readback_cannot_confirm_write() -> None:
+    """An existing incomplete row is neither absent nor confirmed."""
+    records = MemoryRecords()
+    d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    del records.rows[d.row_id(ORG, RUN, FACT_ID)]["cop_objectids"]
+    with pytest.raises(ValueError, match="destination_write_unconfirmed"):
+        d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    assert records.creates == 1
