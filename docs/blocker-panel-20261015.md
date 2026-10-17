@@ -4,6 +4,17 @@ Three independent agents reviewed desktop coordination, host reliability, and de
 
 ## Coordination recovery — 16 October 2026
 
+**17 October update:** the temporary recovery below regressed. All five supported
+follow-on sends returned local-host availability errors; delivery is unconfirmed.
+Read-only desktop logs show repeated `codex_app` tool-discovery timeouts. Last
+recorded turns in all five session tails completed on 16 October; this does not
+establish current liveness. VUW-AI-TEST is now selected and authenticated Azure
+discovery confirms a Dataverse-linked Sandbox. Separate VUW PAC device sign-in is
+pending. See the [current readiness decisions](local-readiness-20261016.md).
+Historical independent-CI and retention blockers below are resolved: current
+published revision `86bdc23` passed 1,290 tests and all expected hosted workflows;
+the approved bounded acquisition and its disposal schedule are recorded below.
+
 Fresh desktop list/read calls and a completion wait now respond successfully. The coordinator read all five implementation chats and sent scoped handoffs; Reliability & ALM returned a completion report, and Outlook returned its explicit retention blocker. This supersedes the desktop-unavailable finding below. It does not establish the cause of the earlier failure or repair the host-stability gate.
 
 The operator subsequently approved deleting both the derived test evidence and pseudonym key seven days after completion and explicitly instructed the bounded VUW test to proceed. The coordinator relayed the exact approval to Outlook and M365. Outlook owns recording/frozen controls and execution against the original fixed observation bounds; M365 remains the downstream evidence validator. Actual completion, reconciliation/replay results and the resulting disposal deadline still require the run receipt. Root owns arranging disposal follow-through once the exact derived-file manifest and completion timestamp exist. Earlier pending-retention statements below are historical.
@@ -66,6 +77,6 @@ Record each command's exit code and stop on failure, rather than treating a fina
 
 ## Remaining project gates
 
-The [current Outlook receipt](../conductor/tracks/outlook-cloud-historical-backfill_20260721/test-connection-20261015.md) supersedes the earlier transport blocker: connection and encrypted token access work. No mailbox acquisition, measured reconciliation or replay has occurred. After an explicit retention choice, Outlook owns frozen controls and bounded acquisition; M365 consumes the measured handoff. [VUW testing and Queensland Health pilot boundaries](m365-test-to-pilot-boundary.md) remain distinct.
+The [current Outlook receipt](../conductor/tracks/outlook-cloud-historical-backfill_20260721/test-connection-20261015.md) supersedes the earlier transport and retention blockers: the approved bounded acquisition, 30-record destination reconciliation and unchanged replay completed. M365 independently validated the evidence. Full-folder inventory, whole-mailbox and Dataverse closure remain unverified. [VUW testing and Queensland Health pilot boundaries](m365-test-to-pilot-boundary.md) remain distinct.
 
 Queensland Health still requires genuine owner/IG and scope/destination/retention decisions. Credentialing requires approved pathway/authority mappings, real retrospective and prospective evidence, and human acceptance. Teams requires a selected implementation lane, deployed behavior and multi-user/continuity acceptance. ALM retains hosted checks, actual updater execution, non-production import/export/restore and human checkpoints. Local contracts cannot close these gates; tracks remain in progress.

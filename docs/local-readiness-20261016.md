@@ -24,9 +24,34 @@ The coordinator separately passed 176 combined governance tests after notificati
 
 ## Remaining work and concrete prerequisites
 
+### Coordinator decisions — 17 October 2026
+
+The user delegated routine blocker and implementation decisions to the coordinator.
+VUW-AI-TEST is selected as the first non-production target. Authenticated Azure CLI
+Power Apps discovery confirmed it is a Sandbox with linked Dataverse. PAC still
+had an unrelated active profile; a separate `CareOps-VUW-TEST` device sign-in was
+started and requires the human VUW sign-in. Target selection is resolved; actual
+PAC access, customization, sharing and import/restore rights remain unverified.
+
+The selected first synthetic governance lane is Dataverse with a model-driven
+Power App, conditional on those rights. Begin with intake/list/detail and canonical
+record persistence, keeping transition/decision controls unavailable until an
+authenticated atomic command adapter exists. Export actual authored components
+before extending ALM validation; do not fabricate solution XML or assume a cloud
+flow executes the existing Python engine. This is a development choice, not IHG
+operating-model or pilot acceptance.
+
+Supported follow-on prompts were attempted for all five implementation chats on
+17 October. Every send returned a local-host availability error; none is recorded
+as delivered. Exact handoffs are preserved privately for recovery. Bounded session
+tails show all five last recorded turns completed on 16 October, not current
+liveness. Desktop logs show repeated `codex_app` tool-discovery timeouts. Complete
+or safely stop active work and gracefully reopen the app before verifying delivery;
+no process termination, database manipulation or BIOS change was performed.
+
 | Area | Required next evidence or decision |
 | --- | --- |
-| VUW ALM setup | Select the actual Dataverse test target. Azure CLI matched VUW, but PAC's active profile belonged to another account and Microsoft 365 CLI was signed out. No wrong-profile environment query or forced switch was performed. The target question is pending. |
+| VUW ALM setup | VUW-AI-TEST selected and confirmed as a Dataverse-linked Sandbox; complete the separate VUW PAC sign-in and verify effective rights. Microsoft 365 CLI was signed out. No environment query used the unrelated PAC profile. |
 | Teams implementation | Select lane/resources and supply approved authority, roles, workflow rules and records controls; implement real identity, persistence, app/flow and provider adapters; verify multi-user behavior, continuity and rollback. Local contracts do not substitute for these tasks. |
 | Credentialing acceptance | Approved source/pseudonymisation/pathway/authority/instrument definitions, real baseline and retrospective/silent-mode evidence, credible capacity evaluation/provenance and human acceptance. |
 | Outlook and M365 full scope | Genuine admitted-source/population/destination approvals, complete inventory and independent population evidence, actual destination reconciliation and full-run acceptance. Queensland Health is the actual pilot; VUW remains development testing. |
