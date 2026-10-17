@@ -6,16 +6,16 @@ reporting separately requested by the operator does not authorize QH access.
 
 ## Verified repository revision
 
-Published code revision `91b6997e5881149333c313d1693c4a135b0dbaa0` passed all
+Published code revision `7e0812317d0077a8be6f5bdb408bd3ceaaeb19ed` passed all
 expected hosted workflows:
 
-- [CI](https://github.com/edithatogo/careops-process/actions/runs/39028713121):
-  1,331 tests; line coverage 6524/6668 (97.84%); branch coverage 1902/1996
-  (95.29%). Formatting, lint, strict typing, Conductor, both offline PowerShell
+- [CI](https://github.com/edithatogo/careops-process/actions/runs/39032148555):
+  1,465 tests; line coverage 7138/7297 (97.82%); branch coverage 2064/2170
+  (95.12%). Formatting, lint, strict typing, Conductor, both offline PowerShell
   suites, Bandit and dependency audit passed.
-- [CodeQL](https://github.com/edithatogo/careops-process/actions/runs/39028713036),
-  [secret scan](https://github.com/edithatogo/careops-process/actions/runs/39028712976)
-  and [workflow security](https://github.com/edithatogo/careops-process/actions/runs/39028713063)
+- [CodeQL](https://github.com/edithatogo/careops-process/actions/runs/39032148554),
+  [secret scan](https://github.com/edithatogo/careops-process/actions/runs/39032148551)
+  and [workflow security](https://github.com/edithatogo/careops-process/actions/runs/39032148573)
   passed. Optional PM4Py remains intentionally skipped.
 
 This revision includes the folder-inventory validation repair, separation of
@@ -28,6 +28,12 @@ Draft 2020-12 validation accepted runtime-exported synthetic data and rejected
 all nine tested terminal-newline mutations, using a disposable UV overlay with
 no project dependency or lockfile change.
 
+The current revision also includes protected case reporting, the local SQLite
+credentialing adapter and synthetic Dataverse writer/provenance adapters.
+Independent review repaired missing organization evidence and timestamp precision
+loss; the final 76 focused tests passed. SQLite authentication and recovery are
+local adapter evidence, not Entra/Dataverse identity or disaster-restore acceptance.
+
 ## Actual VUW evidence and limits
 
 | Area | Verified result | Still required |
@@ -38,9 +44,9 @@ no project dependency or lockfile change.
 | Development target | The existing personal VUW Developer environment has verified customization, publisher, solution, import/export and AppModule privileges; selected for isolated synthetic authoring/rehearsal. Named VUW-AI-DEV returned organization-membership denial | Inventory and protect existing components, establish the isolated baseline, then verify actual deployment/readback/recovery; success here cannot close Test acceptance |
 | Live checker | Reviewed unmanaged table-only package `careops_process` 1.0.0.0 checked in Australia; downloaded SARIF has `executionSuccessful=true`, zero findings; artifact hash independently matched | No app/flow behavior, functional test or deployment/restore proof |
 | Binding | Current package has zero environment variables, connection references and agents | Binding is N/A for this package; future app/flow bindings remain unverified |
-| Import/export/restore | No CareOps baseline found in the test target; unrelated solutions unchanged | Required rights and an approved synthetic baseline/rehearsal; not performed |
-| Outlook | Approved bounded Inbox smoke test reconciled 30 records and unchanged replay to local files | Genuine Dataverse destination mapping/readback provenance and durable cloud page checkpoints; no expanded acquisition |
-| Hub | One-record conditional notification ledger scaffolding, strict identity/history checks and disabled delivery plan | Actual schema, worker principals, first-row provisioning, server-response/concurrency tests and environment-first app/flow authoring |
+| Import/export/restore | Personal Developer baseline imported and exported; solution-description change restored and read-verified | Test-target rights and acceptance; description recovery does not prove schema/data rollback or disaster restore |
+| Outlook | Approved 30-record local Inbox smoke remains separate. Two synthetic Developer rows created, exact service readback independently verified, unchanged replay added zero rows; both test rows deleted and absence confirmed | Durable cloud page checkpoints and authorised full-population evidence; synthetic run identity does not prove global deduplication or live-corpus closure |
+| Hub | Two new UserOwned tables created and read-verified with optimistic concurrency; ledger Memo capacity 1,000,000 characters | App, isolated first-row/CAS rehearsal and export remain in progress; no real notifications or clinical acceptance |
 
 The coordinator inspected the downloaded checker ZIP without extracting it and
 confirmed SARIF execution success and zero results. Its SHA-256 is
