@@ -82,7 +82,57 @@ create/write publisher, solution and model-driven app privileges were returned
 at Global depth. This establishes an available development authoring capability,
 not a completed rehearsal, app-sharing proof or VUW-AI-TEST acceptance.
 No authentication profiles or environment content were changed by these checks.
-Publisher/solution/table inventory and an isolated synthetic baseline remain next.
+Publisher/solution/table inventory and an isolated synthetic baseline were the
+next steps at that checkpoint; their completed evidence follows.
+
+### Subsequent bounded Developer rehearsal
+
+Inventory found no CareOps publisher, solution or `cop_` table collisions. The
+existing reviewed unmanaged `careops_process` 1.0.0.0 package was imported into the
+personal VUW Developer environment with its original `careops_publisher` / `cop`
+metadata. The asynchronous import completed successfully. The resulting baseline
+was exported successfully before the recovery mutation; its local ZIP passed CRC
+verification and has SHA-256
+`46fb0cca2109e3fe6d9ff9c9648fd7fb31dd4ef5d659ce9a2edfb65e4e5e3818`.
+
+Using the official Dataverse Python SDK 1.1.0 in an isolated local environment,
+the new solution's description was changed to a synthetic marker, independently
+read back, restored to its original null value, then independently read back with
+the version unchanged. This proves recovery of that one metadata property only.
+It does not prove schema/data rollback, managed promotion or TEST acceptance.
+The imported baseline is intentionally retained for the coordinated next lane.
+
+Actual event-table metadata was shared privately with Outlook, M365, Governance
+and Coordination. The five fields are activity (String 100), event key (String
+200), object IDs (Memo 4000), source system (String 100) and timestamp (DateAndTime,
+TimeZoneIndependent). The primary key is a GUID; no alternate keys or run field
+exist. Synthetic deterministic run-scoped GUIDs and exact-ID readback may support
+a bounded experiment, but cannot establish server event-key uniqueness, global
+deduplication or query-based run isolation. No retained mailbox data was written.
+All writes are complete for this bounded rehearsal; Coordination owns subsequent
+single-writer scheduling. Real org bindings, raw responses and export remain local.
+
+### Cross-lane synthetic service verification and cleanup
+
+The [Outlook destination receipt](../../../docs/outlook-dataverse-destination.md)
+and commit `9967919` record two synthetic Developer rows created and read back
+exactly, with unchanged replay creating zero additional rows. M365 independently
+queried actual service identity and both primary keys, verifying organization,
+user, organization lookups and canonical contents. This is bounded
+`synthetic_service_readback`, not evidence inferred from a local JSON receipt.
+
+In a separately serialized cleanup slot, Outlook rechecked identity and both
+complete payloads, deleted exactly those two rows through the SDK, and confirmed
+both absent. The slot was released to Governance. The lane reports 64 focused
+destination/reconciliation tests passing. No retained real-mailbox evidence was
+used, and this does not establish server event-key uniqueness, durable cloud
+checkpoint recovery, complete-corpus ingestion or TEST acceptance.
+
+Coordination reports integrated revision `7e08123` published with CI, secret scan
+and workflow security successful; CodeQL was pending at that handoff. That report
+does not supersede an exact-head completed CodeQL result or certify subsequent
+Governance app/ledger mutations. No platform operations were performed while
+finishing this documentation checkpoint. TEST, updater and human gates stay open.
 
 Keep the track registered and retain its folder. No archive, deletion, PR merge,
 production change or completion status is justified at this checkpoint.
