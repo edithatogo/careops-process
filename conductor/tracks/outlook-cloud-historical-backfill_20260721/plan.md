@@ -1,5 +1,29 @@
 # Implementation Plan: Cloud-only complete historical Outlook mailbox backfill
 
+## Active scope — VUW only, 17 October 2026
+
+The operator has directed implementation and testing in VUW for now. Queensland
+Health work is deferred until a later instruction. The historical QH tasks below
+remain recorded requirements, not prerequisites for completing VUW sandbox work.
+
+- [x] Complete the bounded VUW Inbox test and unchanged replay (30 records).
+- [x] Independently review the managed Dataverse adapter through `a8daf72`;
+  81 focused adapter/notification/view tests pass, including watermark, Windows
+  runner and cleanup-error regressions. This is local scaffold evidence.
+- [x] Verify PAC lists the active `CareOps-VUW-TEST` profile for VUW-AI-TEST.
+- [ ] Verify current VUW organization identity and effective environment rights.
+- [ ] Complete the separate managed Dataverse CLI authentication for VUW.
+- [ ] Discover and bind the VUW destination schema and approved test configuration.
+- [ ] Implement and test VUW persistence, service readback and recovery with
+  synthetic data before extending mailbox collection.
+- [ ] Record actual VUW results, remaining limitations and exported components
+  in the repository; retain sensitive evidence outside Git.
+
+The earlier mailbox test's fixed scope and disposal schedule remain applicable.
+Additional mailbox collection needs an explicit frozen scope and retention record;
+general sandbox implementation is not evidence of a completed full-mailbox run.
+QH authentication, source collection, deployment and acceptance are deferred.
+
 ## Current local handover — 17 October 2026
 
 The authorized VUW bounded development test is complete: 30 minimized initial
