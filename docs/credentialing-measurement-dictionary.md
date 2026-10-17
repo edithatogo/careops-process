@@ -30,6 +30,7 @@ counters, approve deployment parameters or establish a live baseline.
 | Correction, further-information, deferral and exception case/reason rates | Positive cases (or each overlapping administrative reason's cases) / explicitly assessed cases for that measure | Missing differs from explicit negative; population rates require complete assessments and source coverage; source-defined criteria, not ontology guesses |
 | Queue/active/unknown calendar minutes | Sum of explicit exhaustive, mutually exclusive observed case-span intervals in minutes | Unknown and missing remain explicit; active calendar state is not worker effort or released capacity |
 | Observed administrative variants | One full observed source-defined sequence per granted assessed case, repeated activities retained | Missing/ambiguous/incomplete traces must remain null; joint suppression protects cross-category combinations |
+| Professional-review/committee-preparation effort | Explicit worker-minute/touch deltas assigned to one controlled stage per observation; means divide by observed cases | Source-approved assignment and same measurement window required; stage measurement completeness is distinct from clinical completion; missing work is unknown; joint case privacy is not worker privacy |
 
 Every nonzero released case cell must meet the configured approved threshold,
 with a technical minimum of two; otherwise suppress the entire report. A report
@@ -49,7 +50,10 @@ Actual approved baseline, retrospective/silent-mode evidence and governance/manu
 acceptance remain necessary. The current [original-outcome audit](credentialing-acceptance-handover.md)
 also distinguishes event counters from the implemented
 [local case-rate, calendar-state and protected variant aggregation](credentialing-local-reporting.md),
-and records the still-partial stage-specific worker-effort and model-fitness outcomes.
+and records the still-partial stage queue and model-fitness outcomes.
+[Stage-specific worker effort](credentialing-stage-effort.md) is locally implemented
+over explicit source-mapped work observations; actual mapping/baseline acceptance
+and causal released capacity remain open.
 
 [Outstanding overdue renewal semantics](credentialing-renewal-quality.md) require
 source-owner acceptance of effective deadline, cycle, state and denominator

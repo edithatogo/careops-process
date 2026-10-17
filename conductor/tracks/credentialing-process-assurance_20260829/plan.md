@@ -8,6 +8,17 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
 
+### Stage-specific worker effort — 17 October 2026
+
+- [x] Report explicit source-mapped professional-review and committee-preparation worker minutes/touches.
+- [x] Preserve case coverage, measurement completeness, observed zero, missingness and replay semantics.
+- [x] Suppress the full stage release for rare joint case categories.
+
+See [stage-effort semantics and tests](../../../docs/credentialing-stage-effort.md).
+This adds local worker-effort granularity using existing work observations.
+Stage-specific queue attribution, actual source/stage definitions, causal capacity,
+approved baselines/pilots and human/governance acceptance remain open.
+
 ### Local operational adapter follow-up — 17 October 2026
 
 - [x] Persist local ledger state, unbounded tombstones, provenance and watermarks atomically.
