@@ -5,6 +5,8 @@
 - [Metadata](./metadata.json)
 - [Local review, 14 October 2026](./review-20261014.md)
 - [Completion audit, 14 October 2026](./completion-audit-20261014.md)
+- [Bounded VUW connection and test receipt](./test-connection-20261015.md)
+- [Local readiness review and pilot inputs, 17 October 2026](./readiness-review-20261017.md)
 
 ## ALM issues
 

@@ -1,5 +1,16 @@
 # Historical Outlook backfill completion audit
 
+Current local review, 17 October 2026: the authorized 30-record VUW smoke test
+has completed and been independently checked. The existing exact-file/key
+disposal schedule remains active for 23 October at 13:03 Brisbane time.
+Folder-disposition/runtime-shape repair `037cd90` and destination-provenance
+repair `7f376db` pass 112 targeted tests together. See the
+[readiness review and exact pilot inputs](readiness-review-20261017.md).
+The dated audit below records earlier snapshots; its pending VUW setup and
+retention decisions are superseded by the completed test receipt. The full
+QH folder/Dataverse/resume/owner/Executive gates remain unmet, and unsupported
+live closure now fails closed rather than trusting a destination boolean.
+
 Date: 14 October 2026, Australia/Brisbane. The full objective is implementation
 of the selected Conductor track followed by its review, including the actual
 complete authorised mailbox run. Local code/test completion is insufficient.

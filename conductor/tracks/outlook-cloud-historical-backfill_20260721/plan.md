@@ -1,5 +1,24 @@
 # Implementation Plan: Cloud-only complete historical Outlook mailbox backfill
 
+## Current local handover — 17 October 2026
+
+The authorized VUW bounded development test is complete: 30 minimized initial
+records, 30 independently read local destination records and 30 unchanged
+replay records. Its [receipt](test-connection-20261015.md) records limitations
+and scheduled disposal. Earlier pending VUW login/connection/retention notes
+below are historical; no additional source collection is authorized by this
+handover. Queensland Health remains the actual pilot target.
+
+- [x] Task: Review synthetic folder/pagination/reconciliation/restart readiness and verify the existing disposal schedule without repeating acquisition.
+- [x] Task: Reject contradictory inventory dispositions, included descendants of excluded folders and malformed source shapes with failing-then-passing regressions — `037cd90`.
+- [x] Task: Record the smallest actual-pilot input set and explicit absence of durable helper page-resume in the [readiness review](readiness-review-20261017.md).
+- [x] Task: Complete the coordinated destination-provenance repair `7f376db` and verify 112 targeted contract/evidence/reconciliation/integration/CLI/publication tests together.
+
+Full-folder QH acquisition, service-origin Dataverse readback, deployed durable
+checkpoint/resume, operational-owner/Executive decisions and manual Conductor
+checkpoints remain open. Local fixture results and the VUW smoke test do not
+fulfil those requirements.
+
 ## Shared hardening prerequisite
 
 Before the next live mailbox run, complete the exporter privacy, date-window,

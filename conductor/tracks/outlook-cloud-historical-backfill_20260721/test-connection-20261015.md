@@ -131,3 +131,14 @@ legal-hold safeguards, and requires final absence verification and a minimal
 receipt. No duplicate scheduler was created by Outlook. Disposal is scheduled,
 not completed; execution requires Codex to be available and is not guaranteed
 while offline.
+
+## Local follow-on review — 17 October 2026
+
+The completed bounded acquisition was not repeated or expanded. The saved
+disposal automation was verified active with unchanged 23 October 13:03
+Brisbane timing and the exact 14-file/key safeguards; nothing was deleted.
+The [readiness review](readiness-review-20261017.md) records seven new synthetic
+folder/disposition/malformed-response regressions, coordinated destination
+provenance hardening, 112 passing targeted checks and the smallest actual-pilot
+input set. Full-mailbox, durable deployed resume and Dataverse provenance
+remain unverified. No VUW evidence is relabelled as QH pilot evidence.
