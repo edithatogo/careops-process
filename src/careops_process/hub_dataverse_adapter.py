@@ -64,6 +64,24 @@ def run_cli(args: tuple[str, ...]) -> CliResult:
     """Use existing managed CLI credentials without creating/selecting profiles."""
     executable = shutil.which("dataverse")
     _check(executable is not None, "dataverse_cli_missing")
+    prefix = [str(executable)]
+    if Path(str(executable)).suffix.lower() in {".cmd", ".bat", ".ps1"}:
+        entry = (
+            Path(str(executable)).parent
+            / "node_modules"
+            / "@microsoft"
+            / "dataverse"
+            / "bin"
+            / "dataverse.js"
+        )
+        node = shutil.which("node")
+        _check(
+            entry.is_file()
+            and node is not None
+            and Path(str(node)).suffix.lower() not in {".cmd", ".bat", ".ps1"},
+            "dataverse_native_entry_missing",
+        )
+        prefix = [str(node), str(entry)]
     body_path: Path | None = None
     try:
         if "--body" in args:
@@ -75,7 +93,7 @@ def run_cli(args: tuple[str, ...]) -> CliResult:
                 body_file.write(args[position + 1])
             args = (*args[:position], "--body-file", str(body_path), *args[position + 2 :])
         result = subprocess.run(  # noqa: S603 # nosec B603
-            [str(executable), *args],
+            [*prefix, *args],
             capture_output=True,
             text=True,
             timeout=30,
@@ -371,7 +389,9 @@ class DataverseLedgerStore:
             not proposal.replayed
             and new.revision == old.revision + 1
             and new.receipts[:-1] == old.receipts
-            and new.receipts[-1] == proposal.receipt,
+            and new.receipts[-1] == proposal.receipt
+            and new.evaluated_at is not None
+            and new.evaluated_at >= (old.evaluated_at or old.history_origin),
             "invalid_proposal",
         )
         _check(

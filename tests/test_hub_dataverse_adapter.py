@@ -3,6 +3,7 @@
 import json
 import subprocess
 from dataclasses import replace
+from datetime import timedelta
 from pathlib import Path
 from typing import Any
 
@@ -188,6 +189,47 @@ def test_row_identity_ignores_scope_policy_and_history_origin() -> None:
     original = a.row_id(config(), ledger())
     assert original == a.row_id(config(), replace(ledger(), scope_ref="other"))
     assert original != a.row_id(config(), replace(ledger(), recipient_ref="other"))
+
+
+def test_commit_cannot_rewind_persisted_evaluation_watermark() -> None:
+    """Two individually valid histories must still preserve cross-revision freshness."""
+    command = replace(reserve(), enabled=False, now=reserve().now + timedelta(hours=2))
+    actual = reserve_notification(ledger(), command).ledger
+    rewound = replace(actual, evaluated_at=reserve().now)
+    proposed = reserve_notification(rewound, reserve(1, revision=1))
+    cli = FakeCli(
+        [identity(), metadata(), row(actual), identity(), metadata(), row(proposed.ledger, 'W/"2"')]
+    )
+    store = a.DataverseLedgerStore(replace(config(), writes_enabled=True), cli)
+    loaded = store.load(ledger())
+    with pytest.raises(a.AdapterError, match="invalid_proposal"):
+        store.commit(loaded, proposed)
+    assert all("PATCH" not in call for call in cli.calls)
+
+
+def test_windows_npm_shim_is_not_executed_through_a_command_shell(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """Call the official Node entry point directly when PATH resolves an npm batch shim."""
+    shim = tmp_path / "dataverse.cmd"
+    entry = tmp_path / "node_modules" / "@microsoft" / "dataverse" / "bin" / "dataverse.js"
+    entry.parent.mkdir(parents=True)
+    entry.write_text("synthetic entry", encoding="utf-8")
+    node = tmp_path / "node.exe"
+    observed: list[list[str]] = []
+
+    def which(name: str) -> str:
+        return str(node if name == "node" else shim)
+
+    def invoke(argv: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        observed.append(argv)
+        return subprocess.CompletedProcess(argv, 0, stdout="{}", stderr="")
+
+    monkeypatch.setattr(a.shutil, "which", which)
+    monkeypatch.setattr(a.subprocess, "run", invoke)
+    a.run_cli(("auth", "who"))
+    assert observed[0][:2] == [str(node), str(entry)]
 
 
 @pytest.mark.parametrize("field", ["windows", "reservations", "receipts"])
