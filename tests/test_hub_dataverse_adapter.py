@@ -248,6 +248,35 @@ def test_missing_identity_and_payload_fields_return_fixed_codes() -> None:
         a.DataverseLedgerStore(config(), cli).load(ledger())
 
 
+def test_direct_runner_sanitizes_temporary_cleanup_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Cleanup after a potentially completed write cannot expose private filesystem details."""
+    original_unlink = Path.unlink
+    observed: list[Path] = []
+
+    def unlink(path: Path, *, missing_ok: bool = False) -> None:
+        del missing_ok
+        observed.append(path)
+        error = "synthetic private tempfile path"
+        raise PermissionError(error)
+
+    def executable(_name: str) -> str:
+        return "dataverse.exe"
+
+    def invoke(argv: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(argv, 0, stdout="{}", stderr="")
+
+    monkeypatch.setattr(a.shutil, "which", executable)
+    monkeypatch.setattr(a.subprocess, "run", invoke)
+    monkeypatch.setattr(a.Path, "unlink", unlink)
+    try:
+        with pytest.raises(a.AdapterError, match="request_unconfirmed") as error:
+            a.run_cli(("api", "request", "--body", '{"synthetic":"payload"}'))
+        assert "private" not in str(error.value)
+    finally:
+        for path in observed:
+            original_unlink(path, missing_ok=True)
+
+
 def test_managed_runner_uses_temporary_body_file_and_cleans_it(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

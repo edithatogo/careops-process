@@ -104,7 +104,11 @@ def run_cli(args: tuple[str, ...]) -> CliResult:
         raise AdapterError(error_code) from None
     finally:
         if body_path is not None:
-            body_path.unlink(missing_ok=True)
+            try:
+                body_path.unlink(missing_ok=True)
+            except OSError:
+                error_code = "request_unconfirmed"
+                raise AdapterError(error_code) from None
     return CliResult(result.returncode, result.stdout)
 
 

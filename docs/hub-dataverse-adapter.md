@@ -139,3 +139,18 @@ initial-commit secret scan pass. The actual direct managed runner executed a
 read-only auth check: native CLI available, exit 1, no active authentication
 profile. No target data-plane call, schema/app/flow authoring or notification
 was attempted. Complete live testing and integration CI remain separate gates.
+
+## Temporary payload cleanup failure
+
+A final independent review reproduced a raw `PermissionError` escaping the
+exported `run_cli` helper when temporary payload deletion failed. The store
+boundary already sanitized that error, but direct callers now also receive only
+`request_unconfirmed`. The focused regression failed before the repair and
+passes afterward; all 21 adapter tests, scoped Ruff and strict Pyright pass.
+
+Deletion failure can leave a private temporary JSON ledger payload behind. The
+error does not claim successful cleanup and does not publish the path or raw
+exception. An authorized operator must investigate and remove retained payloads
+from the worker account's protected temporary storage under the approved
+retention/hold policy. A write may already have committed before cleanup failed:
+reload and reconcile its command receipt rather than automatically resending.
