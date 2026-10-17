@@ -8,6 +8,18 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
 
+### Local operational adapter follow-up — 17 October 2026
+
+- [x] Persist local ledger state, unbounded tombstones, provenance and watermarks atomically.
+- [x] Verify restart/crash recovery, deletion/replay and concurrent writer serialization.
+- [x] Resolve local test credentials, revocation, expiry, roles and case grants per transaction.
+- [x] Persist evidence-recomputed, authenticated human measurement reviews with atomic command replay.
+
+See [local SQLite adapter scope and verification](../../../docs/credentialing-store.md).
+The local adapter does not close VUW/Dataverse deployment or organisational
+identity, approved source mapping, filesystem/transport security, retention,
+old-backup disaster recovery or final human/live acceptance gates.
+
 ### Authorised local reporting follow-up — 17 October 2026
 
 - [x] Add explicit case-demand/pathway mix, missing classifications and case denominators.
