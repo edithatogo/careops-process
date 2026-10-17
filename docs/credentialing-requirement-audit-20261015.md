@@ -1,5 +1,12 @@
 # Credentialing requirement audit — 15 October 2026
 
+Historical checkpoint: the current 17 October handover is
+[the executable acceptance and original-outcome audit](credentialing-acceptance-handover.md).
+Submission, renewal, review, temporary, experience and capacity-evidence contracts
+have since landed. Later receipts do not convert this historical audit into
+source approval or full-track completion; remaining granularity is explicit in
+the current handover.
+
 Scope: the original `credentialing-process-assurance_20260829` specification and
 plan, evaluated against isolated measurement checkpoint `91b82e6`. This is a
 completion audit, not a new definition of success. Local capability and live

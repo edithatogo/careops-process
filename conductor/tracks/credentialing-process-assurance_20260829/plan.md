@@ -1,5 +1,11 @@
 # Implementation plan
 
+Current handover (17 October 2026): see
+[synthetic acceptance, original-outcome audit and real-source checklist](../../../docs/credentialing-acceptance-handover.md).
+Historical receipts below retain their original verification scope. Local
+measurement contracts do not close remaining aggregation/decomposition work,
+source/authority/instrument acceptance, pilot/manual gates or causal capacity.
+
 ## Repository tranche
 
 - [x] Add a generic credentialing ontology.
@@ -147,11 +153,11 @@ This supports a host-stability investigation; it does not establish the precise
 cause or a repair. The full private package preserves scripts, results, hashes,
 interpreter builds and source-capture limitations outside public Git.
 
-The machine operator should follow Intel's current default-settings/firmware
-guidance for the exact motherboard, then verify unchanged unpinned probes and
-the full suite on a serviced or known-stable authorised host. No firmware,
-machine-wide affinity or dependency change was made. Keep this runtime gate open;
-the approved-source, design, manual and pilot gates remain separate.
+The user's direction is to leave BIOS settings alone. Verification on a
+known-stable authorised host is the alternative; hosted checks establish their
+specific revision's behavior, not repair of this machine. No firmware,
+machine-wide affinity or dependency change was made. Keep the host-reliability
+question separate from approved-source, design, manual and pilot gates.
 
 ### Local first-submission measurement checkpoint — 2026-10-16
 

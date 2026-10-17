@@ -37,11 +37,14 @@ First-submission assessment semantics and boundaries are documented in
 [the first-submission manual](credentialing-submission-quality.md). This local
 capability does not establish an approved first-time-complete baseline.
 
-Still unimplemented or unproven by this extension:
-practitioner/staff experience measures and causal capacity
-released to higher-value work. Later pathway references alone cannot establish
-these measures. Actual approved baseline, retrospective and silent-mode evidence
-and governance/manual acceptance remain necessary.
+[Practitioner/staff experience reporting](credentialing-experience.md) is locally
+implemented with explicit instrument/cohort definitions and distinct-person
+suppression. Real instrument/sampling acceptance and actual experience effects
+remain unproven. Causal capacity released to higher-value work remains partial.
+Actual approved baseline, retrospective/silent-mode evidence and governance/manual
+acceptance remain necessary. The current [original-outcome audit](credentialing-acceptance-handover.md)
+also distinguishes event counters from unimplemented case-rate, queue/work
+decomposition and credentialing-scoped variant aggregation.
 
 [Outstanding overdue renewal semantics](credentialing-renewal-quality.md) require
 source-owner acceptance of effective deadline, cycle, state and denominator
