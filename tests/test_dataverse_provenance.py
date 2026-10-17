@@ -36,7 +36,12 @@ FACT = CanonicalMailFact(
 def setup_service(monkeypatch: pytest.MonkeyPatch) -> tuple[list[str], dict[str, Any]]:
     """Replace only the internal I/O boundary with explicit synthetic responses."""
     calls: list[str] = []
-    row = {**serialize_fact(FACT), PRIMARY_KEY: row_id(ORG, RUN, FACT.id), "@odata.etag": 'W/"1"'}
+    row = {
+        **serialize_fact(FACT),
+        PRIMARY_KEY: row_id(ORG, RUN, FACT.id),
+        "_organizationid_value": ORG,
+        "@odata.etag": 'W/"1"',
+    }
     replies: dict[str, Any] = {"identity": {"OrganizationId": ORG, "UserId": USER}, "row": row}
 
     def token(_url: str) -> str:
@@ -80,7 +85,17 @@ def test_verifier_reads_identity_and_exact_row_before_returning_evidence(
 
 
 @pytest.mark.parametrize(
-    "defect", ["organization", "user", "row_id", "row_org", "content", "nextlink", "extra"]
+    "defect",
+    [
+        "organization",
+        "user",
+        "row_id",
+        "row_org",
+        "missing_row_org",
+        "content",
+        "nextlink",
+        "extra",
+    ],
 )
 def test_service_identity_or_row_drift_fails_closed(
     monkeypatch: pytest.MonkeyPatch,
@@ -96,6 +111,8 @@ def test_service_identity_or_row_drift_fails_closed(
         replies["row"][PRIMARY_KEY] = RUN
     elif defect == "row_org":
         replies["row"]["_organizationid_value"] = RUN
+    elif defect == "missing_row_org":
+        replies["row"].pop("_organizationid_value")
     elif defect == "content":
         replies["row"]["cop_eventkey"] = "mail_" + "c" * 64
     else:

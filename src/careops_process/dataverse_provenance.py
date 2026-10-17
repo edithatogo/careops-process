@@ -155,7 +155,7 @@ def _verified_row(
     }
     if not set(row).issubset(permitted) or row.get(PRIMARY_KEY) != identifier:
         _invalid()
-    if row.get("_organizationid_value", organization_id) != organization_id:
+    if row.get("_organizationid_value") != organization_id:
         _invalid()
     return parse_readback({column: row[column] for _, column in FIELD_MAPPING})
 

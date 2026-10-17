@@ -14,7 +14,7 @@ redirects are disabled, response size is bounded and failures are sanitised.
 For each expected fact it imports Outlook's committed `row_id` contract:
 UUID5 with run UUID namespace and compact JSON of protocol version, organisation
 UUID and canonical fact ID. Exact primary-key reads use the official managed
-Dataverse SDK against the explicit origin. Each returned primary key, optional
+Dataverse SDK against the explicit origin. Each returned primary key, required
 automatic organisation lookup and canonical five-field content must agree.
 Unexpected fields and collection continuations fail closed. Selected OData
 context/etag annotations are permitted; the SDK's automatic organisation lookup
