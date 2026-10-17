@@ -58,11 +58,21 @@ repository evidence, hosted GitHub evidence and live VUW evidence separately.
 - [ ] Task: Complete the separately agreed VUW CLI setup and verify account, authorised environments, tools, roles and consent; record unavailable capabilities.
 - [x] Task: Publish reviewed changes when authorised and verify required Actions, offline PowerShell checks and actual CodeQL analysis/SARIF upload. Draft PR 73, exact code head `e72b26c`: all expected hosted workflows passed, including 1,290 tests, both PowerShell suites and confirmed CodeQL upload. See [local readiness](../../../docs/local-readiness-20261016.md). This does not complete the other live/human gates or merge the PR.
 - [ ] Task: Verify the selected updater configuration in hosted runs and confirm that duplicate ecosystem responsibility is removed.
-- [ ] Task: Run an authorised low-sensitivity exporter smoke test, compare date-window/replay behaviour with local evidence, and reconcile manifests without committing live data.
+- [x] Task: Run an authorised low-sensitivity exporter smoke test, compare date-window/replay behaviour with local evidence, and reconcile manifests without committing live data. Bounded VUW test completed 16 October; local destination and independent replay/readback only, not Dataverse or full-corpus closure. See closure-review-20261017.md.
 - [ ] Task: Validate solution checking, configuration binding, import/export and rollback in an authorised non-production environment when permissions allow.
 - [ ] Task: Verify selected optional pipeline features only if relevant resources and permissions exist; record explicit limitations otherwise.
 - [ ] Task: Hand evidence to the Outlook, M365 discovery and Teams tracks; their complete-population runs and governance pilots remain there.
 - [ ] Task: Record final review, unresolved external gates and human verification before completing the track.
+
+17 October closure checkpoint: final evidence review recorded in
+[closure-review-20261017.md](closure-review-20261017.md). VUW PAC sign-in succeeded;
+required write/customization rights remain absent in VUW-AI-TEST. A later read-only
+check verified authoring capabilities in the existing personal VUW Developer
+environment, selected for an isolated synthetic rehearsal. This does not close
+the Test acceptance gate. Live checker succeeded with
+zero findings; binding is N/A for the current table-only package. Import/export
+and recovery remain unperformed. Updater verification is partial, and human
+sign-off remains pending. Keep the track in progress.
 
 ## Evidence and review — 14 October 2026
 

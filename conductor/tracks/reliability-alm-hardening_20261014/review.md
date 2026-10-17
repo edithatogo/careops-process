@@ -1,5 +1,8 @@
 # Review Report: Local reliability and ALM hardening
 
+Current closure disposition: see [17 October closure review](closure-review-20261017.md).
+The historical local review below remains scoped to its recorded revision.
+
 ## Summary
 
 Reviewed local implementation is ready for integration; the track remains open for

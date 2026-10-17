@@ -35,6 +35,7 @@ no project dependency or lockfile change.
 | Coordination | All five finish/follow-on handoffs delivered; supported chat inspection recovered | Individual steering calls can still fail; a failed send is not delivery |
 | Authentication | Separate VUW PAC profile connected to VUW-AI-TEST; PAC and server identity matched | Dataverse CLI has a separate authentication surface; no successful CLI data-plane session is claimed |
 | Test target | VUW-AI-TEST is a Dataverse-linked Sandbox; current user enabled with Read-Write access mode | Effective privileges lack required customization, import/export, publisher/solution write and model-driven AppModule capabilities; access mode is not an authorization grant |
+| Development target | The existing personal VUW Developer environment has verified customization, publisher, solution, import/export and AppModule privileges; selected for isolated synthetic authoring/rehearsal. Named VUW-AI-DEV returned organization-membership denial | Inventory and protect existing components, establish the isolated baseline, then verify actual deployment/readback/recovery; success here cannot close Test acceptance |
 | Live checker | Reviewed unmanaged table-only package `careops_process` 1.0.0.0 checked in Australia; downloaded SARIF has `executionSuccessful=true`, zero findings; artifact hash independently matched | No app/flow behavior, functional test or deployment/restore proof |
 | Binding | Current package has zero environment variables, connection references and agents | Binding is N/A for this package; future app/flow bindings remain unverified |
 | Import/export/restore | No CareOps baseline found in the test target; unrelated solutions unchanged | Required rights and an approved synthetic baseline/rehearsal; not performed |
@@ -51,9 +52,10 @@ is inferred from the checker upload or successful reads.
 ## Ownership and next steps
 
 Reliability owns VUW authentication, effective capability checks, the shared
-publisher/solution baseline and ALM rehearsal. It is checking existing VUW
-development environments read-only for an authorized authoring lane; success
-there would not substitute for VUW-AI-TEST deployment acceptance. Governance owns
+publisher/solution baseline and ALM rehearsal. After read-only verification, the
+coordinator selected the existing personal VUW Developer environment for isolated
+synthetic authoring/rehearsal. Inventory and pre-change export precede writes;
+success there cannot substitute for VUW-AI-TEST deployment acceptance. Governance owns
 hub tables/app after that verified handoff. Outlook owns mailbox destination
 integration; M365 owns service-origin provenance and discovery/report integration.
 Credentialing owns the separately requested local reporting work. Owners must
