@@ -26,8 +26,10 @@ exported the isolated baseline and handed off the existing ingestion mapping.
 SDK rehearsal. Both synthetic rows read back exactly; replay created zero new
 rows. M365 independently rechecked current service identity and both rows.
 Sixty-two focused destination/reconciliation tests and scoped static checks pass.
-Exact-key service cleanup and independent review of the reusable writer remain
-pending. See [destination receipt](../../../docs/outlook-dataverse-destination.md).
+Exact-key service cleanup subsequently deleted both synthetic rows and verified
+their absence after fresh identity/payload guards. The writer slot is released.
+Sixty-four focused tests now pass; independent review of the reusable writer
+remains with coordination. See [destination receipt](../../../docs/outlook-dataverse-destination.md).
 Developer results do not complete TEST acceptance or expand mailbox collection.
 
 The earlier mailbox test's fixed scope and disposal schedule remain applicable.

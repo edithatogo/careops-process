@@ -83,3 +83,25 @@ Local protocol tests cover lost acknowledgements, changed content and partial
 readback. The first actual service rehearsal used a private bounded SDK script;
 it does not by itself verify the reusable writer or independently authenticate
 M365 provenance. Neither result completes TEST deployment or live-corpus closure.
+
+## Independent verification and exact cleanup
+
+M365 independently acquired current service identity and read both exact primary
+keys through the managed SDK. Organization, user, primary keys, organization
+lookups and canonical contents matched. This independently observed result is
+`synthetic_service_readback`; local receipt JSON did not establish it.
+
+After Governance explicitly paused its writer and coordination granted the
+cleanup slot, fresh WhoAmI and both complete synthetic payloads were checked
+again. Exactly two single-primary-key SDK deletes succeeded. Subsequent SDK
+retrieval returned confirmed absence for both keys. The cleanup slot was
+explicitly released to Governance and coordination. No synthetic service rows
+from this rehearsal remain; private synthetic receipts are retained locally.
+No real mailbox evidence, source record, authentication profile or schema was
+changed by cleanup.
+
+Sixteen destination tests and 48 existing reconciliation tests pass together
+(64 total). Additional cases verify an unavailable read cannot authorize create
+and an ambiguous create without a committed row cannot trigger a resend.
+Scoped Ruff lint/format, strict Pyright, Bandit and Conductor checks pass.
+Independent review/publication of the reusable writer remains with coordination.
