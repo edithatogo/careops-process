@@ -32,6 +32,11 @@ Sixty-four focused tests now pass; independent review of the reusable writer
 remains with coordination. See [destination receipt](../../../docs/outlook-dataverse-destination.md).
 Developer results do not complete TEST acceptance or expand mailbox collection.
 
+The [VUW synthetic durable-resume design](vuw-durable-resume-design.md) defines
+the bounded next implementation checklist and actual table/worker prerequisites.
+It is documentation only; no checkpoint schema or cloud worker has been deployed
+by that design, and no additional mailbox acquisition is included.
+
 The earlier mailbox test's fixed scope and disposal schedule remain applicable.
 Additional mailbox collection needs an explicit frozen scope and retention record;
 general sandbox implementation is not evidence of a completed full-mailbox run.
