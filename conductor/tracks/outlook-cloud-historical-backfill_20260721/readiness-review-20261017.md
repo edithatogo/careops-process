@@ -67,6 +67,36 @@ deadline. Its exact 14-file allowlist includes the unique encrypted key and
 forbids early/recursive deletion or source changes. No duplicate schedule or
 early deletion was created. Execution requires Codex to be available.
 
+### Cloud checkpoint definition versus executable resume
+
+The original Phase 2 task is to **define** minimized projection, idempotency,
+dead-letter and checkpoint actions. The historical backfill contract declares
+the mailbox/folder/page-cursor/watermark key, per-folder `checkpoint_state`
+manifest field and no-advance-on-failure invariant. It is an acquisition
+contract, not an importable Logic Apps/Power Automate flow definition.
+
+The separate TESL arrival-flow contract lists `read_checkpoint`, projection,
+watermark validation, write and `advance_checkpoint` ordering. Its validator
+checks unique identifiers, checkpoint-safe order and failure protection.
+The Dataverse checkpoint mapping defines watermark and bounded identifier-set
+columns; the Python IngestionCheckpoint is explicitly an in-memory model.
+Neither the mapping nor the model proves a historical per-folder cursor was
+committed, restored or transactionally coordinated with a real Dataverse write.
+The helper separately provides safe publication/restart from page one.
+
+The original plan's offline checkpoint-contract/regression work can be checked
+without any new storage selection. Durable historical cursor recovery cannot
+be demonstrated by these fixtures alone: it requires the approved Dataverse
+checkpoint binding and an executable cloud adapter with verified commit and
+recovery semantics. There is no remaining existing offline executable cloud
+resume artifact to run. No replacement local persistence architecture was
+introduced for this review.
+
+Verification: 38 existing flow-contract, reliability, contract-file and
+historical-backfill-contract tests passed. These establish offline ordering,
+monotonic watermark, idempotency and failure-policy behavior only. Conductor
+validation and diff checks also passed; no tenant operation was performed.
+
 ## Smallest actual-pilot input set
 
 Supply these three private records, without identifiers or approvals in Git:
