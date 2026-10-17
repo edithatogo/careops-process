@@ -24,6 +24,16 @@ Additional mailbox collection needs an explicit frozen scope and retention recor
 general sandbox implementation is not evidence of a completed full-mailbox run.
 QH authentication, source collection, deployment and acceptance are deferred.
 
+Platform ownership: Reliability owns VUW authentication, effective rights,
+publisher/solution baseline and ALM. Governance owns the hub table/app after that
+baseline. This lane owns mailbox destination integration and readback after
+Reliability supplies the verified existing ingestion-table mapping; M365 owns
+the provenance verifier and discovery/report integration. VUW-AI-DEV is being
+assessed as an authoring option; DEV results cannot establish TEST acceptance.
+PAC organization discovery succeeded for VUW-AI-TEST, but this does not establish
+ingestion-table read/write rights. No additional mailbox reads are part of this
+handoff, and the original frozen evidence and disposal schedule are preserved.
+
 ## Current local handover — 17 October 2026
 
 The authorized VUW bounded development test is complete: 30 minimized initial
