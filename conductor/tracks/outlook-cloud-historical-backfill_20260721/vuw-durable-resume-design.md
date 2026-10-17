@@ -101,6 +101,17 @@ Conflicting content must stop both paths rather than use last-writer-wins.
 
 ## Minimal actual table and worker prerequisites
 
+- [ ] Freeze maximum page membership, page count, manifest bytes and column
+  capacity for this two-page test before authoring. Validate serialized sizes
+  before writes; exceedance fails closed without trimming identity or receipt
+  history. Bind these limits to the frozen configuration and discovered metadata.
+- [ ] Name the single initialization owner and define create-if-absent behavior
+  for a deterministic checkpoint primary key. Competing initializers must reconcile
+  the actual existing binding; a conflict or lost acknowledgement must not replace
+  state, silently create another row, or authorize an empty reset. Test the race.
+- [ ] Freeze immutable page/command receipt retention and exact cleanup rules,
+  including which receipts share the checkpoint row and how any external manifest
+  references remain bound, available and protected until verification finishes.
 - [ ] Reliability verifies/discovers the actual checkpoint entity or authors it
   environment-first in the isolated solution, with concurrency, field capacity,
   protected access, first-row initialization, export and rollback evidence.
@@ -112,6 +123,10 @@ Conflicting content must stop both paths rather than use last-writer-wins.
   exact conditional semantics, select a supported authenticated API action or
   worker route and document that gap before authoring. Do not assume ordinary
   “Update a row” supplies compare-and-swap.
+  Reliability inspected the installed SDK's ordinary `records.update` signature:
+  it offers no ETag parameter. A normal update call therefore cannot implement
+  this protocol by itself. Select and verify a supported conditional API surface
+  in the actual licensed cloud runtime; do not emulate CAS with a prior read.
 - [ ] Implement a versioned synthetic page provider, fixed run/configuration and
   protected cursor store. It must distinguish valid, expired, invalidated and
   exhausted cursors without any mailbox acquisition.
@@ -165,3 +180,8 @@ worker in personal VUW Developer only. It does not prove real mailbox pagination
 full-folder inventory, full-run completeness, global cross-run event uniqueness,
 VUW-AI-TEST deployment rights or QH acceptance. No platform operation is performed
 by adopting this checklist.
+
+Reliability's read-only ALM review found no blocking design issue. That review
+requires the capacity, initialization-race, receipt-retention and conditional-API
+decisions above before metadata authoring. Runtime feasibility remains under
+assessment; this review does not authorize or establish deployed cloud recovery.
