@@ -7,7 +7,7 @@ import hmac
 import json
 import re
 from datetime import datetime
-from typing import TYPE_CHECKING, Annotated, Any, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -104,9 +104,10 @@ def collect_folder_inventory(
                     seen_cursors.add(cursor)
                 # The connection adapter owns approved credentials, retries and
                 # cursor destination checks. Always request hidden folders too.
-                page = fetch_page(parent, cursor, include_hidden)
+                page = _source_page(fetch_page(parent, cursor, include_hidden))
                 _require(isinstance(page.get("value"), list), "folder page required")
                 for raw in page["value"]:
+                    _require(isinstance(raw, dict), "folder record required")
                     identifier = raw.get("id")
                     child_count = raw.get("childFolderCount")
                     source_count = raw.get("totalItemCount")
@@ -178,22 +179,36 @@ def _require(condition: bool, message: str) -> None:  # noqa: FBT001
         raise ValueError(message)
 
 
+def _source_page(value: object) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        message = "folder envelope required"
+        raise TypeError(message)
+    return cast("dict[str, Any]", value)
+
+
 def _inventory(entries: list[FolderEntry]) -> list[str]:
     by_id = {entry.folder_id: entry for entry in entries}
     _require(bool(entries) and len(by_id) == len(entries), "inventory requires unique folders")
     for entry in entries:
         _require(entry.children_enumerated, "nested folder enumeration is incomplete")
         _require(entry.disposition != "inaccessible", "inaccessible population remains unknown")
-        _require(
-            entry.disposition == "included" or entry.reason is not None, "exclusion reason required"
-        )
         if entry.disposition == "included":
+            _require(entry.reason is None, "included folder cannot carry an exclusion reason")
             _require(entry.source_record_count is not None, "source denominator required")
+        else:
+            _require(
+                entry.reason in {"owner-excluded-system-folder", "owner-excluded-scope"},
+                "excluded folder requires an owner exclusion, not an unknown population",
+            )
         visited: set[str] = set()
         current: str | None = entry.folder_id
         while current is not None:
             _require(current in by_id, "folder parent absent from inventory")
             _require(current not in visited, "folder ancestry cycle")
+            _require(
+                entry.disposition != "included" or by_id[current].disposition == "included",
+                "included folder descends from an excluded ancestor",
+            )
             visited.add(current)
             current = by_id[current].parent_folder_id
     admitted = [entry.folder_id for entry in entries if entry.disposition == "included"]

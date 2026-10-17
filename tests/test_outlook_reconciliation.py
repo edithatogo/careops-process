@@ -1,7 +1,7 @@
 """Synthetic frozen-folder, page-ledger and destination reconciliation checks."""
 
 from copy import deepcopy
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -266,6 +266,53 @@ def test_bad_input_is_not_echoed_in_validation_diagnostics() -> None:
     with pytest.raises(ValueError, match="Outlook evidence failed") as error:
         reconcile_outlook_evidence(**fixture)
     assert "PROTECTED-INPUT" not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "defect", ["included_below_excluded", "inaccessible_as_excluded", "included_reason"]
+)
+def test_inventory_disposition_cannot_hide_an_unknown_or_excluded_population(defect: str) -> None:
+    """Supplied snapshots must preserve exclusion inheritance and reason semantics."""
+    fixture = inputs()
+    if defect == "included_below_excluded":
+        fixture["inventory"].append(
+            {
+                "folder_id": "folder_" + "6" * 64,
+                "parent_folder_id": EXCLUDED,
+                "disposition": "included",
+                "reason": None,
+                "children_enumerated": True,
+                "source_record_count": 0,
+            }
+        )
+        fixture["pages"].append(
+            {
+                **deepcopy(fixture["pages"][0]),
+                "folder_id": "folder_" + "6" * 64,
+            }
+        )
+    elif defect == "inaccessible_as_excluded":
+        fixture["inventory"][2]["reason"] = "source-inaccessible"
+    else:
+        fixture["inventory"][1]["reason"] = "owner-excluded-scope"
+    with pytest.raises(ValueError, match="Outlook evidence failed"):
+        reconcile_outlook_evidence(**fixture)
+
+
+@pytest.mark.parametrize(
+    "response",
+    [None, list[object](), {"value": [None]}, {"value": [list[object]()]}],
+)
+def test_inventory_malformed_source_shapes_have_sanitized_failure(response: object) -> None:
+    """Malformed source envelopes and rows fail at the protected adapter boundary."""
+
+    def fetch(parent: str | None, cursor: str | None, include_hidden: bool) -> dict[str, Any]:  # noqa: FBT001, ARG001
+        return cast("dict[str, Any]", response)
+
+    with pytest.raises(ValueError, match="Outlook inventory collection failed"):
+        collect_folder_inventory(
+            fetch, pseudonym_key=bytes(range(32)), mailbox_ref="mailbox_" + "a" * 64
+        )
 
 
 def test_inventory_traverses_nested_and_paginated_hidden_folders() -> None:
