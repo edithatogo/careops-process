@@ -19,6 +19,17 @@ remain recorded requirements, not prerequisites for completing VUW sandbox work.
 - [ ] Record actual VUW results, remaining limitations and exported components
   in the repository; retain sensitive evidence outside Git.
 
+Developer follow-on receipt: Reliability verified authoring rights, imported and
+exported the isolated baseline and handed off the existing ingestion mapping.
+`db28356` implements the shared synthetic row-identity/codec contract;
+`6b24776` adds create/reconcile/replay interfaces and records the actual two-row
+SDK rehearsal. Both synthetic rows read back exactly; replay created zero new
+rows. M365 independently rechecked current service identity and both rows.
+Sixty-two focused destination/reconciliation tests and scoped static checks pass.
+Exact-key service cleanup and independent review of the reusable writer remain
+pending. See [destination receipt](../../../docs/outlook-dataverse-destination.md).
+Developer results do not complete TEST acceptance or expand mailbox collection.
+
 The earlier mailbox test's fixed scope and disposal schedule remain applicable.
 Additional mailbox collection needs an explicit frozen scope and retention record;
 general sandbox implementation is not evidence of a completed full-mailbox run.

@@ -143,3 +143,37 @@ def test_partial_readback_cannot_confirm_write() -> None:
     with pytest.raises(ValueError, match="destination_write_unconfirmed"):
         d.ensure_synthetic_fact(records, ORG, RUN, fact())
     assert records.creates == 1
+
+
+def test_failed_create_without_row_is_not_retried() -> None:
+    """Absence after a timeout cannot become an automatic resend."""
+
+    class FailedCreate(MemoryRecords):
+        def create(self, table: str, data: dict[str, str]) -> object:
+            del table, data
+            self.creates += 1
+            message = "synthetic private provider response"
+            raise TimeoutError(message)
+
+    records = FailedCreate()
+    with pytest.raises(ValueError, match=r"^destination_write_unconfirmed$"):
+        d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    assert records.creates == 1
+    assert not records.rows
+
+
+def test_read_failure_cannot_be_interpreted_as_absence() -> None:
+    """A forbidden or unavailable read cannot authorize a create."""
+
+    class FailedRead(MemoryRecords):
+        def retrieve(
+            self, table: str, record_id: str, *, select: list[str]
+        ) -> dict[str, str] | None:
+            del table, record_id, select
+            message = "synthetic forbidden private response"
+            raise PermissionError(message)
+
+    records = FailedRead()
+    with pytest.raises(ValueError, match=r"^destination_write_unconfirmed$"):
+        d.ensure_synthetic_fact(records, ORG, RUN, fact())
+    assert records.creates == 0
