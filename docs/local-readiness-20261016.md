@@ -1,5 +1,9 @@
 # Local readiness checkpoint — 16 October 2026
 
+For current VUW authentication, checker, permissions and integration evidence,
+see the [17 October VUW checkpoint](vuw-progress-20261017.md). The results below
+remain the exact historical code checkpoint and its evidence ceilings.
+
 The reviewed local code checkpoint is `e72b26ccce0abd26f9a3d57f86abf393bf136b2c` on draft [PR 73](https://github.com/edithatogo/careops-process/pull/73). This is evidence of repository capability, not completed platform deployment or whole-track acceptance.
 
 ## Exact-revision verification
