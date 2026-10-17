@@ -154,3 +154,8 @@ exception. An authorized operator must investigate and remove retained payloads
 from the worker account's protected temporary storage under the approved
 retention/hold policy. A write may already have committed before cleanup failed:
 reload and reconcile its command receipt rather than automatically resending.
+
+Repair commit: `a8daf72dbeccb137213b878bb81d6959271aa12c`. Independent read-only
+review found no actionable issues and separately passed the exact cleanup
+regression (one test). Scoped Bandit and the redacted repair-commit secret scan
+also pass. This receipt adds no live authentication, CAS or deployment evidence.
