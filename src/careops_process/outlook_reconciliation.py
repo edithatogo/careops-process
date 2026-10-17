@@ -324,7 +324,8 @@ def reconcile_outlook_evidence(
             "excluded_folder_count": len(folders) - len(admitted),
             "page_count": len(ledger),
             "candidate_count": sum(page.candidate_count for page in ledger),
-            "dataverse_reconciled": destination_facts is not None,
+            "destination_reconciled": destination_facts is not None,
+            "dataverse_reconciled": False,
             "idempotency_replay_verified": False,
             "full_mailbox_verified": False,
         }

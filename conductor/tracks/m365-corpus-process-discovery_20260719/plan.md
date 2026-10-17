@@ -303,3 +303,13 @@ flags remain false. No mailbox facts or destination/replay evidence exist in
 this receipt. Outlook owns execution after that decision; no duplicate login,
 status polling or acquisition is required here. Queensland Health pilot gates
 remain open.
+
+
+## Destination provenance repair — 17 October 2026
+
+- [x] Reproduce arbitrary local destination data claiming Dataverse reconciliation and caller flags enabling live closure.
+- [x] Separate generic destination content reconciliation from Dataverse provenance; preserve synthetic/smoke closure and reject unsupported live closure.
+- [ ] Implement and independently validate the supported Dataverse destination readback/provenance adapter before enabling live closure.
+
+The local repair does not satisfy the open empirical Dataverse or Queensland
+Health pilot gates. It introduces no acquisition or authentication operation.

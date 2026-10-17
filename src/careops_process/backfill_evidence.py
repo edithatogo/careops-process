@@ -189,6 +189,10 @@ def close_reconciled_run(
     evidence_class: str,
 ) -> dict[str, Any]:
     """Close independently supplied source/destination reconciliation and replay evidence."""
+    _require(
+        evidence_class != "live_corpus",
+        "supported Dataverse destination provenance verification is unavailable for live closure",
+    )
     try:
         frozen = FrozenConfiguration.model_validate(configuration)
     except ValidationError:
@@ -196,7 +200,8 @@ def close_reconciled_run(
         raise ValueError(message) from None
     for snapshot in (initial, replay):
         _require(
-            snapshot.get("status") == "reconciled" and snapshot.get("dataverse_reconciled") is True,
+            snapshot.get("status") == "reconciled"
+            and snapshot.get("destination_reconciled") is True,
             "source and destination reconciliation is required for both snapshots",
         )
         _require(

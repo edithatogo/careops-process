@@ -24,13 +24,14 @@ def configuration(reconciled: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def test_reconciled_source_destination_and_replay_produce_bound_report() -> None:
+@pytest.mark.parametrize("evidence_class", ["synthetic", "smoke_test"])
+def test_reconciled_source_destination_and_replay_produce_bound_report(evidence_class: str) -> None:
     """Two synthetic reconciled snapshots bind empty folders, duplicates and destination data."""
     initial = reconcile_outlook_evidence(**inputs())
     replay = reconcile_outlook_evidence(**inputs())
     frozen = configuration(initial)
     evidence = close_reconciled_run(
-        initial, replay, frozen, run_id="synthetic-run", evidence_class="synthetic"
+        initial, replay, frozen, run_id="synthetic-run", evidence_class=evidence_class
     )
     entry = {
         "source_owner_approved": True,
@@ -65,7 +66,7 @@ def test_incomplete_or_changed_reconciliation_cannot_close(defect: str) -> None:
     frozen = configuration(initial)
     if defect == "destination_pending":
         replay["status"] = "destination_pending"
-        replay["dataverse_reconciled"] = False
+        replay["destination_reconciled"] = False
     elif defect == "changed_replay":
         replay["facts"][0]["activity"] = "changed"
     elif defect == "changed_inventory":
@@ -89,3 +90,25 @@ def test_closure_configuration_errors_do_not_echo_supplied_values() -> None:
             initial, initial, frozen, run_id="synthetic-run", evidence_class="synthetic"
         )
     assert sentinel not in str(error.value)
+
+
+def test_generic_destination_does_not_claim_dataverse_provenance() -> None:
+    """Matching supplied rows prove content equality, not the destination service."""
+    result = reconcile_outlook_evidence(**inputs())
+    assert result["destination_reconciled"] is True
+    assert result["dataverse_reconciled"] is False
+
+
+def test_caller_dataverse_boolean_cannot_unlock_live_closure() -> None:
+    """A caller-controlled label cannot replace a supported readback verifier."""
+    initial = reconcile_outlook_evidence(**inputs())
+    initial["dataverse_reconciled"] = True
+    initial["destination_receipt"] = {"service": "Dataverse", "verified": True}
+    with pytest.raises(ValueError, match=r"Dataverse.*provenance"):
+        close_reconciled_run(
+            initial,
+            initial,
+            configuration(initial),
+            run_id="unsupported-live",
+            evidence_class="live_corpus",
+        )

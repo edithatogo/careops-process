@@ -144,6 +144,16 @@ supplied destination snapshots. It validates minimized field mapping and returns
 `reconciled` or `destination_pending`. It does not read the tenant or prove live
 execution, and deliberately does not mark replay or full-mailbox verification.
 
+Matching destination rows establish generic content reconciliation only:
+`destination_reconciled` records that comparison; `dataverse_reconciled` stays
+false because this offline function cannot verify service provenance. There is
+currently no supported Dataverse readback provenance verifier. Caller flags or
+service labels cannot replace one. Consequently this helper rejects
+`live_corpus` closure, including caller-forged Dataverse flags. Synthetic and
+smoke-test closure retain their explicit non-pilot evidence classes. A future
+live adapter must bind actual authorised destination/environment/readback
+receipts before live closure can be enabled.
+
 M365 `close_reconciled_run(initial, replay, configuration, run_id=...,
 evidence_class=...)` accepts two successful source/destination reconciliations.
 It checks both inventories against the approved frozen `inventory_hash`, compares
@@ -152,7 +162,7 @@ against the v2 manifest, and records canonical hashes of both reconciliation
 artifacts. Changed/missing destination, changed replay facts or partition counts,
 and inventory/configuration mismatch prevent closure.
 
-Use this sequence in the approved store after actual approval and collection:
+Use this sequence for synthetic or smoke-test evidence in the approved store:
 
 1. Supply the measured frozen folder inventory, per-folder page ledgers,
    collector facts and independently exported destination facts to Outlook's

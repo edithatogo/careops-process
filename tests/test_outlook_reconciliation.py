@@ -105,6 +105,8 @@ def test_nested_empty_excluded_folders_and_destination_reconcile() -> None:
     fixture = inputs()
     result = reconcile_outlook_evidence(**fixture)
     assert result["status"] == "reconciled"
+    assert result["destination_reconciled"] is True
+    assert result["dataverse_reconciled"] is False
     assert (result["folder_count"], result["page_count"], result["candidate_count"]) == (2, 3, 2)
     assert result["facts"] == fixture["destination_facts"]
     assert result["partitions"][1]["duplicate_count"] == 1
@@ -120,6 +122,7 @@ def test_missing_destination_is_pending_and_never_synthesized() -> None:
     fixture["destination_facts"] = None
     result = reconcile_outlook_evidence(**fixture)
     assert result["status"] == "destination_pending"
+    assert result["destination_reconciled"] is False
     assert result["dataverse_reconciled"] is False
 
 
