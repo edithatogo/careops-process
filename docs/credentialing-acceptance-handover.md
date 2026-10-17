@@ -56,13 +56,13 @@ metrics. Existing minimum EVENT counters must not silently become case rates.
 | Versioned ontology/projection, prohibited content, observed/inferred separation | `credentialing.py`, registry, strict schema and deep rejection tests | Approved source vocabulary/identity mapping and actual provenance; schema validation cannot authenticate source truth |
 | Replay, deletion, watermarks, dead letters | `CredentialingLedger`, projection merge and reliability tests | Durable atomic persistence, concurrency/recovery and approved retention adapter; in-memory state is not deployed persistence |
 | Routine renewal and separate pathways | `assess_routine_renewal`, source-linked `assess_pathway`; BPMN/SVG/PNG | Actual local applicability, authority, terminal/exception and roster/register mappings; later packs remain open |
-| Request demand/pathway mix | Validated activities/pathway qualifiers, `activity_counts` | Explicit case-demand denominator/population and suppressed pathway-mix report are not implemented by event counts alone |
+| Request demand/pathway mix | Explicit granted-case population, missing classification and jointly suppressed case pathway mix in `credentialing_local_reporting` | Approved source-defined request population/window and classification mapping; case demand is not an arrival rate |
 | First submission, touches, elapsed percentiles and decision/register intervals | Submission, workload and stage-time public reporters | Real-source completeness, cohort/endpoint applicability and baseline acceptance |
-| Correction/further-information and deferral/exception rates by reason | Rework/exception/deferral EVENT counters | Explicit case denominators, controlled reason mapping and scoped rate aggregation remain separate local integration work |
-| Queue time, professional review and committee preparation work | Adjacent observed elapsed intervals; total observed active minutes | Elapsed time is not queue time; stage-specific work/queue evidence and an accepted decomposition are absent |
+| Correction/further-information and deferral/exception rates by reason | Explicit case assessments, controlled process reasons, observed/population case and reason rates with missingness in `credentialing_local_reporting` | Approved criteria/reason vocabulary and complete source assessments; event absence is not a negative assessment |
+| Queue time, professional review and committee preparation work | Explicit source-observed non-overlapping queue/active/unknown case-calendar partition; separate total worker-effort observations | Source state/span acceptance and stage-specific professional/committee worker effort remain partial; calendar active time is not worker effort and queue is never elapsed minus worker minutes |
 | Temporary approval conversion/review/expiry; condition/supervision reviews; renewal overdue | Explicit episode/obligation snapshots and privacy-aware reporters | Approved deadline, extension, completion, censoring and complete obligation populations |
 | Duplicate/register reconciliation exceptions | Validated registered activities and failure/duplicate event counters | Approved reconciliation semantics and source linkage; roster reconciliation and unauthorized-practice conclusions are not established |
-| Conformance fitness and variant frequency | Per-case reference comparisons; generic `mine.conformance` / `discover_variants` | Generic positional/set scores are not model/token-replay fitness. Credentialing-specific observed-trace selection, grants, variant-cell suppression and aggregate integration remain unimplemented |
+| Conformance fitness and variant frequency | Per-case reference comparisons; local case-scoped observed administrative trace frequencies with joint-cell suppression | Generic positional/set scores are not model/token-replay fitness. Source adapter must resolve retained observed-only trace completeness/order, ambiguous timestamp ties and authority applicability; no clinical compliance certificate |
 | False alerts/missed requirements | Independently adjudicated CASE-level FP/FN reporters | Approved evaluation grain/reference and representative silent-mode adjudication; case rates cannot be relabelled alert/requirement rates |
 | Practitioner/staff experience | Versioned instrument, frozen aggregate cohort and distinct-person response/missingness reporter | Source instrument/sampling/privacy acceptance, actual observations and interpretive validation |
 | Higher-value capacity released | Observed destination work, recomputed effort difference, protected attributed claims/judgments | Credible causal evaluation, provenance and human appraisal remain necessary. The causal requirement stays partial |
@@ -72,6 +72,13 @@ The remaining local aggregation/decomposition work above is identified precisely
 not declared blocked merely by absent approvals. Source definitions are needed
 before its operational interpretation can be accepted. Do not mark the track,
 later packs or all named mathematical outcomes complete from this example.
+
+The subsequent [local reporting implementation and synthetic example](credentialing-local-reporting.md)
+cover the four explicitly authorised local reporting outcomes. They use a separate
+source-assessment contract, not guessed clinical mappings or event-counter rates.
+Professional/committee worker-effort granularity, causal capacity and every
+real-source/acceptance gate below remain open. VUW-only live work and deferred
+Queensland Health integration are unchanged by tenant-neutral local arithmetic.
 
 ## Minimal real-source/authority/instrument acceptance checklist
 

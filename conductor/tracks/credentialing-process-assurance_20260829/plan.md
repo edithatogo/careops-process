@@ -8,6 +8,19 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
 
+### Authorised local reporting follow-up — 17 October 2026
+
+- [x] Add explicit case-demand/pathway mix, missing classifications and case denominators.
+- [x] Add correction/further-information/deferral/exception and overlapping reason case rates.
+- [x] Add source-observed queue/active/unknown calendar-state partition with reconciliation.
+- [x] Add case-scoped observed administrative variants and whole-release joint-cell protection.
+
+See [local reporting semantics and executable example](../../../docs/credentialing-local-reporting.md).
+These are local synthetic capabilities. Stage-specific professional/committee
+worker effort, true model fitness, causal capacity, approved source/authority
+mapping, live integration and manual track acceptance remain open. Calendar active
+time is not worker effort. This update does not complete the original track.
+
 - [x] Add a generic credentialing ontology.
 - [x] Add a strict privacy-minimised event projection schema.
 - [x] Add the credentialing process-assurance design note.

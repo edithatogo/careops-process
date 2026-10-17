@@ -26,6 +26,10 @@ counters, approve deployment parameters or establish a live baseline.
 | Observed destination-work minutes and coverage | Source-observed integer minutes by supplied versioned activity/purpose, one frozen worker cohort/window; means use observed workers | Complete joint-person atoms govern suppression; missing workers remain unknown; these are observations, not released-capacity proof |
 | Protected attributed-redeployment claim and judgment | Explicit same-measured-population minute claim, bound to recomputed effort/source evidence and external evaluation artifacts | Claim amounts/states are omitted from public projections; human judgment and hash syntax cannot establish causality or authenticate evidence |
 | Stage-delay investigation candidate | Released p95 strictly above a finite positive versioned threshold | Bound to current observed evidence, case grants, authority and policy; alternatives preserve uncertainty; human acceptance is measurement review only |
+| Case demand and pathway mix | Distinct eligible request cases in the supplied window; pathway fractions divide by classified cases | Missing snapshots and classifications remain separate; never use event frequency as the case denominator |
+| Correction, further-information, deferral and exception case/reason rates | Positive cases (or each overlapping administrative reason's cases) / explicitly assessed cases for that measure | Missing differs from explicit negative; population rates require complete assessments and source coverage; source-defined criteria, not ontology guesses |
+| Queue/active/unknown calendar minutes | Sum of explicit exhaustive, mutually exclusive observed case-span intervals in minutes | Unknown and missing remain explicit; active calendar state is not worker effort or released capacity |
+| Observed administrative variants | One full observed source-defined sequence per granted assessed case, repeated activities retained | Missing/ambiguous/incomplete traces must remain null; joint suppression protects cross-category combinations |
 
 Every nonzero released case cell must meet the configured approved threshold,
 with a technical minimum of two; otherwise suppress the entire report. A report
@@ -43,8 +47,9 @@ suppression. Real instrument/sampling acceptance and actual experience effects
 remain unproven. Causal capacity released to higher-value work remains partial.
 Actual approved baseline, retrospective/silent-mode evidence and governance/manual
 acceptance remain necessary. The current [original-outcome audit](credentialing-acceptance-handover.md)
-also distinguishes event counters from unimplemented case-rate, queue/work
-decomposition and credentialing-scoped variant aggregation.
+also distinguishes event counters from the implemented
+[local case-rate, calendar-state and protected variant aggregation](credentialing-local-reporting.md),
+and records the still-partial stage-specific worker-effort and model-fitness outcomes.
 
 [Outstanding overdue renewal semantics](credentialing-renewal-quality.md) require
 source-owner acceptance of effective deadline, cycle, state and denominator
