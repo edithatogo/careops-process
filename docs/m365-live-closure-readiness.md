@@ -11,7 +11,7 @@ does not grant Queensland Health source access or pilot acceptance.
 | `outlook_reconciliation.reconcile_outlook_evidence` | Validates folder graph/admission, page order/exhaustion, source denominators, fact membership and supplied destination equality | Service origin of supplied rows; it returns generic `destination_reconciled`, while `dataverse_reconciled` remains false |
 | `backfill_evidence.close_reconciled_run` | Binds two supplied reconciliations to frozen inventory/configuration, compares facts/partitions/content and validates the v2 envelope | That two real acquisitions happened; it explicitly rejects `live_corpus` while synthetic/smoke closure is supported |
 | `dataverse_provenance.verify_synthetic_destination` | Requeries pinned WhoAmI and exact expected primary keys through authenticated service interfaces; checks row organisation and shared serialization | Full destination population, cross-run deduplication, complete source acquisition or live approval; output is only `synthetic_service_readback` |
-| `backfill_run.run_closed_backfill` | Checks closed status, strict counts/completeness flags and bound fact/configuration/partition hashes; runs the OCEL pipeline and assigns lineage | Authenticity of the supplied manifest or independent source/destination evidence |
+| `backfill_run.run_closed_backfill` | Rejects `live_corpus` execution; checks closed status, strict counts/completeness flags and bound fact/configuration/partition hashes; runs the OCEL pipeline and assigns lineage | Authenticity of the supplied manifest or independent source/destination evidence |
 | `backfill_run.run_authorised_closed_backfill` | Adds pilot-entry validation plus exact configuration-hash and partition-scope binding | Actual authority behind caller booleans or the referenced approval record |
 | `report.build_closed_run_report` / `build_authorised_closed_run_report` | Runs discovery, quality/operational summaries, OCEL, semantic projection and coverage ledger from the validated run | Clinical/business correctness, owner acceptance or executive approval; owner validation stays pending and publication is restricted analytical review |
 | `scripts/build-closed-run-report.py` | Loads supplied JSON, invokes the authorised report API and publishes atomically through `report_publication.publish_report` | Trusted source acquisition or authenticated approval resolution merely because input files exist |
@@ -31,17 +31,21 @@ must not be joined into a claim that real mailbox facts flowed into Dataverse.
 
 ## Direct-entry enforcement finding
 
-The helper's `live_corpus` rejection is not currently a universal report guard.
+The helper's `live_corpus` rejection originally did not cover direct report entry.
 An in-memory probe using `tests.backfill_fixture.sealed_evidence`, synthetic
 facts, a caller-selected `live_corpus` label and synthetic approval booleans was
 accepted by `build_authorised_closed_run_report`. The direct report path does
 not call `close_reconciled_run`. Hash consistency does not authenticate origin.
 
-This finding has been sent to the coordinator before overlapping source edits.
-The proposed repair is a fail-closed check at the common execution boundary
-until a real live-evidence validator is integrated. No synthetic proof should
-unlock that path. This document records the current limitation, not a claim
-that all live entry points are already blocked.
+The coordinator authorised a narrow repair. `run_closed_backfill` now rejects
+`live_corpus` before invoking the pipeline. Both report functions, both runner
+functions and the report CLI converge on that guard. Five regressions reproduced
+the bypass before implementation and now reject it; the CLI cannot publish a
+report from the relabelled input. Synthetic/smoke execution remains supported.
+The v2 structure validator still accepts the class as a schema value; structural
+validation alone is deliberately not execution or live admission. A future live
+validator must be integrated before this guard can be removed. No synthetic
+proof or caller-authored approval flags unlock the path.
 
 ## Requirements before live closure can be enabled
 

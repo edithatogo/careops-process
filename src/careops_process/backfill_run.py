@@ -23,6 +23,8 @@ def run_closed_backfill(
     generated_at_utc: datetime | None = None,
 ) -> PipelineResult:
     """Run discovery only when a sanitized backfill evidence record is closed."""
+    if evidence.get("evidence_class") == "live_corpus":
+        _fail("live corpus execution requires supported authenticated evidence verification")
     required = ("run_id", "status", "folder_count", "page_count", "candidate_count")
     missing = [key for key in required if evidence.get(key) is None]
     if missing:
