@@ -160,6 +160,28 @@ def test_rare_exclusion_suppresses_all_intervals_and_totals() -> None:
     }
 
 
+def test_numeric_subclass_cannot_override_distinct_case_privacy_floor() -> None:
+    """A caller-supplied scalar must not change validation or suppression comparisons."""
+
+    class ComparisonBypassingFloor(int):
+        """Reproduce a nonconcrete integer that defeats both threshold comparisons."""
+
+        def __lt__(self, _other: object, /) -> bool:
+            return False
+
+        def __gt__(self, _other: object, /) -> bool:
+            return False
+
+    with pytest.raises(CredentialingContractError, match="minimum"):
+        measurements.report_stage_times(
+            _projection(hours=(1,)),
+            role="report_reader",
+            case_ids={"case-0"},
+            minimum_cases=ComparisonBypassingFloor(2),
+            authority_version="synthetic-v1",
+        )
+
+
 def test_no_eligible_cases_is_not_a_measured_zero_duration() -> None:
     """A sufficiently large excluded group may be reported with unavailable time."""
     projection = _projection(mutation="inferred_only", hours=(1, 2))

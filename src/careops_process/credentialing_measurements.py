@@ -81,7 +81,7 @@ def validate_measurement_scope(
     Args:
         role: Role resolved by the server-side authorisation layer.
         case_ids: A set of authorised references classified as cases by the adapter.
-        minimum_cases: Deployment-approved distinct-case threshold, at least two.
+        minimum_cases: Deployment-approved builtin integer threshold, at least two.
 
     Returns:
         A detached immutable grant set and a validated integer threshold.
@@ -93,11 +93,7 @@ def validate_measurement_scope(
     if role != "report_reader":
         message = "Measurement role must be report_reader"
         raise CredentialingContractError(message)
-    if (
-        not isinstance(minimum_cases, int)
-        or isinstance(minimum_cases, bool)
-        or minimum_cases < _MINIMUM_CASES
-    ):
+    if type(minimum_cases) is not int or minimum_cases < _MINIMUM_CASES:
         message = "Measurement minimum must be at least two distinct cases"
         raise CredentialingContractError(message)
     if not _is_set_container(case_ids):
