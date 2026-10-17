@@ -1,0 +1,111 @@
+{
+  "additionalProperties": false,
+  "description": "Require explicit quorum, voting, authority, chair and ratification configuration.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "rule_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Rule Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "authority_source_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Authority Source Ref",
+      "type": "string"
+    },
+    "approved_policy_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Approved Policy Ref",
+      "type": "string"
+    },
+    "template_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "eligible_principals": {
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Eligible Principals",
+      "type": "array"
+    },
+    "minimum_participants": {
+      "minimum": 1,
+      "title": "Minimum Participants",
+      "type": "integer"
+    },
+    "method": {
+      "enum": [
+        "quorum",
+        "majority",
+        "unanimous"
+      ],
+      "title": "Method",
+      "type": "string"
+    },
+    "majority_denominator": {
+      "enum": [
+        "eligible",
+        "participating"
+      ],
+      "title": "Majority Denominator",
+      "type": "string"
+    },
+    "decision_outcome": {
+      "enum": [
+        "approval",
+        "endorsement",
+        "noting",
+        "ratification"
+      ],
+      "title": "Decision Outcome",
+      "type": "string"
+    },
+    "chair_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Chair Ref",
+      "type": "string"
+    },
+    "conflict_policy": {
+      "enum": [
+        "exclude_from_quorum",
+        "hold_decision"
+      ],
+      "title": "Conflict Policy",
+      "type": "string"
+    },
+    "ratification_required": {
+      "title": "Ratification Required",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "rule_id",
+    "scope_ref",
+    "authority_source_ref",
+    "approved_policy_ref",
+    "template_version",
+    "eligible_principals",
+    "minimum_participants",
+    "method",
+    "majority_denominator",
+    "decision_outcome",
+    "chair_ref",
+    "conflict_policy",
+    "ratification_required"
+  ],
+  "title": "DecisionRule",
+  "type": "object"
+}

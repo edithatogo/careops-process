@@ -1,5 +1,13 @@
 # Platform feasibility and secure repository bootstrap
 
+Status: completed
+
+- [Specification](spec.md)
+- [Implementation plan](plan.md)
+- [Metadata](metadata.json)
+
+## Historical index
+
 - Status: completed
 - Evidence: [feasibility](../../../docs/feasibility.md)
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/1

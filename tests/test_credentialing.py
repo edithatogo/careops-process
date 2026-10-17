@@ -79,10 +79,40 @@ def test_valid_projection_is_normalised_and_sorted() -> None:
     )
 
 
-def test_parsed_projection_is_returned_without_reinterpretation() -> None:
-    """An already validated projection remains the same object."""
+def test_parsed_projection_is_revalidated_as_a_detached_snapshot() -> None:
+    """A mutable parsed projection crosses the same validation boundary as a mapping."""
     projection = CredentialingProjection.model_validate(synthetic_payload())
-    assert validate_credentialing_projection(projection) is projection
+    validated = validate_credentialing_projection(projection)
+    assert validated == projection
+    assert validated is not projection
+
+
+@pytest.mark.parametrize("invalid_side", ["existing", "incoming"])
+def test_merge_revalidates_mutated_source_fields(invalid_side: str) -> None:
+    """Neither retained nor arriving invalid facts can cross the direct merge boundary."""
+    invalid = validate_credentialing_projection(synthetic_payload())
+    invalid.facts[1].source_system = "synthetic@example.invalid"
+    empty = validate_credentialing_projection({"source": "careops-approve", "facts": []})
+    existing, incoming = (invalid, empty) if invalid_side == "existing" else (empty, invalid)
+    with pytest.raises(ValidationError, match="source_system"):
+        merge_credentialing_projections(existing, incoming)
+
+
+def test_metrics_reject_post_validation_mutation() -> None:
+    """Invalid observed evidence cannot be counted as a validated source event."""
+    projection = validate_credentialing_projection(synthetic_payload())
+    projection.facts[1].confidence = 0.2
+    with pytest.raises(ValidationError, match="confidence"):
+        summarise_credentialing_projection(projection)
+
+
+def test_direct_merge_detaches_nested_source_values() -> None:
+    """Subsequent caller edits cannot silently rewrite the returned history."""
+    projection = validate_credentialing_projection(synthetic_payload())
+    empty = validate_credentialing_projection({"source": "careops-approve", "facts": []})
+    merged = merge_credentialing_projections(projection, empty)
+    projection.facts[0].qualifiers.pathway_code = "caller-modified"
+    assert merged.facts[0].qualifiers.pathway_code == "routine-renewal"
 
 
 @pytest.mark.parametrize(
@@ -301,3 +331,37 @@ def test_timezone_normalisation_handles_non_whole_hour_offset() -> None:
 
     projection = validate_credentialing_projection(payload)
     assert projection.facts[1].timestamp_utc.tzinfo is UTC
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "pathway_code",
+        "professional_stream",
+        "facility_or_service_type",
+        "exception_code",
+        "authority_mapping_version",
+    ],
+)
+@pytest.mark.parametrize(
+    "value",
+    [
+        "Dr Jane Smith reviewed this case",
+        "jane@example.invalid",
+        "case evidence / unrestricted narrative",
+    ],
+)
+def test_qualifiers_reject_free_text_and_email_values(field: str, value: str) -> None:
+    """Allowed qualifier keys cannot serve as a free-text content channel."""
+    payload = synthetic_payload()
+    payload["facts"][0]["qualifiers"][field] = value
+    with pytest.raises(ValidationError):
+        validate_credentialing_projection(payload)
+
+
+def test_source_system_rejects_free_text_content() -> None:
+    """Source-system labels are codes rather than unrestricted descriptions."""
+    payload = synthetic_payload()
+    payload["facts"][0]["source_system"] = "raw correspondence text"
+    with pytest.raises(ValidationError):
+        validate_credentialing_projection(payload)

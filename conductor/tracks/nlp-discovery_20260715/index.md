@@ -1,5 +1,13 @@
 # Hybrid NLP process-family discovery and active learning
 
+Status: completed
+
+- [Specification](spec.md)
+- [Implementation plan](plan.md)
+- [Metadata](metadata.json)
+
+## Historical index
+
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/4
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 

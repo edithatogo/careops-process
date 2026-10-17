@@ -1,0 +1,486 @@
+{
+  "$defs": {
+    "DecisionRule": {
+      "additionalProperties": false,
+      "description": "Require explicit quorum, voting, authority, chair and ratification configuration.",
+      "properties": {
+        "execution_mode": {
+          "const": "synthetic",
+          "default": "synthetic",
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "scope_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Scope Ref",
+          "type": "string"
+        },
+        "authority_source_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Source Ref",
+          "type": "string"
+        },
+        "approved_policy_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Approved Policy Ref",
+          "type": "string"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "eligible_principals": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Eligible Principals",
+          "type": "array"
+        },
+        "minimum_participants": {
+          "minimum": 1,
+          "title": "Minimum Participants",
+          "type": "integer"
+        },
+        "method": {
+          "enum": [
+            "quorum",
+            "majority",
+            "unanimous"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "majority_denominator": {
+          "enum": [
+            "eligible",
+            "participating"
+          ],
+          "title": "Majority Denominator",
+          "type": "string"
+        },
+        "decision_outcome": {
+          "enum": [
+            "approval",
+            "endorsement",
+            "noting",
+            "ratification"
+          ],
+          "title": "Decision Outcome",
+          "type": "string"
+        },
+        "chair_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Chair Ref",
+          "type": "string"
+        },
+        "conflict_policy": {
+          "enum": [
+            "exclude_from_quorum",
+            "hold_decision"
+          ],
+          "title": "Conflict Policy",
+          "type": "string"
+        },
+        "ratification_required": {
+          "title": "Ratification Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule_id",
+        "scope_ref",
+        "authority_source_ref",
+        "approved_policy_ref",
+        "template_version",
+        "eligible_principals",
+        "minimum_participants",
+        "method",
+        "majority_denominator",
+        "decision_outcome",
+        "chair_ref",
+        "conflict_policy",
+        "ratification_required"
+      ],
+      "title": "DecisionRule",
+      "type": "object"
+    },
+    "DecisionSession": {
+      "additionalProperties": false,
+      "description": "Bind response, chair, minute and ratification records to one rule and scope.",
+      "properties": {
+        "execution_mode": {
+          "const": "synthetic",
+          "default": "synthetic",
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "session_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Session Id",
+          "type": "string"
+        },
+        "scope_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Scope Ref",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "authority_source_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Source Ref",
+          "type": "string"
+        },
+        "responses": {
+          "items": {
+            "$ref": "#/$defs/ParticipantResponse"
+          },
+          "title": "Responses",
+          "type": "array"
+        },
+        "matter_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "review_cycle": {
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        },
+        "meeting_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meeting Ref"
+        },
+        "chair_confirmation_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chair Confirmation Ref"
+        },
+        "chair_confirmation_actor_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chair Confirmation Actor Ref"
+        },
+        "minute_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minute Ref"
+        },
+        "ratification_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ratification Ref"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        }
+      },
+      "required": [
+        "session_id",
+        "scope_ref",
+        "rule_id",
+        "authority_source_ref",
+        "responses",
+        "matter_id",
+        "decision_id",
+        "template_version",
+        "review_cycle"
+      ],
+      "title": "DecisionSession",
+      "type": "object"
+    },
+    "ParticipantResponse": {
+      "additionalProperties": false,
+      "description": "Record one authenticated-context response, with comments kept in protected records.",
+      "properties": {
+        "actor_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Actor Ref",
+          "type": "string"
+        },
+        "principal_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Principal Ref",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "consultation",
+            "recommendation",
+            "endorsement",
+            "approval",
+            "noting",
+            "ratification",
+            "decline",
+            "return_for_further_work"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "conflicted": {
+          "default": false,
+          "title": "Conflicted",
+          "type": "boolean"
+        },
+        "recused": {
+          "default": false,
+          "title": "Recused",
+          "type": "boolean"
+        },
+        "delegation_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegation Ref"
+        },
+        "acting_arrangement_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Acting Arrangement Ref"
+        },
+        "response_record_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Response Record Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_ref",
+        "principal_ref",
+        "outcome",
+        "recorded_at",
+        "response_record_ref"
+      ],
+      "title": "ParticipantResponse",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Keep urgency, decision expiry and later ratification distinct and explicit.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "matter_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "decision_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "decision_session_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Decision Session Id",
+      "type": "string"
+    },
+    "policy_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Policy Ref",
+      "type": "string"
+    },
+    "urgency_evidence_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Urgency Evidence Ref",
+      "type": "string"
+    },
+    "authority_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Authority Ref",
+      "type": "string"
+    },
+    "template_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "review_cycle": {
+      "minimum": 0,
+      "title": "Review Cycle",
+      "type": "integer"
+    },
+    "approved_ratification_policy_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Approved Ratification Policy Digest",
+      "type": "string"
+    },
+    "original_response_refs": {
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Original Response Refs",
+      "type": "array"
+    },
+    "provisionally_decided_at": {
+      "format": "date-time",
+      "title": "Provisionally Decided At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "ratification_required": {
+      "title": "Ratification Required",
+      "type": "boolean"
+    },
+    "ratification_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ratification Ref"
+    },
+    "ratification_rule": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DecisionRule"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ratification_session": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DecisionSession"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "matter_id",
+    "scope_ref",
+    "decision_id",
+    "decision_session_id",
+    "policy_ref",
+    "urgency_evidence_ref",
+    "authority_ref",
+    "template_version",
+    "review_cycle",
+    "approved_ratification_policy_digest",
+    "original_response_refs",
+    "provisionally_decided_at",
+    "expires_at",
+    "ratification_required"
+  ],
+  "title": "UrgentDecisionLedger",
+  "type": "object"
+}

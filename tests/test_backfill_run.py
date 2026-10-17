@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from careops_process.backfill_run import run_authorised_closed_backfill, run_closed_backfill
+from tests.backfill_fixture import sealed_evidence
 
 FACTS: list[dict[str, Any]] = [
     {
@@ -16,17 +17,7 @@ FACTS: list[dict[str, Any]] = [
         "object_ids": ["request-1"],
     }
 ]
-EVIDENCE = {
-    "run_id": "run-1",
-    "status": "closed",
-    "folder_count": 1,
-    "page_count": 1,
-    "candidate_count": 1,
-    "pagination_exhausted": True,
-    "reconciled": True,
-    "idempotency_replay_verified": True,
-    "no_raw_content_stored": True,
-}
+EVIDENCE = sealed_evidence(FACTS)
 PILOT_ENTRY = {
     "source_owner_approved": True,
     "ig_approved": True,
@@ -35,6 +26,7 @@ PILOT_ENTRY = {
     "authorised_source_partitions": ["outlook-authorised-mailbox"],
     "evidence_reference": "approved-ref",
 }
+PILOT_ENTRY["configuration_hash"] = EVIDENCE["configuration_hash"]
 
 
 def test_closed_backfill_runs_pipeline() -> None:
@@ -71,3 +63,12 @@ def test_authorised_closed_backfill_requires_pilot_entry() -> None:
             {**PILOT_ENTRY, "ig_approved": False},
             pseudonym_secret="test-secret",  # noqa: S106
         )
+
+
+@pytest.mark.parametrize("field", ["folder_count", "page_count", "candidate_count"])
+@pytest.mark.parametrize("value", [-1, True, "1"])
+def test_closed_backfill_rejects_invalid_counts(field: str, value: object) -> None:
+    """Declared closure cannot admit negative, boolean or textual population counts."""
+    evidence = {**EVIDENCE, field: value}
+    with pytest.raises(ValueError, match="non-negative integer"):
+        run_closed_backfill(FACTS, evidence, pseudonym_secret="test-secret")  # noqa: S106

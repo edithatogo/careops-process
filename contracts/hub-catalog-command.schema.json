@@ -1,0 +1,83 @@
+{
+  "additionalProperties": false,
+  "description": "Supply synthetic review evidence and a compare-and-swap revision.",
+  "properties": {
+    "request_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Request Ref",
+      "type": "string"
+    },
+    "expected_revision": {
+      "minimum": 0,
+      "title": "Expected Revision",
+      "type": "integer"
+    },
+    "template_id": {
+      "enum": [
+        "pra_pitstop",
+        "research_governance",
+        "clinical_risk",
+        "executive_decision",
+        "policy_endorsement",
+        "operational_exception",
+        "review_action"
+      ],
+      "title": "Template Id",
+      "type": "string"
+    },
+    "version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Version",
+      "type": "string"
+    },
+    "synthetic_approval_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Synthetic Approval Ref",
+      "type": "string"
+    },
+    "action": {
+      "default": "activate",
+      "enum": [
+        "activate",
+        "rollback"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "migration_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Migration Ref"
+    },
+    "rollback_approval_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rollback Approval Ref"
+    }
+  },
+  "required": [
+    "request_ref",
+    "expected_revision",
+    "template_id",
+    "version",
+    "synthetic_approval_ref"
+  ],
+  "title": "CatalogCommand",
+  "type": "object"
+}

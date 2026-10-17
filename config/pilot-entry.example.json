@@ -4,5 +4,6 @@
   "configuration_frozen": false,
   "rollback_retention_approved": false,
   "authorised_source_partitions": [],
+  "configuration_hash": "<sha256-of-approved-frozen-configuration>",
   "evidence_reference": "<approved-evidence-location-reference>"
 }

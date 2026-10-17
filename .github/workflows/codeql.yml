@@ -6,6 +6,7 @@ on:
     branches: [main]
   schedule:
     - cron: "17 3 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,7 +18,8 @@ concurrency:
 jobs:
   analyze:
     name: CodeQL Python analysis
-    if: ${{ vars.ENABLE_CODEQL == 'true' }}
+    # Runs explicitly on all configured triggers. Repository eligibility and
+    # advanced setup/SARIF acceptance still require hosted verification.
     permissions:
       contents: read
       security-events: write # Required to upload CodeQL SARIF results.

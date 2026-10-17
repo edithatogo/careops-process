@@ -1,0 +1,94 @@
+{
+  "additionalProperties": false,
+  "description": "Bind approved brief sources to one scope, matter, template and decision policy.",
+  "properties": {
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "matter_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "template_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "approval_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "decision_rule_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Decision Rule Digest",
+      "type": "string"
+    },
+    "question_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Question Ref",
+      "type": "string"
+    },
+    "recommendation_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Recommendation Ref",
+      "type": "string"
+    },
+    "alternatives_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Alternatives Ref",
+      "type": "string"
+    },
+    "risk_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Risk Ref",
+      "type": "string"
+    },
+    "authority_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Authority Ref",
+      "type": "string"
+    },
+    "conflicts_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Conflicts Ref",
+      "type": "string"
+    },
+    "consultations_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Consultations Ref",
+      "type": "string"
+    },
+    "proposed_actions_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Proposed Actions Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "matter_id",
+    "scope_ref",
+    "template_version",
+    "approval_ref",
+    "decision_rule_digest",
+    "question_ref",
+    "recommendation_ref",
+    "alternatives_ref",
+    "risk_ref",
+    "authority_ref",
+    "conflicts_ref",
+    "consultations_ref",
+    "proposed_actions_ref"
+  ],
+  "title": "BriefReferences",
+  "type": "object"
+}
