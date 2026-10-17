@@ -42,7 +42,8 @@ that migration is not implemented here.
 
 Commit sends one PATCH with the exact loaded `If-Match` ETag and
 `Prefer:return=representation`, storing state and receipt in the same row.
-An enabled optimistic-concurrency table must enforce the conditional operation.
+An enabled optimistic-concurrency table must enforce the conditional operation. Commit also preserves the persisted evaluation-time
+watermark across revisions; independently valid snapshots cannot rewind it.
 Only a successful response with identical full payload and a changed valid ETag
 returns confirmed commit context. Conflict, timeout, empty/malformed output or
 unexpected representation yields a fixed `commit_unconfirmed` error. Do not
@@ -50,7 +51,8 @@ automatically resend; reload and reconcile the original command receipt. A
 failure may have happened after the server committed.
 
 Each operation explicitly passes the selected environment URL to
-`dataverse api request`. The runner uses argv without a shell, places large
+`dataverse api request`. The runner invokes the official Node entry point directly when Windows PATH
+resolves an npm batch shim, uses argv without a shell, places large
 write bodies in a temporary file and removes it after execution. It captures
 responses in memory and never includes raw bodies, credentials or identity
 details in exception messages. Provider-response formatting must be verified
@@ -117,3 +119,23 @@ Supported API behavior was checked against the installed CLI's
 The Dataverse skills require environment-first authoring; actual metadata must
 be authored in the approved environment and exported, not hand-written as
 solution XML.
+
+## Reviewed checkpoint
+
+Owned shared-branch commits:
+
+- `e876d0c9cfaa8d4a4f3de056d4b7f96747ba7281`: managed identity/CAS scaffold,
+  strict ledger codec, disabled delivery planning, tests and platform-gate guide.
+- `720d8e5980ae2f281477b140006ea9e021994a4b`: evaluation-time monotonicity and
+  direct Node invocation for Windows npm shims.
+
+Independent read-only review reproduced a persisted freshness rollback; its
+regression failed before the repair. A separate Windows shim regression also
+failed before direct invocation was implemented. Final independent review found
+no further actionable issues within the bounded scaffold and independently
+passed all 80 focused adapter/notification/view tests. Scoped Ruff lint/format,
+strict Pyright, Bandit, Conductor validation, whitespace checks and a redacted
+initial-commit secret scan pass. The actual direct managed runner executed a
+read-only auth check: native CLI available, exit 1, no active authentication
+profile. No target data-plane call, schema/app/flow authoring or notification
+was attempted. Complete live testing and integration CI remain separate gates.
