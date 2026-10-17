@@ -24,6 +24,10 @@ FIELD_MAPPING = (
 )
 _OBJECT_LIMIT = 4000
 _MAIL_ID = re.compile(r"mail_[a-f0-9]{64}")
+_WHOLE_SECOND_INSTANT = re.compile(
+    r"[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"
+    r"(?:\.0+)?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])"
+)
 
 
 def _guid(value: str) -> UUID:
@@ -63,6 +67,8 @@ def serialize_fact(fact: CanonicalMailFact) -> dict[str, str]:
         if type(fact) is not CanonicalMailFact:
             _invalid()
         checked = CanonicalMailFact.model_validate(fact.model_dump())
+        if _WHOLE_SECOND_INSTANT.fullmatch(checked.timestamp_utc) is None:
+            _invalid()
         instant = datetime.fromisoformat(checked.timestamp_utc)
         if instant.utcoffset() is None or instant.microsecond:
             _invalid()

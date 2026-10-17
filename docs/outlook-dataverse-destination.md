@@ -105,3 +105,22 @@ Sixteen destination tests and 48 existing reconciliation tests pass together
 and an ambiguous create without a committed row cannot trigger a resend.
 Scoped Ruff lint/format, strict Pyright, Bandit and Conductor checks pass.
 Independent review/publication of the reusable writer remains with coordination.
+
+## Timestamp precision repair
+
+Panel review reproduced a lexical precision bug: Python's datetime parser can
+truncate a seven-digit fractional second or accept fractional offset seconds
+before the earlier microsecond check. Both changed instants could therefore
+compare equal to a stored whole second during replay.
+
+The codec now checks the timestamp grammar before parsing: full calendar date,
+`T`, hours/minutes/seconds, optional all-zero fractional digits, and `Z` or a
+minute-resolution `+HH:MM`/`-HH:MM` offset. Nonzero fractional digits, offset
+seconds and alternate datetime syntaxes are rejected without rounding. Calendar
+validity and UTC normalization are still checked by datetime. All-zero fractions
+represent an exact whole second and remain safe to normalize.
+
+Four initial regression cases failed before repair. Expanded serialize/readback/
+replay regressions and a zero-fraction/minute-offset control now pass. The combined
+destination, provenance and reconciliation suite passes 97 tests. No live service
+calls or changes to the completed synthetic rehearsal were needed for this repair.

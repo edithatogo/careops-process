@@ -177,3 +177,46 @@ def test_read_failure_cannot_be_interpreted_as_absence() -> None:
     with pytest.raises(ValueError, match=r"^destination_write_unconfirmed$"):
         d.ensure_synthetic_fact(records, ORG, RUN, fact())
     assert records.creates == 0
+
+
+@pytest.mark.parametrize(
+    "timestamp",
+    ["2026-01-01T00:00:00.0000001Z", "2026-01-01T00:00:00+00:00:00.5"],
+)
+@pytest.mark.parametrize("boundary", ["serialize", "readback"])
+def test_unsupported_timestamp_precision_is_not_silently_lost(
+    timestamp: str, boundary: str
+) -> None:
+    """Python datetime parsing must not truncate an unsupported source instant."""
+    mutated = fact().model_copy(update={"timestamp_utc": timestamp})
+    row = d.serialize_fact(fact())
+    row["cop_timestamputc"] = timestamp
+    if boundary == "serialize":
+        with pytest.raises(ValueError, match="invalid_destination_fact"):
+            d.serialize_fact(mutated)
+    else:
+        with pytest.raises(ValueError, match="invalid_destination_fact"):
+            d.parse_readback(row)
+
+
+def test_zero_fraction_and_minute_offset_preserve_exact_instant() -> None:
+    """Explicit zero fractions are whole seconds; minute offsets normalize exactly."""
+    value = fact().model_copy(update={"timestamp_utc": "2026-01-01T10:30:00.0000000+10:30"})
+    assert d.serialize_fact(value)["cop_timestamputc"] == "2026-01-01T00:00:00Z"
+
+
+@pytest.mark.parametrize(
+    "timestamp",
+    ["2026-01-01T00:00:00.0000001Z", "2026-01-01T00:00:00+00:00:00.5"],
+)
+def test_replay_rejects_lossy_timestamp_readback(timestamp: str) -> None:
+    """Changed stored instants cannot be normalized into an unchanged replay."""
+    records = MemoryRecords()
+    expected = fact()
+    if "+00:00:00.5" in timestamp:
+        expected = fact().model_copy(update={"timestamp_utc": "2025-12-31T23:59:59Z"})
+    d.ensure_synthetic_fact(records, ORG, RUN, expected)
+    records.rows[d.row_id(ORG, RUN, FACT_ID)]["cop_timestamputc"] = timestamp
+    with pytest.raises(ValueError, match="destination_write_unconfirmed"):
+        d.ensure_synthetic_fact(records, ORG, RUN, expected)
+    assert records.creates == 1
