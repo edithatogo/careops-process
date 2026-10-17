@@ -185,3 +185,32 @@ Reliability's read-only ALM review found no blocking design issue. That review
 requires the capacity, initialization-race, receipt-retention and conditional-API
 decisions above before metadata authoring. Runtime feasibility remains under
 assessment; this review does not authorize or establish deployed cloud recovery.
+
+## Read-only runtime feasibility receipt
+
+Reliability completed the bounded check on 17 October 2026. PAC 2.13.1 connection
+listing against the explicit personal Developer target succeeded with “No results
+returned.” Flow listing succeeded, but identified no verified CareOps worker or
+conditional action. This is a bounded discovery result, not proof that no worker
+can exist. The pre-baseline custom-table inventory contained no checkpoint or
+watermark table; no actual checkpoint mapping has subsequently been handed off.
+
+The local Dataverse CLI supports explicit target URLs, arbitrary request headers
+and response-header inclusion, but has no authenticated profile and is not a cloud
+runtime. The installed SDK's ordinary update operation has no ETag parameter.
+Neither observation establishes a deployable conditional checkpoint worker.
+
+One candidate for further assessment is a solution-aware Power Automate flow
+with an actual Dataverse connection and a delegated HTTP action supporting exact
+`If-Match`, status and response-header handling. This candidate has not been
+verified available: licensing, connection creation/use, DLP, resource permissions
+and action capabilities remain unresolved. Do not assume premium entitlement,
+tenant-admin approval, consent or an existing connection from this design.
+
+The next gate is therefore to select an actual permitted cloud runtime and verify
+its conditional-write connection before checkpoint metadata or flow authoring.
+After that, finalize the bounded schema, rights, initialization, retention and
+recovery test contract, then obtain the coordinated writer slot. No new mailbox
+acquisition is needed to resolve this runtime prerequisite. Reliability retained
+the private connection/flow-listing receipts in the ignored ALM artifact directory.
+No authentication, metadata or source changes were performed by the assessment.
