@@ -15,6 +15,7 @@ import careops_process.credentialing_measurements as measurements
 from careops_process.credentialing import (
     CredentialingContractError,
     CredentialingProjection,
+    merge_credentialing_projections,
     validate_credentialing_projection,
 )
 
@@ -154,6 +155,93 @@ def test_rare_exclusion_suppresses_all_intervals_and_totals() -> None:
     projection.facts = [fact for fact in projection.facts if fact.event_id != "case-0-event-0"]
     report = _report(projection)
     assert asdict(report) == {
+        "suppressed": True,
+        "population_case_count": None,
+        "measures": None,
+    }
+
+
+def _cross_interval_projection(copies: int) -> CredentialingProjection:
+    """Make missing-start/finish sets with a one-pattern overlap per five cases."""
+    projection = _projection(hours=(1,) * (5 * copies))
+    retained = []
+    for fact in projection.facts:
+        case_index = int(fact.event_id.split("-")[1])
+        pattern = case_index // copies
+        if fact.activity == "request_received" and pattern in (0, 1):
+            continue
+        if fact.activity == "case_completed" and pattern in (1, 2):
+            continue
+        retained.append(fact)
+    projection.facts = retained
+    return projection
+
+
+def test_cross_interval_complements_cannot_reveal_singleton_overlap() -> None:
+    """Missing starts two + missing finishes two - missing either three reveals one."""
+    report = measurements.report_stage_times(
+        _cross_interval_projection(1),
+        role="report_reader",
+        case_ids={f"case-{i}" for i in range(5)},
+        minimum_cases=2,
+        authority_version="synthetic-v1",
+    )
+    assert asdict(report) == {
+        "suppressed": True,
+        "population_case_count": None,
+        "measures": None,
+    }
+
+
+@given(copies=st.integers(min_value=2, max_value=5), reverse_input=st.booleans())
+def test_safe_joint_patterns_keep_marginals_quantiles_and_exact_replay(
+    *,
+    copies: int,
+    reverse_input: bool,
+) -> None:
+    """Duplicating whole patterns protects cells without changing interval arithmetic."""
+    projection = _cross_interval_projection(copies)
+    if reverse_input:
+        projection.facts.reverse()
+    replayed = merge_credentialing_projections(projection, projection)
+    grants = frozenset(f"case-{i}" for i in range(5 * copies))
+    report = measurements.report_stage_times(
+        replayed,
+        role="report_reader",
+        case_ids=grants,
+        minimum_cases=copies,
+        authority_version="synthetic-v1",
+    )
+    assert not report.suppressed
+    assert report.population_case_count == 5 * copies
+    assert report.measures is not None
+    intervals = {measure.interval_id: measure for measure in report.measures}
+    start = intervals[FIRST_INTERVAL]
+    finish = intervals["case_completed__renewal_reminder_issued"]
+    overall = intervals["request_received__case_completed"]
+    assert start.eligible_case_count == finish.eligible_case_count == 3 * copies
+    assert (
+        start.excluded_case_counts
+        == finish.excluded_case_counts
+        == (("missing_endpoints", 2 * copies),)
+    )
+    assert overall.eligible_case_count == 2 * copies
+    assert overall.excluded_case_counts == (("missing_endpoints", 3 * copies),)
+    assert (overall.median_hours, overall.p75_hours, overall.p90_hours, overall.p95_hours) == (
+        11.0,
+        11.0,
+        11.0,
+        11.0,
+    )
+    # Every marginal meets this larger floor; the rare joint atoms do not.
+    stricter = measurements.report_stage_times(
+        replayed,
+        role="report_reader",
+        case_ids=grants,
+        minimum_cases=copies + 1,
+        authority_version="synthetic-v1",
+    )
+    assert asdict(stricter) == {
         "suppressed": True,
         "population_case_count": None,
         "measures": None,

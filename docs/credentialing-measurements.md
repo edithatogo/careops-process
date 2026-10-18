@@ -36,9 +36,21 @@ and 95th percentile elapsed hours. For four samples 1,2,3,4 hours, the median
 is 2.5, p75 is 3 and p90/p95 are 4. With no eligible samples, quantiles are
 unavailable (`None`), not zero.
 
-Every nonzero eligible or exclusion cell in every interval must reach the
-approved case threshold. Otherwise the whole report is suppressed, including
-population totals and earlier computed intervals. Empty grants are suppressed.
+Every nonempty joint case group across all intervals' eligibility/exclusion
+categories must reach the approved case threshold. The reporter checks each
+case's full interval-status signature before releasing any measures. This also
+protects every nonzero marginal and any inferable union/complement of those
+joint groups. Otherwise the whole report is suppressed, including population
+totals and earlier computed intervals. Empty grants are suppressed.
+
+Checking each interval alone is insufficient. For example, two cases missing a
+start, two missing a finish and three missing either reveal that exactly one
+case lacks both. The five-case regression suppresses this report even though
+every individual released count meets a floor of two. Duplicating each joint
+pattern permits release at floor two while preserving the correct counts and
+elapsed quantiles. Joint protection concerns eligibility/exclusion categories;
+it is not a differential-privacy claim about numerical quantiles.
+
 Released records contain no case/event IDs, source timestamps or run details.
 Cross-release and overlapping-cohort privacy controls remain deployment work.
 

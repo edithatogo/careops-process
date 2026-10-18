@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import re
 import statistics
+from collections import Counter
 from collections.abc import Set as AbstractSet
 from dataclasses import dataclass
 from itertools import pairwise
@@ -149,15 +150,18 @@ def _measure(
     start: str,
     finish: str,
     authority: str,
-) -> tuple[StageTimeMeasure, tuple[int, ...]]:
+) -> tuple[StageTimeMeasure, tuple[str, ...]]:
     samples: list[float] = []
     excluded: dict[str, int] = {}
+    outcomes: list[str] = []
     for facts in observed.values():
         outcome = _case_interval(facts, start, finish, authority)
         if isinstance(outcome, str):
             excluded[outcome] = excluded.get(outcome, 0) + 1
+            outcomes.append(outcome)
         else:
             samples.append(outcome)
+            outcomes.append("eligible")
     samples.sort()
     counts = tuple(sorted(excluded.items()))
     measure = StageTimeMeasure(
@@ -169,7 +173,7 @@ def _measure(
         p90_hours=_nearest_rank(samples, 90),
         p95_hours=_nearest_rank(samples, 95),
     )
-    return measure, (len(samples), *(count for _, count in counts))
+    return measure, tuple(outcomes)
 
 
 def report_stage_times(
@@ -214,11 +218,16 @@ def report_stage_times(
             for case_id in grants.intersection(fact.object_ids):
                 observed[case_id].append(fact)
     measures: list[StageTimeMeasure] = []
+    interval_outcomes: list[tuple[str, ...]] = []
     for start, finish in STAGE_INTERVALS:
-        measure, counts = _measure(observed, start, finish, authority_version)
-        if any(0 < count < threshold for count in counts):
-            return StageTimeReport(suppressed=True, population_case_count=None, measures=None)
+        measure, outcomes = _measure(observed, start, finish, authority_version)
+        interval_outcomes.append(outcomes)
         measures.append(measure)
+    # Each tuple is one case's joint interval eligibility/exclusion signature.
+    # Safe joint atoms imply safe marginal cells and their inferable complements.
+    joint = Counter(zip(*interval_outcomes, strict=True))
+    if any(count < threshold for count in joint.values()):
+        return StageTimeReport(suppressed=True, population_case_count=None, measures=None)
     return StageTimeReport(
         suppressed=False,
         population_case_count=len(grants),
