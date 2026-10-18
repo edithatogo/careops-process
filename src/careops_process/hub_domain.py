@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Connector-neutral, synthetic-only governance metadata and lifecycle contracts.
 
 This local engine demonstrates version pinning, access boundaries and replay

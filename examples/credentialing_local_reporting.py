@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Run synthetic, aggregate-only credentialing local reporting without AI or I/O."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Leakage-safe evaluation and lightweight drift/novelty metrics."""
 
 from __future__ import annotations

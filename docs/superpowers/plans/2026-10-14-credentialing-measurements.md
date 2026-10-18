@@ -152,7 +152,7 @@ the metric dictionary addendum (do not overwrite shared runtime-owner findings).
   pathways, durable adapter controls, native reliability and manual acceptance
   as actual remaining gates. The full Conductor track stays in progress.
 
-## Task 4 receipt — 15 October 2026
+## Task 4 receipt â€” 15 October 2026
 
 The full-suite attempt is inconclusive: its captured output and coverage XML
 contain zero-filled regions, and no trustworthy terminal result survives. The

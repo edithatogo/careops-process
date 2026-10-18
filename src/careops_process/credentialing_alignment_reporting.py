@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Case-grain retained-ledger alignment reporting with joint-cell protection."""
 
 from __future__ import annotations

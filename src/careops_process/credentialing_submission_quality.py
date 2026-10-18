@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit first-submission assessments and privacy-minimised case rates."""
 
 from __future__ import annotations

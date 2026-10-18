@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Hand-calculated synthetic elapsed-time and privacy regression evidence."""
 
 from __future__ import annotations

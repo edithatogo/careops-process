@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Authenticated retained alignment snapshots and release-time authorization."""
 
 from __future__ import annotations

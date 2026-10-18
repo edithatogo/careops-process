@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Fail-closed validation for the Power Automate flow contract."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Atomic publication of a validated analytical report in its approved directory."""
 
 from __future__ import annotations

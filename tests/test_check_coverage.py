@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Independent coverage thresholds must not be hidden by an aggregate score."""
 
 from __future__ import annotations

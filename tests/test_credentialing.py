@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Credentialing process-assurance tests use synthetic facts only."""
 
 from __future__ import annotations

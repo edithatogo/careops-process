@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Live-corpus information-handling control tests."""
 
 from datetime import UTC, datetime

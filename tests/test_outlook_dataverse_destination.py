@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic destination identity and serialization contract checks."""
 
 from uuid import UUID, uuid5

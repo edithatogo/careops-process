@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Fail-closed deployment eligibility from scoped, reviewed capability evidence.
 
 Successful read-only probes are observations, never proof of write privileges,

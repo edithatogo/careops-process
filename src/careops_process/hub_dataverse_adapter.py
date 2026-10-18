@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Managed Dataverse CLI identity/CAS scaffolding; real delivery remains disabled."""
 
 from __future__ import annotations

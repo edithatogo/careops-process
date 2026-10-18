@@ -1,4 +1,7 @@
-"""Validate a sanitized governance and executive decision record."""  # noqa: N999
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
+"""Validate a sanitized governance and executive decision record."""
 
 from __future__ import annotations
 

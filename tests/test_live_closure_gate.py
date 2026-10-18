@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Every execution entry point rejects relabelled synthetic live artifacts."""
 
 from __future__ import annotations

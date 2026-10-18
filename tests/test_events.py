@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Canonical event-contract tests use synthetic facts only."""
 
 from datetime import UTC, datetime

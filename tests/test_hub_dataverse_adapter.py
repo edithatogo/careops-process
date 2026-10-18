@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic managed-CLI boundaries for identity and conditional ledger persistence."""
 
 import json

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Coverage accounting and evidence-claim safeguards."""
 
 from __future__ import annotations

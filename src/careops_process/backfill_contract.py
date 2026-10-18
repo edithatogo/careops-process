@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Validation for the cloud-only historical Outlook backfill contract."""
 
 from typing import Any, cast

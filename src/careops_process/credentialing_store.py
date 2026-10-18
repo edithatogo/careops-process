@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Local SQLite credentialing adapter with authenticated transactional operations.
 
 Provisioning is a separate OS-administrator interface. Request methods accept

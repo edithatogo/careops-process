@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Observed destination work and inferable joint-participation privacy."""
 
 # Hand-calculated fixture numbers express measured aggregate expectations.

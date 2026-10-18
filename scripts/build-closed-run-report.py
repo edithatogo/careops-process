@@ -1,4 +1,7 @@
-"""Build a governed report from a closed, sanitized Outlook backfill export."""  # noqa: N999
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
+"""Build a governed report from a closed, sanitized Outlook backfill export."""
 
 from __future__ import annotations
 

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic rule-based triage, secretariat queues and quiet executive digests."""
 
 from __future__ import annotations

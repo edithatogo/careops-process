@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Offline release safeguards with synthetic solution and package fixtures."""
 
 import json

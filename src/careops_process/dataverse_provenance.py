@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit-target synthetic service readback; never a live-corpus approval gate."""
 
 from __future__ import annotations

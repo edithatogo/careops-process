@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Immutable trusted startup configuration for local authenticated alignments."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """First-submission assessment denominator, replay and privacy regressions."""
 
 # Fixture booleans and numeric expectations express explicit measured outcomes.

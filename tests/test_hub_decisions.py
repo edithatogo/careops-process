@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic configured collective-decision and ratification tests."""
 
 from __future__ import annotations

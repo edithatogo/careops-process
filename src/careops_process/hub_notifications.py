@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Pure synthetic notification admission proposals; adapters own auth, CAS and delivery."""
 
 from __future__ import annotations

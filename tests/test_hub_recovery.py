@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic recoverable dead letters without failed command or sensitive error payloads."""
 
 from __future__ import annotations

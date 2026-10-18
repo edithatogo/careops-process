@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Independent expected outcomes for the executable synthetic handover example."""
 
 from __future__ import annotations

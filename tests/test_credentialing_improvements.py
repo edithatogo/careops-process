@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic deterministic proposal provenance and human-review transitions."""
 
 from __future__ import annotations

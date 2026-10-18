@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic versioned pathway-reference and case-access tests."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic, privacy-minimised triage and executive views without external connectors."""
 
 from __future__ import annotations

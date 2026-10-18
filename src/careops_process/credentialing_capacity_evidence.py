@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Observed redeployment and protected attribution judgments, never causal proof."""
 
 from __future__ import annotations

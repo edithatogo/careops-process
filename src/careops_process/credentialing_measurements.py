@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Observed credentialing elapsed-time measurements with whole-report privacy."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic approval and action projection boundaries."""
 
 from datetime import UTC, datetime, timedelta

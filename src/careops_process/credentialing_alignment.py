@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Bounded optional cost-based Petri alignments; no clinical or causal claims."""
 
 from __future__ import annotations

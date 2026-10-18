@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic lane gates for the IHG Governance and Executive Action Hub."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic observation units, missingness, replay and distinct-case privacy."""
 
 from __future__ import annotations

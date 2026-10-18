@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit stage assignments over observed worker effort, with joint case privacy."""
 
 from __future__ import annotations

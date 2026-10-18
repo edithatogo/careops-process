@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Source-defined review obligations: completion rates and distinct-case privacy."""
 
 from __future__ import annotations

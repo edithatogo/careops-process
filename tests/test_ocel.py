@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic multi-object OCEL contract tests."""
 
 from datetime import UTC, datetime

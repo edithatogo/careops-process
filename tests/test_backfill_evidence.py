@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Closed-run evidence must bind inputs, scope and measured reconciliation."""
 
 from copy import deepcopy

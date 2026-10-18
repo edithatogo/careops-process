@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit versioned references for independent credentialing pathways.
 
 These comparisons report observed process evidence against a caller-supplied

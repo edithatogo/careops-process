@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic run-scoped Dataverse row identity; no authentication or service writes."""
 
 from __future__ import annotations

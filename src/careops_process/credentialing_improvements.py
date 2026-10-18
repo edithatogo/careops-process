@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Evidence-bound investigation hypotheses and measurement-only human review."""
 
 from __future__ import annotations

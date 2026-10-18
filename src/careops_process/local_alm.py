@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Offline Dataverse solution validation, atomic packaging and release preparation.
 
 No function authenticates, exports from a tenant, checks online or imports a solution.

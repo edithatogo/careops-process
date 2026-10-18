@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic preflight boundary tests; mocks are not target acceptance evidence."""
 
 # pyright: reportPrivateUsage=false

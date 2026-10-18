@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit renewal deadline, denominator and censoring evidence."""
 
 # Numeric expectations and fixture flags are explicit measured outcomes.

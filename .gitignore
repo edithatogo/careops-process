@@ -29,3 +29,6 @@ data/
 artifacts/
 secrets/
 careops-*-corpus-*.json
+
+# Local CI evidence and canary environments
+.local/

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Privacy-minimised credentialing event contracts and deterministic assurance."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic renewal, deletion and reporting boundary evidence."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Stage queue/calendar arithmetic, explicit source allocation and joint privacy."""
 
 # Synthetic expected arithmetic uses deliberate literals.

@@ -35,3 +35,6 @@
 
 - [~] **Track: Local reliability and ALM hardening**
   *Link: [./tracks/reliability-alm-hardening_20261014/index.md](./tracks/reliability-alm-hardening_20261014/index.md)*
+
+- [~] **Track: Suite CI dependency, canary and release qualification**
+  *Link: [./tracks/suite_ci_adoption_20261018/index.md](./tracks/suite_ci_adoption_20261018/index.md)*

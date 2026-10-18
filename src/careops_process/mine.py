@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Deterministic sequence metrics; PM4Py integration is a separate OCEL boundary."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Strict observed effort/evaluation evidence and aggregate comparison boundaries."""
 
 from __future__ import annotations

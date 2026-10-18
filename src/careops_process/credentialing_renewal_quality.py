@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Source-defined renewal snapshots and outstanding overdue prevalence."""
 
 from __future__ import annotations

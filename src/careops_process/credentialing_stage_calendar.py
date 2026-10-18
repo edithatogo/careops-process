@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit stage allocation of observed case-calendar queue/active/unknown time."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Deterministic reference evidence and explicit credentialing reporting boundaries.
 
 This disconnected pack requires trusted callers to supply authorised case IDs.

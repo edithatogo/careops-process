@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Read-only hub deployment preparation must expose actual artifact and live gates."""
 
 from __future__ import annotations

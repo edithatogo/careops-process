@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Report command privacy and approved-manifest integration checks."""
 
 from __future__ import annotations

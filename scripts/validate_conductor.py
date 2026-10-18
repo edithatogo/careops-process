@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Validate local Conductor records and pinned skill installations without writes."""
 
 from __future__ import annotations

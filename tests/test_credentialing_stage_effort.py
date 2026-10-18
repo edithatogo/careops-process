@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit administrative-stage work attribution and joint case privacy."""
 
 # Numeric expectations describe independent synthetic arithmetic.

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Read-only hub deployment dry run, with explicit artifact, authority and platform gates."""
 
 from __future__ import annotations

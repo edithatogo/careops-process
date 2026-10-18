@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Expose pinned upstream skills to repository and independent user-level Codex."""
 
 from __future__ import annotations

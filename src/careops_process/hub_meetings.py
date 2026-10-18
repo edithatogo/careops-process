@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic meeting records assembled from approved references, without protected content."""
 
 from __future__ import annotations

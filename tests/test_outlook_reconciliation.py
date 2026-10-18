@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic frozen-folder, page-ledger and destination reconciliation checks."""
 
 from copy import deepcopy

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Independent JSON Schema lexical boundary fixtures for credentialing projection."""
 
 import json

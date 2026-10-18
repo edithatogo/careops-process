@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic approved-reference briefs, agendas, minutes and urgent-decision ledgers."""
 
 from __future__ import annotations

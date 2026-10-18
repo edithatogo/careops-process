@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Canonical model boundaries and optional backend synthetic evidence."""
 
 from __future__ import annotations

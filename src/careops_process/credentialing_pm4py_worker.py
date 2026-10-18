@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Isolated optional backend worker; no identifiers, raw alignments or narrative IPC."""
 
 from __future__ import annotations

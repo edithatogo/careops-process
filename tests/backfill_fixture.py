@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Sealed synthetic backfill evidence used by contract regression tests."""
 
 import hashlib

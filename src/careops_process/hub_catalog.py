@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Bounded immutable synthetic catalog; no persistence or live approval verification.
 
 Changes affect selection for future matters only. Existing matters continue to

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Fail-closed entry controls for the authorised corpus-scale pilot."""
 
 from __future__ import annotations

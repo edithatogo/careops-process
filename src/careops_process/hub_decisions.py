@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic collective-decision rules without hard-coded IHG meeting conventions.
 
 References and participant context must come from a controlled authority record.

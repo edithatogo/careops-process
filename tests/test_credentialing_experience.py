@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit synthetic instruments, distinct-person aggregates and privacy release."""
 
 from __future__ import annotations

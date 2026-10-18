@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Bounded synthetic projections; no persistence, provider calls or canonical writes.
 
 Approval responses are provisional input to the canonical collective evaluator.

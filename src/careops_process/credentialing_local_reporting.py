@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Source-defined case snapshots and jointly protected local reporting.
 
 These observations are independent source assessments, not labels inferred from

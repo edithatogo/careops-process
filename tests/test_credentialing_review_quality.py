@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Review-obligation mathematics and distinct-case release protection."""
 
 # Hand-calculated expected values describe synthetic observations.

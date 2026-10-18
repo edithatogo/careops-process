@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Read-only, privacy-safe Windows probe orchestration with synthetic responses."""
 
 from __future__ import annotations

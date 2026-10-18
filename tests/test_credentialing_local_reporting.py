@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic case denominators, interval reconciliation and joint-cell privacy."""
 
 # Numeric literals are independent expected fixture outcomes.

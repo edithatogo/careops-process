@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Supplied single-select instruments and privacy-gated aggregate experience evidence."""
 
 from __future__ import annotations

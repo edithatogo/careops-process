@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Durable replay, request authentication and transactional human-review tests."""
 
 # Synthetic arithmetic expectations are deliberate literals.

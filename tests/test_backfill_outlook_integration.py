@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic Outlook reconciliation-to-M365 closed-report integration."""
 
 from copy import deepcopy

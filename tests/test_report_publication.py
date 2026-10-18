@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Report publication must preserve prior artifacts across serialization and I/O failures."""
 
 from __future__ import annotations

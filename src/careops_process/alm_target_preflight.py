@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Read-only artifact/target prerequisites; never an import or portable-release gate."""
 
 from __future__ import annotations

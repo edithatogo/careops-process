@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Replay-safe ingestion checkpoints, tombstones, and dead-letter records."""
 
 from __future__ import annotations

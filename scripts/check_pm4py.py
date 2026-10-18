@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Exercise the optional native OCEL 2 JSON import boundary with synthetic data."""
 
 import json

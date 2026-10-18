@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Offline reconciliation of supplied Outlook folder/page and destination evidence."""
 
 from __future__ import annotations

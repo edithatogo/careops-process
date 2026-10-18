@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Verify local Conductor integrity without live platform access."""
 
 from __future__ import annotations

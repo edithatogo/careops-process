@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Explicit temporary episode and review evidence; no clinical duration defaults."""
 
 from __future__ import annotations

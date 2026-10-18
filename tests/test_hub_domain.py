@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic canonical governance lifecycle and versioned-policy contracts."""
 
 from __future__ import annotations

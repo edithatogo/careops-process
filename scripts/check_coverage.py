@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Enforce independent line and branch coverage from coverage.py XML counts."""
 
 import sys

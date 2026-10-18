@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic notification admission, history and delivery uncertainty contracts."""
 
 from dataclasses import fields, replace

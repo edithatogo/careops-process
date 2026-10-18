@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Mocked service-boundary checks, never actual Dataverse acceptance evidence."""
 
 # Unit tests exercise the private I/O adapters independently of network access.

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Run disconnected synthetic acceptance; output aggregates, never source/policy approval.
 
 Run from the repository: uv run --no-sync python examples/credentialing_acceptance.py

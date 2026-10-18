@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Windows-native read-only capability discovery using existing user sign-ins.
 
 No raw tool response, identity, resource title, URL or error text is exported.
