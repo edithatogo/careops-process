@@ -28,12 +28,19 @@ files to meet the newer Ruff toolchain. One legacy CP1252 dash in a historical
 plan was converted to UTF-8 without rewriting the plan's claims.
 
 Local checks passed lint, formatting, strict typing, Conductor validation,
-Bandit, dependency audit and both offline PowerShell suites. The combined
+Bandit, dependency audit and both offline PowerShell suites. The first combined
 installed-backend suite passed **1,717 tests, with eight skips**: seven hosted
 Linux Bash receipt cases are unsupported on Windows, and the absent-backend
-case intentionally skips when the pinned backend is installed. Hosted Linux
-must execute the seven receipt cases; these skips are not evidence that they
-passed locally. A built wheel was installed into a separate runtime-only
+case intentionally skips when the pinned backend is installed. The seven receipt
+cases subsequently passed locally after adding direct execution of the unchanged
+Python receipt body on Windows; Linux retains execution of the Bash wrapper.
+The full local suite then passed **1,724 tests with one intentional absent-backend
+skip**. On published integration `ae2f234`, stable hosted CI passed 1,715 tests
+with ten optional-backend skips, and both hosted source canaries passed 1,724
+tests with one skip. CodeQL, shared source security and the wheel candidate also
+passed on that exact revision. Later receipt wording changes need their own
+exact-revision hosted checks.
+A built wheel was installed into a separate runtime-only
 environment and its XML, alignment and authenticated-store imports passed.
 
 Windows denied replacement of a file in the prior shared virtual environment.
