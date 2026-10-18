@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Transform sanitized Dataverse approval metadata into pilot facts."""
 
 from __future__ import annotations

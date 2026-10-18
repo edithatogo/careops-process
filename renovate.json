@@ -1,8 +1,28 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>edithatogo/renovate-config",
-    "github>edithatogo/renovate-config:careops-dev#c11fa28421687fbdaccb92ae0f5006c484fc1ed2"
+    "local>edithatogo/renovate-config"
   ],
-  "automerge": false
+  "enabledManagers": [
+    "pep621"
+  ],
+  "ignoreUnstable": false,
+  "schedule": [
+    "at any time"
+  ],
+  "timezone": "Australia/Brisbane",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ]
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "*"
+      ],
+      "automerge": false
+    }
+  ]
 }

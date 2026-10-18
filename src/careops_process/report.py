@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Deterministic, lineage-preserving report assembly for closed runs."""
 
 from __future__ import annotations

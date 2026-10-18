@@ -17,7 +17,6 @@ concurrency:
 jobs:
   analyze:
     name: CodeQL Python analysis
-    if: ${{ vars.ENABLE_CODEQL == 'true' }}
     permissions:
       contents: read
       security-events: write # Required to upload CodeQL SARIF results.
@@ -27,7 +26,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: github/codeql-action/init@02c5e83432fe5497fd85b873b6c9f16a8578e1d9 # v3
+      - uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4
         with:
           languages: python
-      - uses: github/codeql-action/analyze@02c5e83432fe5497fd85b873b6c9f16a8578e1d9 # v3
+      - uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Low-privilege ingestion boundary for minimized M365 and Dataverse facts."""
 
 from __future__ import annotations

@@ -14,23 +14,32 @@ concurrency:
 
 jobs:
   quality:
-    name: Python 3.14 quality and tests
+    name: Python ${{ matrix.label }} quality and tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: '3.14.8'
+            label: '3.14'
+          - python: '3.15.0'
+            label: '3.15'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
-          enable-cache: true
-          python-version: "3.14"
+          version: "0.13.1"
+          enable-cache: false
+          python-version: ${{ matrix.python }}
+      - name: Reject stale dependency declarations before frozen installation
+        run: uv lock --check
       - run: uv sync --frozen --group dev
-      - run: uv run ruff format --check --diff .
-      - run: uv run ruff check .
-      - run: uv run pyright
-      - run: uv run pytest
-      - run: uv run bandit -q -r src
-      - name: Upgrade audited packaging tool to the fixed release
-        run: uv pip install --python .venv/bin/python --upgrade "pip>=26.2"
+      - run: uv run --no-sync ruff format --check --diff .
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync pyright
+      - run: uv run --no-sync pytest
+      - run: uv run --no-sync bandit -q -r src
       - run: uv run --no-sync pip-audit

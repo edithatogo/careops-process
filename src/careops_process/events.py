@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Fail-closed validation for minimized object-centric event facts."""
 
 from __future__ import annotations

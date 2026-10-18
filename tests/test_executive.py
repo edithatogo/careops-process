@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Coverage-honest executive output tests."""
 
 from dataclasses import replace

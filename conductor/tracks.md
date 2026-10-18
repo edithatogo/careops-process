@@ -21,6 +21,9 @@
 ## [~] Track: Credentialing privacy-minimised event and assurance pack
 *Link: [./tracks/credentialing-process-assurance_20260829/](./tracks/credentialing-process-assurance_20260829/)*
 
+## [~] Track: Suite CI dependency, canary and release qualification
+*Link: [./tracks/suite_ci_adoption_20261018/](./tracks/suite_ci_adoption_20261018/)*
+
 ## Modular suite evolution — 18 October 2026
 
 Use [the ordered low-hanging-fruit queue](suite-delivery.md) for development-first

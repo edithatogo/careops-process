@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Validate versioned process-model artifacts."""
 
 from pathlib import Path

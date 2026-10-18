@@ -12,7 +12,7 @@
       "id": "runtime",
       "status": "queued",
       "lane": "existing implementation or platform lane",
-      "operation": "Resolve newest compatible Python and native-wheel dependencies in isolation before changing the current 3.14 lock.",
+      "operation": "Retain qualified Python3.15.0 and3.14.8 compatibility with the frozen lock; qualify newer compatible runtime and native-wheel candidates in isolation before promotion.",
       "tools": [
         "uv",
         "local Python"

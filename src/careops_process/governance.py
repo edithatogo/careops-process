@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Governance and Executive decision validation boundaries."""
 
 from __future__ import annotations

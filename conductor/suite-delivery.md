@@ -16,7 +16,7 @@ A completed MVP is not reopened by this queue: optional improvements follow the
 selected slice and remain optional. Keep detailed progress in the existing track.
 Do not create another track, chat, acceptance pack or status ledger for alignment.
 
-1. **runtime** — Resolve newest compatible Python and native-wheel dependencies in isolation before changing the current 3.14 lock.
+1. **runtime** — Retain qualified Python3.15.0 and3.14.8 compatibility with the frozen lock; qualify newer compatible runtime and native-wheel candidates in isolation before promotion.
    Done when: Frozen install and affected analytics/privacy checks pass; incompatibilities name the package and retry condition.
 2. **events** — Replay existing fictional OCEL fixtures with duplicate, late, missing-provider and tombstone cases.
    Done when: Stable event/object identities and minimised payloads survive replay without source writes.
