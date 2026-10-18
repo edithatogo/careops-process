@@ -15,7 +15,7 @@ describe their own revisions and are not current full-repository results.
 | Dataverse and Power Apps — 4 | Two user-owned tables with optimistic concurrency; published intake-only model-driven shell with zero validation issues; actual main form/view/navigation and unmanaged export | Full canonical tables/relationships/keys, least-privilege roles/auditing, remaining experiences and packaged executable flows; target import/restore and browser acceptance |
 | Durable notification admission — 3/5 | Product engine/store exercised through injected authenticated HTTP transport; actual competing writes returned 200/412; retained revision 1, one charged reservation and one receipt independently read-verified | Default CLI live transport, hosted worker identity/recipient authorization, crash continuity and provider delivery/reconciliation; dispatch remains disabled |
 | Teams, Approvals and Planner — 5 | Local bound projection/reconciliation and notification-admission contracts | Executable provider orchestration, permitted connections/resources, actual task/card/message delivery, durable reconciliation and failure recovery; local projection tests do not prove provider calls |
-| Packaging and recovery — 4/6 | Actual ZIP hash/CRC and embedded app/navigation inspected; baseline preserved; shared app-aware validation implementation exists for review | Validator repair/review/integration, two platform dependencies and two target role maps, TEST permissions, import/restore and full schema/data recovery |
+| Packaging and recovery — 4/6 | Actual ZIP hash/CRC and embedded app/navigation inspected; baseline preserved; bounded app-aware validator reviewed and published at `ecb8fce`, with all expected hosted checks passing | Two platform dependencies and two target role maps remain refused by the validator; TEST permissions, import/restore and full schema/data recovery remain open |
 | Multi-user pilot and continuity — 6 | Single-operator synthetic rehearsal only; fresh independent reader verified retained state and app shell | At least three non-owner pilot users, co-owners/backups, revocation/connection/failure scenarios and explicit stage decisions |
 | Records and approval — 7 | Privacy-minimised local contracts and bounded evidence documentation | Steward-approved classification, protected records, retention/archive/legal hold, complete verification and project-owner/IHG post-pilot decision |
 
@@ -24,11 +24,11 @@ password field. Hidden JavaScript fallback text is not a compatibility finding.
 No app list, detail or create interaction has been accepted. Azure CLI identity
 verification is separate from the browser session.
 
-The immediate authorised implementation prerequisite is to finish the existing
-shared ALM validator repair/review for the exported model-driven app format,
-then reconcile its result with the hub release dry run. Reliability owns that
-validator; this lane must preserve its explicit dependency/role review gates.
-This requires no platform mutation and does not activate a pilot. Subsequent
+The shared ALM validator repair/review is complete at `ecb8fce`; 61 scoped ALM
+tests and the exact-revision hosted suite passed. Reconciliation with the actual
+export preserves refusal of its declared dependencies and role bindings. Those
+target-specific gates require evidence before release preparation can pass.
+This result requires no platform mutation and does not activate a pilot. Subsequent
 worker/connector implementation needs an agreed runtime, scoped connection and
 resource bindings, and durable authorization/recovery design before live use.
 
