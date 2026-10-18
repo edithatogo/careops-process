@@ -174,6 +174,22 @@ def _component_tables(
     return tables
 
 
+def _navigation_ids(navigation: Element) -> None:
+    """Require nonempty unique sibling identities within each navigation scope."""
+    for parent, tag in (
+        *[(node, "Area") for node in navigation.findall("SiteMap")],
+        *[(node, "Group") for node in navigation.findall("SiteMap/Area")],
+        *[(node, "SubArea") for node in navigation.findall("SiteMap/Area/Group")],
+    ):
+        seen: set[str] = set()
+        for child in parent.findall(tag):
+            identity = child.get("Id", "")
+            if not identity.strip() or identity != identity.strip() or identity in seen:
+                msg = "Missing, empty or duplicate navigation identity."
+                raise ValueError(msg)
+            seen.add(identity)
+
+
 def _validate_one_app(
     source: Path,
     name: str,
@@ -197,6 +213,7 @@ def _validate_one_app(
     if len(maps) != 1 or not areas:
         msg = "App navigation must contain a single entity map."
         raise ValueError(msg)
+    _navigation_ids(navigation)
     for area in areas:
         if set(area.attrib) != {"Id", "Entity"} or area.get("Entity", "").casefold() not in tables:
             msg = "Unsupported or unresolved navigation target."

@@ -152,6 +152,9 @@ form (60), view (26) and navigation (62) references must resolve to the exported
 entity sources; form/view identifiers must match their files and belong to an
 entity included by the app. Missing, duplicate and unknown references fail closed.
 Navigation supports entity subareas only; external links require another adapter.
+Area IDs must be nonempty and unique within their sitemap, Group IDs within their
+Area, and SubArea IDs within their Group. Missing, whitespace-only and padded IDs
+are rejected rather than normalized into ambiguous navigation identities.
 
 Only the observed `AppChannel` app setting with numeric value `1` and a Boolean
 customizability flag is exempted from the generic bound-value scan, inside the

@@ -131,6 +131,34 @@ def test_pac_app_references_and_typed_setting(app_solution: Path) -> None:
 
 
 @pytest.mark.parametrize(
+    ("tag", "identifier"), [("Area", "area"), ("Group", "group"), ("SubArea", "list")]
+)
+@pytest.mark.parametrize("invalid", ["empty", "missing", "duplicate"])
+def test_navigation_identity_is_required_and_unique(
+    app_solution: Path, tag: str, identifier: str, invalid: str
+) -> None:
+    """Sitemap identity collisions cannot silently select the wrong navigation node."""
+    path = app_solution / "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml"
+    text = path.read_text()
+    if invalid == "empty":
+        text = text.replace(f'Id="{identifier}"', 'Id=""')
+    elif invalid == "missing":
+        text = text.replace(f' Id="{identifier}"', "")
+    elif tag == "SubArea":
+        text = text.replace(
+            '<SubArea Id="list" Entity="cop_intake"/>',
+            '<SubArea Id="list" Entity="cop_intake"/>' * 2,
+        )
+    elif tag == "Group":
+        text = text.replace("</Group>", '</Group><Group Id="group"/>')
+    else:
+        text = text.replace("</Area>", '</Area><Area Id="area"/>')
+    path.write_text(text)
+    with pytest.raises(ValueError, match="navigation identity"):
+        local_alm.validate_solution(app_solution)
+
+
+@pytest.mark.parametrize(
     "mutation",
     [
         "duplicate-root",
