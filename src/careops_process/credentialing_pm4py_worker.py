@@ -44,6 +44,7 @@ def _evaluate(request: dict[str, Any]) -> dict[str, Any]:
                 initial,
                 final,
                 multi_processing=False,
+                variant_str="Variants.VERSION_DIJKSTRA_SEMANTICS",
                 show_progress_bar=False,
                 trace_cost_function=[10000] * len(trace),
                 model_cost_function={t: 1 if t.label is None else 10000 for t in net.transitions},
@@ -55,7 +56,7 @@ def _evaluate(request: dict[str, Any]) -> dict[str, Any]:
     return {
         "status": "available",
         "backend": "2.7.23.8",
-        "policy": "pm4py-2.7.23.8-default-alignment-v1",
+        "policy": "pm4py-2.7.23.8-dijkstra-semantics-v1",
         "fitness": [float(item["fitness"]) for item in diagnostics],
         "costs": [int(item["cost"]) for item in diagnostics],
     }

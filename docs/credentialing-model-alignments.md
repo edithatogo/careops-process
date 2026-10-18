@@ -17,7 +17,7 @@ the facts are complete or authentic, or an intervention caused a benefit.
 
 `AlignmentModel` pins the actual PNML bytes with SHA-256, model version, activity
 mapping version, pathway code, authority mapping version, initial/final token
-markings and the fixed method policy `pm4py-2.7.23.8-default-alignment-v1`.
+markings and the fixed method policy `pm4py-2.7.23.8-dijkstra-semantics-v1`.
 These are protected service configuration, not public clinical approval flags.
 Constructors validate structure and consistency only; they do not resolve source
 documents or authenticate an approver.
@@ -38,6 +38,14 @@ There is **no BPMN converter** in this tranche. The repository's generic routine
 renewal BPMN is not automatically admitted, clinically approved or proved to have
 semantics-preserving conversion. A source owner must approve any separate
 canonicalisation and activity/authority mapping before operational use.
+
+The worker explicitly selects `Variants.VERSION_DIJKSTRA_SEMANTICS` through the
+pinned public alignment API. It applies the backend's classic Petri enabling and
+firing semantics, preserving arc weights and exact token markings. The former
+default-algorithm policy is superseded: independent review reproduced a false
+perfect fit where its synchronous-product construction lost arc weights, and a
+valid weighted net rejected by its preliminary soundness path. A matching
+version alone is therefore insufficient; this variant is part of the binding.
 
 The worker explicitly supplies a visible model move cost of 10,000, log move cost
 of 10,000, synchronous move cost zero and silent model move cost one. It retains

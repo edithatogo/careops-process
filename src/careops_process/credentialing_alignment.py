@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from xml.etree.ElementTree import Element  # nosec B405
 
 BACKEND_VERSION = "2.7.23.8"
-COST_POLICY = "pm4py-2.7.23.8-default-alignment-v1"
+COST_POLICY = "pm4py-2.7.23.8-dijkstra-semantics-v1"
 _CODE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}")
 _NET_TYPE = "http://www.pnml.org/version-2009/grammar/pnmlcoremodel"
 _ACTIVITIES = frozenset(get_args(Activity))

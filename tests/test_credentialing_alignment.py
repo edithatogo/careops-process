@@ -228,6 +228,140 @@ def test_actual_parallel_interleavings_and_tau_normalization() -> None:
     assert result.costs == (2, 2, 10002)
 
 
+@pytest.mark.parametrize("guard_tokens", [1, 2, 3])
+def test_actual_weighted_transition_threshold_and_loop(guard_tokens: int) -> None:
+    """A two-token guard must enable exactly at threshold and preserve loop tokens."""
+    net = graph(
+        ("s", "m", "g", "f"),
+        (
+            ("start", "request_received"),
+            ("correction", "correction_requested"),
+            ("finish", "case_completed"),
+        ),
+        (
+            ("s", "start"),
+            ("start", "m"),
+            ("m", "finish"),
+            ("finish", "f"),
+            ("m", "correction"),
+            ("correction", "m"),
+            ("g", "correction"),
+            ("correction", "g"),
+        ),
+    )
+    xml = net.pnml.replace(
+        b'source="g" target="correction"/>',
+        b'source="g" target="correction"><inscription><text>2</text></inscription></arc>',
+    )
+    xml = xml.replace(
+        b'source="correction" target="g"/>',
+        b'source="correction" target="g"><inscription><text>2</text></inscription></arc>',
+    )
+    net = replace(
+        model(xml),
+        initial_marking=(("s", 1), ("g", guard_tokens)),
+        final_marking=(("f", 1), ("g", guard_tokens)),
+    )
+    result = align_traces(
+        net,
+        (
+            ("request_received", "correction_requested", "case_completed"),
+            ("request_received", "correction_requested", "correction_requested", "case_completed"),
+        ),
+        python=optional_python(),
+    )
+    assert result.status == "available"
+    assert result.fitness == pytest.approx((0.8, 2 / 3) if guard_tokens == 1 else (1, 1))
+    assert result.costs == ((10000, 20000) if guard_tokens == 1 else (0, 0))
+
+
+def test_actual_weighted_consumption_production_and_exact_final_tokens() -> None:
+    """Consumption two/production three and residual start tokens are not unitized."""
+    xml = model().pnml
+    for source, target, weight in (("s", "a", 2), ("a", "m", 3), ("m", "b", 3), ("b", "f", 2)):
+        xml = xml.replace(
+            f'source="{source}" target="{target}"/>'.encode(),
+            (
+                f'source="{source}" target="{target}"><inscription>'
+                f"<text>{weight}</text></inscription></arc>"
+            ).encode(),
+        )
+    net = replace(model(xml), initial_marking=(("s", 3),), final_marking=(("s", 1), ("f", 2)))
+    result = align_traces(
+        net,
+        (("request_received", "case_completed"), ("request_received",)),
+        python=optional_python(),
+    )
+    assert result.status == "available"
+    assert result.fitness == pytest.approx((1, 2 / 3))
+    assert result.costs == (0, 10000)
+    # A final marking omitting the residual start token is unreachable; never
+    # silently discard that token and manufacture a perfect fit.
+    unreachable = replace(net, final_marking=(("f", 2),))
+    result = align_traces(
+        unreachable, (("request_received", "case_completed"),), python=optional_python()
+    )
+    assert result.status == "backend_error"
+    assert result.fitness is None
+
+
+def test_superseded_default_algorithm_policy_is_rejected() -> None:
+    """The weighted-semantics repair cannot reuse the former method binding."""
+    with pytest.raises(CredentialingContractError, match="policy"):
+        replace(model(), cost_policy="pm4py-2.7.23.8-default-alignment-v1")
+
+
+@pytest.mark.parametrize("guard_tokens", [1, 2])
+def test_actual_weighted_choice_keeps_disabled_branch_distinct(guard_tokens: int) -> None:
+    """A genuinely enabled alternative does not enable a weighted guarded choice."""
+    net = graph(
+        ("s", "m", "g", "r", "f"),
+        (
+            ("start", "request_received"),
+            ("guarded", "correction_requested"),
+            ("alternative", "professional_review_completed"),
+            ("finish", "case_completed"),
+        ),
+        (
+            ("s", "start"),
+            ("start", "m"),
+            ("m", "guarded"),
+            ("guarded", "r"),
+            ("m", "alternative"),
+            ("alternative", "r"),
+            ("g", "guarded"),
+            ("guarded", "g"),
+            ("r", "finish"),
+            ("finish", "f"),
+        ),
+    )
+    xml = net.pnml
+    for source, target in (("g", "guarded"), ("guarded", "g")):
+        xml = xml.replace(
+            f'source="{source}" target="{target}"/>'.encode(),
+            (
+                f'source="{source}" target="{target}"><inscription>'
+                "<text>2</text></inscription></arc>"
+            ).encode(),
+        )
+    net = replace(
+        model(xml),
+        initial_marking=(("s", 1), ("g", guard_tokens)),
+        final_marking=(("f", 1), ("g", guard_tokens)),
+    )
+    result = align_traces(
+        net,
+        (
+            ("request_received", "professional_review_completed", "case_completed"),
+            ("request_received", "correction_requested", "case_completed"),
+        ),
+        python=optional_python(),
+    )
+    assert result.status == "available"
+    assert result.fitness == pytest.approx((1, 2 / 3) if guard_tokens == 1 else (1, 1))
+    assert result.costs == ((0, 20000) if guard_tokens == 1 else (0, 0))
+
+
 @pytest.mark.parametrize(
     "change",
     [
