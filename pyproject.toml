@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.27"]
+requires = ["hatchling==1.32.4"]
 build-backend = "hatchling.build"
 
 [project]
@@ -20,6 +20,9 @@ careops-process-smoke = "careops_process.cli:main"
 mining = ["pm4py==2.7.23.8"]
 
 [dependency-groups]
+build = [
+    "hatchling==1.32.4",
+]
 dev = [
   "bandit>=1.8",
   "defusedxml>=0.7.1",

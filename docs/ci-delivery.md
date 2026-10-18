@@ -63,3 +63,15 @@ strict Ruff/Pyright and the optional PM4Py dependency load with pandas3.1rc0 and
 lxml7beta. This is source compatibility and dependency loading only; PM4Py's
 licence/adoption gate and absent production adapter remain explicit. Hosted
 qualification and downloaded receipt checks are required before any promotion.
+
+## Actual wheel candidates
+
+The package workflow builds once with exact locked Hatchling and no isolated
+network backend resolution. An independent environment installs the actual wheel
+with hash-locked base dependencies and executes the fictional CLI pipeline.
+The SPDX inventory describes actual wheel files; the separate CycloneDX export
+describes resolved base and optional dependencies, which are not bundled in the
+wheel. PM4Py inventory does not establish an implemented provider or licence
+adoption. Main-only federated provenance/SPDX signatures bind the downloaded
+package to its exact source and workflow; independently verify them before
+acceptance. This creates Actions candidates, not a PyPI publication or deployment.
