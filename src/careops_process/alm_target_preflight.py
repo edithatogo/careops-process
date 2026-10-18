@@ -77,7 +77,8 @@ try:
    if len(rs)==1:
     bu=c.records.retrieve('businessunit',rs[0]['_businessunitid_value'],
      select=['_parentbusinessunitid_value'])
-    root=bu is not None and bu.get('_parentbusinessunitid_value') is None
+    root=(bu is not None and '_parentbusinessunitid_value' in bu
+          and bu['_parentbusinessunitid_value'] is None)
    out['roles'].append({'template_id':tid,'name':template['name'] if template else '',
     'count':len(rs),'root_business_unit':root})
  print(json.dumps(out,allow_nan=False))

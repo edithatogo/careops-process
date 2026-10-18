@@ -4,6 +4,9 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import subprocess  # nosec B404 - fixed Python test subprocess
+import sys
 import zipfile
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
@@ -19,6 +22,52 @@ ORG = "11111111-1111-4111-8111-111111111111"
 USER = "22222222-2222-4222-8222-222222222222"
 ENV = "33333333-3333-4333-8333-333333333333"
 REAL_OBSERVE = preflight._observe  # noqa: SLF001 - exercise internal I/O guards separately
+
+_SDK_STUB = """
+import sys,types
+for name in ['PowerPlatform','PowerPlatform.Dataverse','PowerPlatform.Dataverse.client',
+             'PowerPlatform.Dataverse.core','PowerPlatform.Dataverse.core.config',
+             'azure','azure.identity']:
+ sys.modules[name]=types.ModuleType(name)
+class Records:
+ def list(self,table,**kwargs):
+  return [{'roleid':'synthetic','_businessunitid_value':'synthetic-bu'}]
+ def retrieve(self,table,identifier,**kwargs):
+  return {'name':'System Customizer'} if table=='roletemplate' else BUSINESS_UNIT
+class Client:
+ def __init__(self,*args,**kwargs): self.records=Records()
+ def __enter__(self): return self
+ def __exit__(self,*args): pass
+sys.modules['PowerPlatform.Dataverse.client'].DataverseClient=Client
+sys.modules['PowerPlatform.Dataverse.core.config'].OperationContext=lambda x:x
+sys.modules['azure.identity'].AzureCliCredential=lambda:None
+"""
+
+
+@pytest.mark.parametrize(
+    ("business_unit", "expected"),
+    [
+        ({}, False),
+        ({"_parentbusinessunitid_value": None}, True),
+        ({"_parentbusinessunitid_value": "synthetic-parent"}, False),
+    ],
+)
+def test_embedded_sdk_requires_explicit_root_parent(
+    business_unit: dict[str, str | None], *, expected: bool
+) -> None:
+    """Execute the real SDK subprocess body; missing selected fields are not root proof."""
+    script = "BUSINESS_UNIT=" + repr(business_unit) + "\n" + _SDK_STUB + preflight._SDK  # noqa: SLF001
+    result = subprocess.run(  # noqa: S603  # nosec B603
+        [sys.executable, "-c", script],
+        input=json.dumps(
+            {"origin": "https://fixture.crm6.dynamics.com", "dependencies": [], "roles": [ORG]}
+        ),
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=15,
+    )
+    assert json.loads(result.stdout)["roles"][0]["root_business_unit"] is expected
 
 
 @pytest.fixture
