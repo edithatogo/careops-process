@@ -46,3 +46,20 @@ comment quoting the same prose. Private local inspection verified all five exact
 match values. `.gitleaksignore` records only those revision/file/rule/line
 fingerprints; no credential detector, path or history interval is disabled.
 No source history was rewritten and no credential recovery was performed.
+
+Development qualification runs weekly/manually and for relevant CI dependency
+changes. It snapshots committed source into an isolated workspace and resolves
+all declared extras with prereleases allowed. Exact Python3.14.8 and3.15.0
+candidates run all existing quality/property/privacy/coverage/audit gates. Newer
+published CPython previews are discovered through the frozen upstream manifest;
+unavailable previews remain untested/skipped. The project's supported runtime
+range is widened only in the isolated candidate copy, never in the source lock
+or production declaration. Changed production range requires explicit review of
+the canary preparation contract. Each candidate retains exact package versions,
+source commit, lock digest and actual setup/test outcome without promotion.
+
+Local isolated Python3.15 qualification passed all156tests at90.88%coverage,
+strict Ruff/Pyright and the optional PM4Py dependency load with pandas3.1rc0 and
+lxml7beta. This is source compatibility and dependency loading only; PM4Py's
+licence/adoption gate and absent production adapter remain explicit. Hosted
+qualification and downloaded receipt checks are required before any promotion.

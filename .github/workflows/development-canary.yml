@@ -1,0 +1,157 @@
+name: Development dependency and runtime qualification
+on:
+  schedule:
+    - cron: '41 18 * * 2'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/development-canary.yml'
+      - pyproject.toml
+      - uv.lock
+permissions:
+  contents: read
+concurrency:
+  group: development-canary-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  discover:
+    name: Discover published runtime candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Read qualified shared discovery tooling
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: edithatogo/careops
+          ref: 48dec86b0eb17f44f5c0a155b5d41453e3a842b9
+          path: .local/ci-policy
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.0'
+      - name: Freeze upstream manifest and create exact candidate matrix
+        id: discover
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .local/runtime-canary
+          revision="$(gh api repos/actions/python-versions/commits/main --jq .sha)"
+          [[ "$revision" =~ ^[a-f0-9]{40}$ ]]
+          curl --fail --silent --show-error --location "https://raw.githubusercontent.com/actions/python-versions/$revision/versions-manifest.json" -o .local/runtime-canary/manifest.json
+          platform_version="$(python -c 'import platform; print(platform.freedesktop_os_release()["VERSION_ID"])')"
+          python .local/ci-policy/portfolio-scripts/ci_delivery.py runtime --platform-version "$platform_version" --manifest .local/runtime-canary/manifest.json --manifest-revision "$revision" --output .local/runtime-canary/discovery.json --github-output "$GITHUB_OUTPUT"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          receipt = json.loads(Path('.local/runtime-canary/discovery.json').read_text())
+          versions = ['3.14.8', '3.15.0']
+          if receipt['candidate']:
+              version = receipt['candidate'].replace('-alpha.', 'a').replace('-beta.', 'b').replace('-rc.', 'rc')
+              versions.append(version)
+          else:
+              receipt['runtimeTestOutcome'] = 'skipped'
+              Path('.local/runtime-canary/discovery.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('matrix=' + json.dumps({'python': versions}) + '\n')
+          PY
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: runtime-discovery
+          path: .local/runtime-canary/
+          include-hidden-files: true
+          if-no-files-found: warn
+  qualify:
+    name: Candidate (${{ matrix.python }})
+    needs: discover
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CANDIDATE_PYTHON: ${{ matrix.python }}
+      SOURCE_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+        with:
+          version: '0.13.1'
+          python-version: ${{ matrix.python }}
+          enable-cache: false
+      - name: Prepare committed source in an isolated candidate workspace
+        id: prepare
+        run: |
+          export CANARY_ROOT="$RUNNER_TEMP/process-canary"
+          echo "CANARY_ROOT=$CANARY_ROOT" >> "$GITHUB_ENV"
+          mkdir -p "$CANARY_ROOT"
+          git archive HEAD | tar -x -C "$CANARY_ROOT"
+          python - <<'PY'
+          import os, re, tomllib
+          from pathlib import Path
+          path = Path(os.environ['CANARY_ROOT']) / 'pyproject.toml'
+          source = path.read_text()
+          if tomllib.loads(source)['project']['requires-python'] != '>=3.14,<3.15':
+              raise SystemExit('Review the changed supported runtime range before preparing this canary.')
+          match = re.fullmatch(r'3\.(\d+)\.\d+(?:a\d+|b\d+|rc\d+)?', os.environ['CANDIDATE_PYTHON'])
+          if match is None:
+              raise SystemExit('Unsupported exact candidate runtime.')
+          upper = int(match.group(1)) + 1
+          path.write_text(source.replace('requires-python = ">=3.14,<3.15"', f'requires-python = ">=3.14,<3.{upper}"'))
+          PY
+      - name: Resolve preview dependencies without changing the source lock
+        id: resolve
+        run: uv lock --directory "$CANARY_ROOT" --python "$CANDIDATE_PYTHON" --upgrade --prerelease allow
+      - name: Install all declared extras from the candidate lock
+        id: install
+        run: uv sync --directory "$CANARY_ROOT" --python "$CANDIDATE_PYTHON" --frozen --group dev --all-extras
+      - name: Run existing quality, property, privacy and coverage gates
+        id: tests
+        run: |
+          uv run --directory "$CANARY_ROOT" --no-sync python -VV > "$CANARY_ROOT/runtime-version.txt"
+          uv run --directory "$CANARY_ROOT" --no-sync ruff format --check --diff .
+          uv run --directory "$CANARY_ROOT" --no-sync ruff check .
+          uv run --directory "$CANARY_ROOT" --no-sync pyright
+          uv run --directory "$CANARY_ROOT" --no-sync pytest
+          uv run --directory "$CANARY_ROOT" --no-sync bandit -q -r src
+          uv run --directory "$CANARY_ROOT" --no-sync pip-audit
+          uv run --directory "$CANARY_ROOT" --no-sync python -c 'import pm4py; print("Optional dependency load only; no production adapter invoked")'
+      - name: Record actual qualification and lock integrity
+        if: always() && steps.prepare.outcome == 'success'
+        env:
+          RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, tomllib
+          from pathlib import Path
+          root = Path(os.environ['CANARY_ROOT'])
+          lock = root / 'uv.lock'
+          outcome = os.environ['TEST_OUTCOME']
+          state = {'success': 'qualified-source-only', 'failure': 'executed-failure', 'cancelled': 'cancelled', 'skipped': 'setup-blocked'}[outcome]
+          receipt = {'sourceCommit': os.environ['SOURCE_COMMIT'], 'python': os.environ['CANDIDATE_PYTHON'], 'state': state, 'resolveOutcome': os.environ['RESOLVE_OUTCOME'], 'installOutcome': os.environ['INSTALL_OUTCOME'], 'testOutcome': outcome, 'testsExecuted': outcome in ['success', 'failure'], 'promoted': False, 'nativeWrites': False, 'optionalProviderScope': 'dependency installation/load only; no production adapter'}
+          if lock.exists():
+              receipt['lockSha256'] = hashlib.sha256(lock.read_bytes()).hexdigest()
+              receipt['packages'] = {p['name']: p['version'] for p in tomllib.loads(lock.read_text())['package']}
+          (root / 'qualification.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          PY
+      - name: Preserve candidate evidence after success or failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: candidate-${{ matrix.python }}
+          path: |
+            ${{ runner.temp }}/process-canary/uv.lock
+            ${{ runner.temp }}/process-canary/pyproject.toml
+            ${{ runner.temp }}/process-canary/qualification.json
+            ${{ runner.temp }}/process-canary/runtime-version.txt
+          if-no-files-found: warn
+          retention-days: 14
