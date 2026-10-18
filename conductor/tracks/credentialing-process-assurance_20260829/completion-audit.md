@@ -23,13 +23,13 @@ The [authenticated local alignment route](../../../docs/credentialing-authentica
 is implemented in `1bce2b9` and accepted by the integration owner's independent
 review and published in `beaef80ec20221eb525eeb999d8c81730b5a8eb0`. The integration
 owner reports 1,718 full-suite tests passed without skips on that local profile.
-Hosted CI/CodeQL remain in progress at this checkpoint; hosted secret/workflow
-security checks have passed. It binds trusted completeness metadata to revision and a
+Hosted CI, CodeQL, secret scanning and workflow security passed on that exact
+published revision: 1,708 tests passed with ten optional-backend skips, line
+coverage 96.36% and branch coverage 92.79%. It binds trusted completeness metadata to revision and a
 canonical retained-state digest, uses stored grants/policy, runs the worker
 outside the SQLite write lock, and reauthenticates/rechecks evidence before
 release. Its 53 focused tests and 80 store-integration tests pass; independent
-component review found no actionable findings. This does not stand in for that
-revision's remaining hosted checks, actual source/model/temporal-coverage
+component review found no actionable findings. This does not stand in for actual source/model/temporal-coverage
 approval or an anti-rollback recovery guarantee. No database migration or
 production identity-provider integration is implied.
 
