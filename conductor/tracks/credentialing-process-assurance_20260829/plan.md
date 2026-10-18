@@ -8,6 +8,19 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
 
+### Authenticated local alignment reporting — 18 October 2026
+
+- [x] Expose a token-only reporting route using current stored reader roles, case grants and privacy policy.
+- [x] Bind trusted model/runtime/completeness configuration to the exact retained ledger revision and canonical digest.
+- [x] Run alignment outside the database lock and reauthenticate full principal, policy and retained state before releasing any result.
+- [x] Verify concurrent ingestion/revocation, deletion/replay, same-revision substitution and the actual pinned weighted backend.
+
+Independent review of `1bce2b9` found no actionable issues; 80 route/store tests
+passed, including all 53 new route cases. See the
+[authenticated alignment boundary](../../../docs/credentialing-authenticated-alignment.md).
+This closes the local authenticated route, not organisational identity, source
+completeness/model approval, anti-rollback recovery, deployment or human acceptance.
+
 ### Optional canonical-model alignment — 18 October 2026
 
 - [x] Bind canonical weighted P/T models, explicit markings and observed retained case traces to a pinned optional backend and versioned method.

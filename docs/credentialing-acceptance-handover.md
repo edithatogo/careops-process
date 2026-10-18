@@ -86,6 +86,10 @@ authenticated atomic review, without claiming a deployed VUW identity/backend.
 The [optional model-alignment adapter](credentialing-model-alignments.md) adds
 canonical weighted Petri alignment fitness with explicit backend semantics;
 it does not admit an operational source model or establish causal effects.
+The [authenticated local route](credentialing-authenticated-alignment.md) binds
+that reporter to stored reader grants/privacy policy and exact retained evidence,
+then rechecks access and state after computation. It supplies local request
+authentication, not VUW identity, source/model acceptance or anti-rollback recovery.
 VUW-only live work and deferred
 Queensland Health integration are unchanged by tenant-neutral local arithmetic.
 
