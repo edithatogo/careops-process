@@ -170,3 +170,23 @@ new authentication or private evidence copies. This verifies the current retaine
 synthetic Developer state and published app shell. It does not repeat the CAS
 race/replay rehearsal, establish browser interaction, prove multi-user access or
 close provider delivery, live-corpus or target deployment acceptance.
+
+## Subsequent managed export verification
+
+Reliability produced a genuine managed export through the documented export API
+after the native PAC export crashed before producing a ZIP. This lane separately
+inspected the actual package without network calls or platform changes:
+
+```text
+artifacts/alm/personal-dev-hub-managed-20261018.zip
+Bytes 24222
+SHA-256 0bff972a5bb3bab121913ca26715ceacdce381b4ecd50864152214b447756473
+```
+
+CRC verification passes. The actual solution declares managed flag **1**, version
+**1.0.0.0**, four table roots, one sitemap root and one app root. Its embedded
+customizations contain one AppModule, one AppModuleSiteMap, one SiteMap and four
+app components. Two Role entries remain under AppModuleRoleMaps, and the solution
+still declares two missing dependencies. This local inspection verifies package
+integrity and structure; it does not verify target import, effective role sharing,
+recovery or browser acceptance. The charged ledger history remains retained.
