@@ -24,6 +24,11 @@ from careops_process.credentialing import (
     CredentialingProjection,
     validate_credentialing_projection,
 )
+from careops_process.credentialing_alignment_reporting import AlignmentReport, report_alignments
+from careops_process.credentialing_alignment_service import (
+    AlignmentStoreConfig,
+    validate_alignment_config,
+)
 from careops_process.credentialing_assurance import (
     CredentialingLedger,
     InferenceRun,
@@ -150,6 +155,21 @@ def _serialized(ledger: CredentialingLedger) -> str:
             _DeadLetter.model_validate(asdict(item)) for item in ledger.dead_letters
         ),
     ).model_dump_json()
+
+
+def alignment_snapshot_digest(ledger: CredentialingLedger) -> str:
+    """Fingerprint a protected retained snapshot for trusted coverage configuration.
+
+    This administrative helper authenticates nothing. Its digest is not a public
+    reporting value, model acceptance or proof of temporal completeness.
+    """
+    if type(ledger) is not CredentialingLedger:
+        _fail("Expected concrete retained ledger")
+    retained = _ledger(_State.model_validate_json(_serialized(ledger)))
+    payload = json.loads(_serialized(retained))
+    payload["tombstones"] = sorted(payload["tombstones"])
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 @contextmanager
@@ -318,9 +338,61 @@ class SQLiteCredentialingStore:
     API credentials must be carried over a trusted local channel or TLS endpoint.
     """
 
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, alignment_config: AlignmentStoreConfig | None = None) -> None:
         """Bind an existing store without provisioning users or creating files."""
         self._path = path.resolve(strict=True)
+        self._alignment_config = (
+            None if alignment_config is None else validate_alignment_config(alignment_config)
+        )
+
+    def read_alignment_report(self, token: str) -> AlignmentReport:
+        """Authenticate a consistent snapshot, compute unlocked, recheck before release.
+
+        No request-controlled policy, path, completeness or scope is accepted.
+        The final transaction is the authorization/evidence linearization point;
+        changes before it discard output, changes after it affect later requests.
+        """
+        with _transaction(self._path) as connection:
+            principal = _authenticate(connection, token, frozenset({"report_reader"}))
+            revision, ledger, policy = _load(connection)
+            snapshot_digest = alignment_snapshot_digest(ledger)
+        config = self._alignment_config
+        if config is None:
+            result = AlignmentReport("configuration_unavailable")
+        else:
+            config = validate_alignment_config(config)
+            if config.ledger_revision != revision or config.ledger_sha256 != snapshot_digest:
+                result = AlignmentReport("coverage_unavailable")
+            elif config.model.authority_version != policy.authority_version:
+                result = AlignmentReport("configuration_unavailable")
+            else:
+                result = report_alignments(
+                    ledger,
+                    config.model,
+                    role=principal.role,
+                    case_ids=principal.case_ids,
+                    complete_case_ids=config.complete_case_ids.intersection(principal.case_ids),
+                    minimum_cases=policy.minimum_cases,
+                    python=config.python,
+                    timeout_seconds=config.timeout_seconds,
+                )
+        # Never hold the SQLite write lock during optional backend computation.
+        with _transaction(self._path) as connection:
+            current = _authenticate(connection, token, frozenset({"report_reader"}))
+            current_revision, current_ledger, current_policy = _load(connection)
+            if (
+                current,
+                current_revision,
+                current_policy,
+                alignment_snapshot_digest(current_ledger),
+            ) != (
+                principal,
+                revision,
+                policy,
+                snapshot_digest,
+            ):
+                return AlignmentReport("stale_snapshot")
+            return result
 
     def snapshot(self, token: str) -> LedgerSnapshot:
         """Return detached source-wide state to an authenticated ingestion worker."""
