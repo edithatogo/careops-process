@@ -184,10 +184,10 @@ def _navigation_ids(navigation: Element) -> None:
         seen: set[str] = set()
         for child in parent.findall(tag):
             identity = child.get("Id", "")
-            if not identity.strip() or identity != identity.strip() or identity in seen:
+            if not identity.strip() or identity != identity.strip() or identity.casefold() in seen:
                 msg = "Missing, empty or duplicate navigation identity."
                 raise ValueError(msg)
-            seen.add(identity)
+            seen.add(identity.casefold())
 
 
 def _validate_one_app(

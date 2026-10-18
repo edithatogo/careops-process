@@ -133,6 +133,25 @@ def test_pac_app_references_and_typed_setting(app_solution: Path) -> None:
 @pytest.mark.parametrize(
     ("tag", "identifier"), [("Area", "area"), ("Group", "group"), ("SubArea", "list")]
 )
+def test_navigation_case_only_collisions(app_solution: Path, tag: str, identifier: str) -> None:
+    """The conservative local profile refuses case-only sibling ID collisions."""
+    path = app_solution / "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml"
+    text = path.read_text()
+    if tag == "SubArea":
+        text = text.replace(
+            '<SubArea Id="list" Entity="cop_intake"/>',
+            '<SubArea Id="list" Entity="cop_intake"/><SubArea Id="LIST" Entity="cop_intake"/>',
+        )
+    else:
+        text = text.replace(f"</{tag}>", f'</{tag}><{tag} Id="{identifier.upper()}"/>')
+    path.write_text(text)
+    with pytest.raises(ValueError, match="navigation identity"):
+        local_alm.validate_solution(app_solution)
+
+
+@pytest.mark.parametrize(
+    ("tag", "identifier"), [("Area", "area"), ("Group", "group"), ("SubArea", "list")]
+)
 @pytest.mark.parametrize("invalid", ["empty", "missing", "duplicate"])
 def test_navigation_identity_is_required_and_unique(
     app_solution: Path, tag: str, identifier: str, invalid: str

@@ -155,6 +155,8 @@ Navigation supports entity subareas only; external links require another adapter
 Area IDs must be nonempty and unique within their sitemap, Group IDs within their
 Area, and SubArea IDs within their Group. Missing, whitespace-only and padded IDs
 are rejected rather than normalized into ambiguous navigation identities.
+This conservative local profile also rejects case-only sibling ID collisions at
+each level. That restriction is not a claim about the full Dataverse sitemap schema.
 
 Only the observed `AppChannel` app setting with numeric value `1` and a Boolean
 customizability flag is exempted from the generic bound-value scan, inside the
