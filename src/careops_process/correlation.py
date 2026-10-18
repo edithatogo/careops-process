@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Cross-source object-centric corpus reconstruction."""
 
 from __future__ import annotations

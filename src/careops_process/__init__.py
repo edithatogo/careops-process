@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """CareOps object-centric process intelligence."""
 
 from careops_process.credentialing import (

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Build a governed, privacy-safe semantic projection from a validated OCEL log."""
 
 from __future__ import annotations

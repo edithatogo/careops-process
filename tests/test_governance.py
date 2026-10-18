@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Governance decision validation tests."""
 
 from typing import Any

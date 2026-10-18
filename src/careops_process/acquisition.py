@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Connector-neutral complete-population acquisition primitives."""
 
 from __future__ import annotations

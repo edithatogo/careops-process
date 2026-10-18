@@ -2,5 +2,27 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>edithatogo/renovate-config"
+  ],
+  "enabledManagers": [
+    "pep621"
+  ],
+  "ignoreUnstable": false,
+  "schedule": [
+    "at any time"
+  ],
+  "timezone": "Australia/Brisbane",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ]
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "*"
+      ],
+      "automerge": false
+    }
   ]
 }

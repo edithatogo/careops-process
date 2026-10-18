@@ -20,3 +20,6 @@
 
 ## [~] Track: Credentialing privacy-minimised event and assurance pack
 *Link: [./tracks/credentialing-process-assurance_20260829/](./tracks/credentialing-process-assurance_20260829/)*
+
+## [~] Track: Suite CI dependency, canary and release qualification
+*Link: [./tracks/suite_ci_adoption_20261018/](./tracks/suite_ci_adoption_20261018/)*

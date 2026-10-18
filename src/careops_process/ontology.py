@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Versioned CareOps ontology registry and compatibility validation."""
 
 from __future__ import annotations

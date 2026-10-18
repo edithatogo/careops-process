@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Corpus-level process landscape tests."""
 
 from datetime import UTC, datetime

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Closed-run boundary for converting a reconciled backfill into OCEL output."""
 
 from __future__ import annotations

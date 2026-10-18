@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Sanitized Dataverse pilot adapter tests."""
 
 import pytest

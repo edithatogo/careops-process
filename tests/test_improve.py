@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic semantic-model and improvement-loop tests."""
 
 import pytest

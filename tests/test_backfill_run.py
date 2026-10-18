@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Closed backfill execution boundary tests."""
 
 from datetime import UTC, datetime
