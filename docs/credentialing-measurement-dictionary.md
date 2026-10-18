@@ -50,7 +50,9 @@ Actual approved baseline, retrospective/silent-mode evidence and governance/manu
 acceptance remain necessary. The current [original-outcome audit](credentialing-acceptance-handover.md)
 also distinguishes event counters from the implemented
 [local case-rate, calendar-state and protected variant aggregation](credentialing-local-reporting.md),
-and records the still-partial stage queue and model-fitness outcomes.
+and distinguishes implemented local stage-calendar reporting and optional
+[canonical model-alignment fitness](credentialing-model-alignments.md) from their
+still-open source/model and operational acceptance requirements.
 [Stage-specific worker effort](credentialing-stage-effort.md) is locally implemented
 over explicit source-mapped work observations; actual mapping/baseline acceptance
 and causal released capacity remain open.

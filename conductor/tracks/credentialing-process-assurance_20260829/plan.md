@@ -8,6 +8,19 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
 
+### Optional canonical-model alignment — 18 October 2026
+
+- [x] Bind canonical weighted P/T models, explicit markings and observed retained case traces to a pinned optional backend and versioned method.
+- [x] Preserve weighted enabling/firing semantics and verify sequence, choice, loop, parallel and silent-transition arithmetic.
+- [x] Reconcile exclusions, event/case grain and case-mean fitness with joint release suppression.
+- [x] Bound worker input/output and wall time; return controlled unavailable results for protocol/runtime failures.
+
+See [model-alignment semantics and limits](../../../docs/credentialing-model-alignments.md).
+The weighted-arc and nested-reply review repairs are in `619846d` and `b3dcf2c`.
+This component adds alignment fitness, not model precision, token-replay fitness,
+BPMN conversion, clinical approval or causal capacity evidence. Actual model,
+source, authority, runtime/production licence and operational acceptance remain open.
+
 ### Stage-specific calendar time — 18 October 2026
 
 - [x] Allocate queue/active/unknown intervals using explicit ordered source-stage assignments.
@@ -52,8 +65,8 @@ old-backup disaster recovery or final human/live acceptance gates.
 
 See [local reporting semantics and executable example](../../../docs/credentialing-local-reporting.md).
 These are local synthetic capabilities. Stage-specific professional/committee
-worker effort and calendar reporting are implemented above. True model fitness,
-causal capacity, approved source/authority
+worker effort, calendar reporting and optional canonical alignment fitness are
+implemented above. Causal capacity, approved source/authority
 mapping, live integration and manual track acceptance remain open. Calendar active
 time is not worker effort. This update does not complete the original track.
 

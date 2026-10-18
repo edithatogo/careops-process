@@ -62,7 +62,7 @@ metrics. Existing minimum EVENT counters must not silently become case rates.
 | Queue time, professional review and committee preparation work | Explicit queue/active/unknown case-calendar partition; source-mapped professional-review/committee-preparation worker minutes and touches in `credentialing_stage_effort`; explicit per-interval stage calendar allocation in `credentialing_stage_calendar` | Actual source/span/stage mapping acceptance remains open; calendar active time is not worker effort and queue is never elapsed minus worker minutes |
 | Temporary approval conversion/review/expiry; condition/supervision reviews; renewal overdue | Explicit episode/obligation snapshots and privacy-aware reporters | Approved deadline, extension, completion, censoring and complete obligation populations |
 | Duplicate/register reconciliation exceptions | Validated registered activities and failure/duplicate event counters | Approved reconciliation semantics and source linkage; roster reconciliation and unauthorized-practice conclusions are not established |
-| Conformance fitness and variant frequency | Per-case reference comparisons; local case-scoped observed administrative trace frequencies with joint-cell suppression | Generic positional/set scores are not model/token-replay fitness. Source adapter must resolve retained observed-only trace completeness/order, ambiguous timestamp ties and authority applicability; no clinical compliance certificate |
+| Conformance fitness and variant frequency | Per-case reference comparisons; protected case-scoped variants; optional pinned PM4Py weighted Petri alignment over retained observed traces with explicit markings/method and joint suppression | Alignment is distinct from positional/set scores, token replay and precision. Actual canonical model/source/authority/completeness acceptance, operational runtime and licence review remain open; no BPMN conversion or clinical compliance certificate |
 | False alerts/missed requirements | Independently adjudicated CASE-level FP/FN reporters | Approved evaluation grain/reference and representative silent-mode adjudication; case rates cannot be relabelled alert/requirement rates |
 | Practitioner/staff experience | Versioned instrument, frozen aggregate cohort and distinct-person response/missingness reporter | Source instrument/sampling/privacy acceptance, actual observations and interpretive validation |
 | Higher-value capacity released | Observed destination work, recomputed effort difference, protected attributed claims/judgments | Credible causal evaluation, provenance and human appraisal remain necessary. The causal requirement stays partial |
@@ -83,6 +83,9 @@ queue attribution and reconciled denominators. Actual source/stage mapping,
 causal capacity and every real-source/acceptance gate below remain open.
 The [local store adapter](credentialing-store.md) provides local durable state and
 authenticated atomic review, without claiming a deployed VUW identity/backend.
+The [optional model-alignment adapter](credentialing-model-alignments.md) adds
+canonical weighted Petri alignment fitness with explicit backend semantics;
+it does not admit an operational source model or establish causal effects.
 VUW-only live work and deferred
 Queensland Health integration are unchanged by tenant-neutral local arithmetic.
 
