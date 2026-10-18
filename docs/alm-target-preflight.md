@@ -18,6 +18,11 @@ identity, CRC and supported declared prerequisites, and verifies the on-disk
 artifact remains unchanged after reads. Unhandled dependencies and malformed or
 duplicate declarations fail closed. This is a narrow profile for the inspected
 app export, not a general Dataverse dependency resolver or full app-schema review.
+Prerequisite container cardinality and child tags are checked before extraction:
+exactly one MissingDependencies container per manifest, at most one AppModules
+container, and exactly one AppModuleRoleMaps container per included app. Unknown
+dependency/app/role children and malformed or duplicate containers are rejected,
+rather than silently counted as zero requirements.
 
 Existing Azure CLI delegated authentication must already work. Set the isolated
 VUW configuration directory on the calling process, never globally:

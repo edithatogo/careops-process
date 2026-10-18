@@ -248,3 +248,63 @@ def test_package_requirements_fail_closed(evidence: tuple[Path, dict[str, Any]],
     binding["artifact_sha256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
     with pytest.raises(ValueError, match="preflight"):
         preflight.assess_target(artifact, binding)
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "unknown-dependency-child",
+        "duplicate-dependencies",
+        "missing-dependencies",
+        "unknown-role-child",
+        "duplicate-role-maps",
+        "missing-role-maps",
+        "unknown-app-child",
+        "duplicate-app-container",
+        "nested-role",
+    ],
+)
+def test_unknown_or_ambiguous_prerequisite_containers(
+    evidence: tuple[Path, dict[str, Any]], bad: str
+) -> None:
+    """Unknown tags cannot erase declared prerequisite or sharing obligations."""
+    artifact, binding = evidence
+    with zipfile.ZipFile(artifact) as archive:
+        manifest = archive.read("solution.xml").decode()
+    customizations = "<ImportExportXml/>"
+    if bad == "unknown-dependency-child":
+        manifest = manifest.replace(
+            "<MissingDependencies/>",
+            "<MissingDependencies>"
+            '<UnexpectedDependency><Required type="999"/><Dependent/></UnexpectedDependency>'
+            "</MissingDependencies>",
+        )
+    elif bad == "duplicate-dependencies":
+        manifest = manifest.replace("<MissingDependencies/>", "<MissingDependencies/>" * 2)
+    elif bad == "missing-dependencies":
+        manifest = manifest.replace("<MissingDependencies/>", "")
+    else:
+        role_maps = "<AppModuleRoleMaps/>"
+        if bad == "unknown-role-child":
+            role_maps = '<AppModuleRoleMaps><UnexpectedRole id="synthetic"/></AppModuleRoleMaps>'
+        elif bad == "duplicate-role-maps":
+            role_maps *= 2
+        elif bad == "missing-role-maps":
+            role_maps = ""
+        elif bad == "nested-role":
+            role_maps = (
+                f'<AppModuleRoleMaps><Role id="{ORG}"><Unexpected/></Role></AppModuleRoleMaps>'
+            )
+        app = f"<AppModule><UniqueName>fixtureapp</UniqueName>{role_maps}</AppModule>"
+        if bad == "unknown-app-child":
+            app += "<UnexpectedApp/>"
+        container = f"<AppModules>{app}</AppModules>"
+        if bad == "duplicate-app-container":
+            container *= 2
+        customizations = f"<ImportExportXml>{container}</ImportExportXml>"
+    with zipfile.ZipFile(artifact, "w") as archive:
+        archive.writestr("solution.xml", manifest)
+        archive.writestr("customizations.xml", customizations)
+    binding["artifact_sha256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
+    with pytest.raises(ValueError, match="preflight"):
+        preflight._requirements(artifact.read_bytes())  # noqa: SLF001

@@ -145,9 +145,18 @@ def _read(url: str, token: str) -> dict[str, Any]:
 
 
 def _dependency_key(dependency: Element) -> str:
+    if [child.tag for child in dependency] != ["Required", "Dependent"]:
+        _fail()
     if len(dependency.findall("Required")) != 1 or len(dependency.findall("Dependent")) != 1:
         _fail()
     required = dependency.findall("Required")[0]
+    if (
+        dependency.attrib
+        or (dependency.text or "").strip()
+        or [child.tag for child in required] != ["package"]
+        or len(dependency.findall("Dependent")[0])
+    ):
+        _fail()
     if (
         required.get("type") == "61"
         and required.get("schemaName") == ("msdyn_/Images/AppModule_Default_Icon.png")
@@ -170,6 +179,37 @@ def _dependency_key(dependency: Element) -> str:
     return key
 
 
+def _container(
+    parent: Element, name: str, child_tag: str, *, optional: bool = False
+) -> list[Element]:
+    """Validate a prerequisite container before extracting its known child nodes."""
+    matches = parent.findall(name)
+    if not matches and optional:
+        return []
+    if len(matches) != 1:
+        _fail()
+    container = matches[0]
+    if container.attrib or (container.text or "").strip():
+        _fail()
+    children = list(container)
+    if any(child.tag != child_tag or (child.tail or "").strip() for child in children):
+        _fail()
+    return children
+
+
+def _declared_roles(customizations: Element) -> set[str]:
+    roles: set[str] = set()
+    for app in _container(customizations, "AppModules", "AppModule", optional=True):
+        for role in _container(app, "AppModuleRoleMaps", "Role"):
+            if set(role.attrib) != {"id"} or len(role) or (role.text or "").strip():
+                _fail()
+            identifier = str(UUID(role.get("id", "").strip("{}")))
+            if identifier in roles:
+                _fail()
+            roles.add(identifier)
+    return roles
+
+
 def _requirements(snapshot: bytes) -> tuple[set[str], set[str]]:
     with zipfile.ZipFile(io.BytesIO(snapshot)) as package:
         if (
@@ -185,22 +225,24 @@ def _requirements(snapshot: bytes) -> tuple[set[str], set[str]]:
         manifest = ElementTree.fromstring(package.read("solution.xml"))
         customizations = ElementTree.fromstring(package.read("customizations.xml"))
     dependencies: set[str] = set()
-    for dependency in manifest.findall("SolutionManifest/MissingDependencies/MissingDependency"):
+    manifests = manifest.findall("SolutionManifest")
+    if (
+        manifest.tag != "ImportExportXml"
+        or customizations.tag != "ImportExportXml"
+        or len(manifests) != 1
+    ):
+        _fail()
+    for dependency in _container(manifests[0], "MissingDependencies", "MissingDependency"):
         key = _dependency_key(dependency)
         if key in dependencies:
             _fail()
         dependencies.add(key)
-    roles = [
-        str(UUID(r.get("id", "").strip("{}")))
-        for r in customizations.findall("AppModules/AppModule/AppModuleRoleMaps/Role")
-    ]
-    if len(roles) != len(set(roles)):
-        _fail()
+    roles = _declared_roles(customizations)
     if "icon" in dependencies and {
         node.text for node in customizations.findall("AppModules/AppModule/WebResourceId")
     } != {_ICON_ID}:
         _fail()
-    return dependencies, set(roles)
+    return dependencies, roles
 
 
 def _identity(snapshot: bytes) -> dict[str, str]:
