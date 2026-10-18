@@ -64,3 +64,33 @@ def test_real_receipt_classifies_every_stage(
     assert receipt["testsExecuted"] == (outcomes["tests"] in {"success", "failure"})
     assert receipt["promoted"] is False
     assert receipt["nativeWrites"] is False
+
+
+@pytest.mark.parametrize(
+    ("candidate", "upper"),
+    [("3.14.8", 16), ("3.15.0", 16), ("3.16.0a1", 17)],
+)
+def test_candidate_preparation_preserves_supported_runtime_range(
+    tmp_path: Path,
+    candidate: str,
+    upper: int,
+) -> None:
+    """Execute real preparation: older candidates cannot narrow supported Python."""
+    workflow = Path(".github/workflows/development-canary.yml").read_text()
+    step = workflow.split(
+        "      - name: Prepare committed source in an isolated candidate workspace\n", 1
+    )[1]
+    step = step.split("      - name: Resolve preview dependencies", 1)[0]
+    shell = textwrap.dedent(step.split("        run: |\n", 1)[1])
+    script = shell.split("python - <<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    source = Path("pyproject.toml").read_text()
+    target = tmp_path / "pyproject.toml"
+    target.write_text(source)
+    subprocess.run(  # noqa: S603 - actual checked-in preparation with synthetic environment
+        [sys.executable, "-c", script],
+        check=True,
+        env={"CANARY_ROOT": str(tmp_path), "CANDIDATE_PYTHON": candidate},
+        capture_output=True,
+    )
+    assert f'requires-python = ">=3.14,<3.{upper}"' in target.read_text()
+    assert Path("pyproject.toml").read_text() == source
