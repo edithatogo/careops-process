@@ -6,10 +6,11 @@ Queensland Health live/pilot work remains deferred.
 
 ## Verified starting point
 
-- Published `b846cfc` passed CI, CodeQL analysis, secret scanning and workflow
-  security. Its hosted suite passed 1,618 tests with nine optional-backend skips.
-  The pinned optional alignment runtime separately passed 74 local tests without
-  skips. Optional PM4Py hosted checks remain opt-in.
+- Published `7025419` passed CI, CodeQL analysis, secret scanning and workflow
+  security. Its hosted suite passed 1,656 tests with nine optional-backend skips,
+  line coverage 96.34% and branch coverage 92.75%. The full local suite with the
+  installed pinned optional backend passed 1,665 tests without skips. Optional
+  PM4Py hosted checks remain opt-in.
 - VUW Azure authentication works through the isolated per-process configuration;
   old caches and unrelated PAC/QH profiles were preserved.
 - The personal Developer environment is managed. The announced retirement of
@@ -21,8 +22,8 @@ Queensland Health live/pilot work remains deferred.
   optional canonical weighted Petri-net alignment fitness are implemented.
   Independent review also cleared the subsequent joint stage-time privacy and
   concrete privacy-threshold repairs (`5661612`, `78ce07b`); their combined local
-  measurement/assurance/store check passed 104 tests. Their hosted verification
-  remains pending publication of the reviewed tranche.
+  measurement/assurance/store check passed 104 tests. Both repairs are included
+  in the exact published revision and hosted results above.
 - The separately reviewed target preflight at `2051a56` passed a fresh independent
   TEST assessment at `2026-10-18T09:10:15.147582Z`: pinned caller/organization,
   exact linked environment, two component prerequisites with versioned solution
