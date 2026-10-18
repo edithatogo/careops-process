@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "careops-process"
 version = "0.1.0"
 description = "Privacy-preserving object-centric process intelligence for CareOps"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.15,<3.16"
 dependencies = [
   "polars>=1.33",
   "pyarrow>=21",
