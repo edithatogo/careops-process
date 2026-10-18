@@ -37,3 +37,11 @@ acceptance; the current deterministic conformance functions do not invoke it.
 Runtime/tool canaries, real optional interfaces and signed release distributions
 remain explicit follow-ups in the Conductor track. No tenant login, mailbox
 processing or deployment follows from these source checks.
+
+The initial shared scan reviewed all238historical commits and found five
+`generic-api-key` matches containing exactly the English data-lifecycle phrase
+`retention/disposal`: four historical documentation passages and an old ignore
+comment quoting the same prose. Private local inspection verified all five exact
+match values. `.gitleaksignore` records only those revision/file/rule/line
+fingerprints; no credential detector, path or history interval is disabled.
+No source history was rewritten and no credential recovery was performed.
