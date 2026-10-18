@@ -72,7 +72,10 @@ M365 was assigned a fresh independent service readback. Its follow-up verificati
 encountered noninteractive Azure CLI token-acquisition failure after correcting
 its SDK ETag handling. Independent live verification therefore remains pending;
 that authentication failure is not a finding against the stored ledger or app.
-Reliability remains the authentication owner.
+Reliability remains the authentication owner. Following the user's VUW login
+request, it restored a usable isolated Azure CLI configuration without changing
+the old cache or unrelated PAC/QH profiles. A subsequent independent service
+verification is recorded below.
 
 ## Actual export and ALM handoff
 
@@ -128,8 +131,8 @@ The user was offered sign-in or leaving UI verification pending. The previous br
 binding could not be recovered after interruption, so no successful
 list/detail/create interaction or browser-runtime acceptance is claimed.
 
-Remaining gates are browser sign-in and UI checks; independent fresh service
-readback; least-privilege/multi-user sharing and access tests; trusted hosted
+Remaining gates are browser sign-in and UI checks;
+least-privilege/multi-user sharing and access tests; trusted hosted
 worker/recipient authorization; crash/continuity and full schema/data recovery;
 provider connection, idempotency and delivery reconciliation; app-aware ALM
 validation plus dependency/role binding and target import/restore verification.
@@ -146,3 +149,24 @@ the retained schema/app/CAS receipts. It found no raw GUIDs or endpoint URLs in
 this note. That review performed no network, authentication or platform calls;
 it does not close the pending independent live service verification or UI gates.
 Conductor configuration validation and Git whitespace checks pass.
+
+## Subsequent independent service verification
+
+At **18 October 2026, 08:36:09 UTC** (18:36:09 Brisbane), the coordinator's
+independent review agent completed fresh read-only verification using the restored
+VUW configuration. The archived M365 chat remained archived.
+
+- Fresh WhoAmI matched the pinned organization and operator.
+- Actual ledger metadata matched the private binding and enabled optimistic
+  concurrency. The exact primary-key read returned an ETag and the expected owner.
+- The payload was decoded from the actual response, then matched against the
+  expected final payload: revision **1**, **one charged reservation**, **one receipt**.
+- The published app had exactly one component of each type **1, 26, 60 and 62**;
+  its entity component matched the actual intake table metadata.
+- Actual navigation contained one intake page and no ledger page.
+
+The checker exited successfully without platform mutations, provider requests,
+new authentication or private evidence copies. This verifies the current retained
+synthetic Developer state and published app shell. It does not repeat the CAS
+race/replay rehearsal, establish browser interaction, prove multi-user access or
+close provider delivery, live-corpus or target deployment acceptance.
