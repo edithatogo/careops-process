@@ -78,10 +78,16 @@ jobs:
       CANDIDATE_PYTHON: ${{ matrix.python }}
       SOURCE_COMMIT: ${{ github.sha }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Initialize evidence before source or runtime setup
+        run: |
+          mkdir -p "$RUNNER_TEMP/process-canary"
+          echo "CANARY_ROOT=$RUNNER_TEMP/process-canary" >> "$GITHUB_ENV"
+      - id: source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+      - id: bootstrap
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
         with:
           version: '0.13.1'
           python-version: ${{ matrix.python }}
@@ -124,20 +130,38 @@ jobs:
           uv run --directory "$CANARY_ROOT" --no-sync pip-audit
           uv run --directory "$CANARY_ROOT" --no-sync python -c 'import pm4py; print("Optional dependency load only; no production adapter invoked")'
       - name: Record actual qualification and lock integrity
-        if: always() && steps.prepare.outcome == 'success'
+        if: always()
         env:
+          SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          BOOTSTRAP_OUTCOME: ${{ steps.bootstrap.outcome }}
+          PREPARE_OUTCOME: ${{ steps.prepare.outcome }}
           RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           INSTALL_OUTCOME: ${{ steps.install.outcome }}
           TEST_OUTCOME: ${{ steps.tests.outcome }}
         run: |
-          python - <<'PY'
+          /usr/bin/python3 - <<'PY'
           import hashlib, json, os, tomllib
           from pathlib import Path
           root = Path(os.environ['CANARY_ROOT'])
+          root.mkdir(parents=True, exist_ok=True)
           lock = root / 'uv.lock'
           outcome = os.environ['TEST_OUTCOME']
-          state = {'success': 'qualified-source-only', 'failure': 'executed-failure', 'cancelled': 'cancelled', 'skipped': 'setup-blocked'}[outcome]
+          stages = {name: os.environ[name.upper() + '_OUTCOME'] for name in ['source', 'bootstrap', 'prepare', 'resolve', 'install']}
+          stages['tests'] = outcome
+          failed = next((name for name, value in stages.items() if value == 'failure'), None)
+          if failed in ['resolve', 'install', 'tests']:
+              state = 'executed-failure'
+          elif failed == 'prepare':
+              state = 'preparation-failure'
+          elif failed:
+              state = 'setup-blocked'
+          elif 'cancelled' in stages.values():
+              state = 'cancelled'
+          else:
+              state = 'qualified-source-only' if outcome == 'success' else 'not-executed'
           receipt = {'sourceCommit': os.environ['SOURCE_COMMIT'], 'python': os.environ['CANDIDATE_PYTHON'], 'state': state, 'resolveOutcome': os.environ['RESOLVE_OUTCOME'], 'installOutcome': os.environ['INSTALL_OUTCOME'], 'testOutcome': outcome, 'testsExecuted': outcome in ['success', 'failure'], 'promoted': False, 'nativeWrites': False, 'optionalProviderScope': 'dependency installation/load only; no production adapter'}
+          receipt['stages'] = stages
+          receipt['failedStage'] = failed
           if lock.exists():
               receipt['lockSha256'] = hashlib.sha256(lock.read_bytes()).hexdigest()
               receipt['packages'] = {p['name']: p['version'] for p in tomllib.loads(lock.read_text())['package']}
