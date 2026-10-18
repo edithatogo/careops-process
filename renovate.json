@@ -3,13 +3,28 @@
   "extends": [
     "local>edithatogo/renovate-config"
   ],
-  "enabledManagers": ["git-submodules"],
+  "enabledManagers": [
+    "pep621",
+    "git-submodules"
+  ],
+  "ignoreUnstable": false,
+  "schedule": [
+    "at any time"
+  ],
+  "timezone": "Australia/Brisbane",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ]
+  },
   "automerge": false,
   "platformAutomerge": false,
   "packageRules": [
     {
-      "description": "All updates require human review, including inherited digest/pin/patch rules",
-      "matchPackageNames": ["*"],
+      "matchPackageNames": [
+        "*"
+      ],
       "automerge": false,
       "platformAutomerge": false
     }

@@ -1,28 +1,37 @@
 # Dependency maintenance and CI
 
-Current policy, 14 October 2026. Repository configuration is local evidence;
-successful hosted execution remains a separate acceptance gate.
+Current policy, 18 October 2026. Effective default-branch operation and reviewed
+branch configuration are separate evidence.
 
 ## Ownership
 
 | Ecosystem | Owner | Scope |
 | --- | --- | --- |
-| Python/uv | Dependabot | Root pyproject and uv.lock, weekly version PRs and GitHub security updates |
-| GitHub Actions | Dependabot | SHA-pinned workflow Actions, weekly version PRs and security updates |
-| Skill Git submodules | Renovate | .gitmodules/gitlink pins; review upstream skill changes before accepting |
+| Python/uv | Renovate | Root pyproject.toml and uv.lock via pep621, including lockfile maintenance |
+| GitHub Actions | Dependabot | SHA-pinned workflow Actions; weekly updates |
+| Skill Git submodules | Renovate | Gitlink pins; review upstream skill changes before accepting |
 
-The inspected [shared preset](https://github.com/edithatogo/renovate-config/blob/f16a84f40c6a6cf1e61c8d96051d272de647342e/default.json)
-extends `config:recommended`, enables git-submodules, and sets pin/digest/patch
-automerge. Without local constraints its Python and Actions managers overlap
-Dependabot. `enabledManagers` now permits only `git-submodules`; the final local
-package rule disables inherited automerge for every package. No checks or coverage
-thresholds are relaxed. The preset is mutable: verify resolved configuration in
-the Renovate dashboard/log when accepting future preset changes.
+The default branch at `1e092ffb11c165c7d23fc9a217a76783577b8624` assigns Python
+to Renovate `pep621` and GitHub Actions to Dependabot. This supersedes the older
+branch plan assigning Python to Dependabot. The reconciled branch adds
+`git-submodules` alongside `pep621`, preserving main's schedule, timezone,
+ignoreUnstable setting and Monday lockfile maintenance. Explicit repository and
+final all-package rules disable automerge and platform automerge, including
+inherited preset rules. No checks or security scanning are relaxed.
+
+[Renovate's pep621 documentation](https://docs.renovatebot.com/modules/manager/pep621/)
+documents pyproject/uv.lock management. Do not add a competing Dependabot Python
+entry. If ownership is deliberately changed in future, [uv's native Dependabot
+integration](https://docs.astral.sh/uv/guides/integration/dependabot/) uses the
+`uv` ecosystem, not a guessed pip lockfile configuration.
 
 [Renovate submodule documentation](https://docs.renovatebot.com/modules/manager/git-submodules/)
-describes its pin updates. Dependabot security updates must also be enabled in
-repository settings; YAML schedules alone do not prove that setting. Confirm
-Python PRs regenerate uv.lock and run locked sync; reject manifest-only updates.
+describes gitlink updates. Confirm resolved managers and no-automerge behavior
+in actual hosted evidence after integration. Inspect Python updates for a
+regenerated uv.lock and successful locked installation; inspect a real submodule
+PR. Dependency dashboards, local configuration and manifest-only updates do not
+complete those checks. Verify repository security-update settings separately.
+The shared preset remains mutable; inspect its resolved configuration when changed.
 
 ## CodeQL
 
@@ -50,6 +59,6 @@ CI pins downloaded Actions; Python packages are resolved by the committed lock.
 
 Before accepting a hosted release, inspect actual Actions checks and branch
 protection for Python quality, offline PowerShell, workflow security, secret scan,
-and CodeQL. Inspect Renovate resolved manager lists and a submodule PR, and verify
-Dependabot Python/Actions updates without duplicate Renovate PRs. Do not claim
+and CodeQL. Inspect Renovate resolved manager lists, Python lockfile updates and a submodule
+PR, and verify Dependabot Actions updates without duplicate ecosystem owners. Do not claim
 these checks succeeded from a local configuration review.
