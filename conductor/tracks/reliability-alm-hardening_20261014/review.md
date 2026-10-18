@@ -3,6 +3,26 @@
 Current closure disposition: see [17 October closure review](closure-review-20261017.md).
 The historical local review below remains scoped to its recorded revision.
 
+## 18 October reconciliation
+
+The bounded app-aware source adapter and navigation review fixes are committed in
+`e7eaa50`, `14f8b96` and `ecb8fce`. Sixty-one scoped ALM tests pass; Coordination
+independently verified all four hosted workflows at `ecb8fce`, including CodeQL
+and 1,553 tests (97.60% line, 94.93% branch). Documentation `555f7d2` was pending
+hosted verification at that handoff. No results are inferred for later revisions.
+
+Personal Developer baseline import/export and restoration of the solution's
+description are verified. This proves recovery of one metadata property only,
+not schema/data rollback, managed promotion or disaster restore. See the
+[independent hub rehearsal](../../../docs/vuw-hub-rehearsal-20261018.md) and
+[app-aware validation limits](../../../docs/local-alm.md). The actual app export
+remains refused because of declared platform dependencies and role mappings;
+no component was relabelled and no validation bypass was introduced.
+
+The isolated VUW Azure configuration now provides fresh verified Developer
+organization/user identity. This does not grant missing TEST rights. Updater
+ownership execution, executable cloud recovery and human verification remain open.
+
 ## Summary
 
 Reviewed local implementation is ready for integration; the track remains open for

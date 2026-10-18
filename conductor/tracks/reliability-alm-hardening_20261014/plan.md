@@ -56,23 +56,30 @@ repository evidence, hosted GitHub evidence and live VUW evidence separately.
 ## Phase 6: Hosted and VUW verification after local work
 
 - [ ] Task: Complete the separately agreed VUW CLI setup and verify account, authorised environments, tools, roles and consent; record unavailable capabilities.
-- [x] Task: Publish reviewed changes when authorised and verify required Actions, offline PowerShell checks and actual CodeQL analysis/SARIF upload. Draft PR 73, exact code head `e72b26c`: all expected hosted workflows passed, including 1,290 tests, both PowerShell suites and confirmed CodeQL upload. See [local readiness](../../../docs/local-readiness-20261016.md). This does not complete the other live/human gates or merge the PR.
+- [x] Task: Publish reviewed changes when authorised and verify required Actions, offline PowerShell checks and actual CodeQL analysis/SARIF upload. Draft PR 73, exact code head `ecb8fce`: Coordination verified all four expected hosted workflows passed, including CodeQL and 1,553 tests (97.60% line, 94.93% branch). Documentation revision `555f7d2` was hosted-pending at this handoff; results are exact-revision evidence. This does not complete other live/human gates or merge the PR.
 - [ ] Task: Verify the selected updater configuration in hosted runs and confirm that duplicate ecosystem responsibility is removed.
 - [x] Task: Run an authorised low-sensitivity exporter smoke test, compare date-window/replay behaviour with local evidence, and reconcile manifests without committing live data. Bounded VUW test completed 16 October; local destination and independent replay/readback only, not Dataverse or full-corpus closure. See closure-review-20261017.md.
-- [ ] Task: Validate solution checking, configuration binding, import/export and rollback in an authorised non-production environment when permissions allow.
+- [~] Task: Validate solution checking, configuration binding, import/export and rollback in an authorised non-production environment when permissions allow. Developer baseline import/export and description-only restoration verified; checker passed for table-only package, binding N/A there. Full schema/data recovery, managed promotion and TEST acceptance remain unverified; actual app export still refused for declared dependencies and role mappings.
 - [ ] Task: Verify selected optional pipeline features only if relevant resources and permissions exist; record explicit limitations otherwise.
 - [ ] Task: Hand evidence to the Outlook, M365 discovery and Teams tracks; their complete-population runs and governance pilots remain there.
 - [ ] Task: Record final review, unresolved external gates and human verification before completing the track.
 
-17 October closure checkpoint: final evidence review recorded in
+18 October reconciliation of the 17 October closure checkpoint: evidence recorded in
 [closure-review-20261017.md](closure-review-20261017.md). VUW PAC sign-in succeeded;
 required write/customization rights remain absent in VUW-AI-TEST. A later read-only
 check verified authoring capabilities in the existing personal VUW Developer
 environment, selected for an isolated synthetic rehearsal. This does not close
-the Test acceptance gate. Live checker succeeded with
-zero findings; binding is N/A for the current table-only package. Import/export
-and recovery remain unperformed. Updater verification is partial, and human
-sign-off remains pending. Keep the track in progress.
+the Test acceptance gate. Live checker succeeded with zero findings for the
+table-only package; binding is N/A there. Personal Developer baseline import/export
+succeeded, followed by read-verified restoration of a synthetic description change.
+This is not schema/data rollback. The actual app export was inspected and the
+bounded app-aware validator implemented (`e7eaa50`, `14f8b96`, `ecb8fce`); it still
+refuses declared platform dependencies and target-specific role mappings. See
+[independent hub evidence](../../../docs/vuw-hub-rehearsal-20261018.md) and
+[ALM profile limits](../../../docs/local-alm.md). Isolated encrypted VUW Azure
+authentication was restored and fresh Developer organization/user identity matched;
+existing unrelated/PAC profiles and the old cache were preserved. Updater,
+executable cloud-runtime, TEST and human gates remain open. Keep the track in progress.
 
 ## Evidence and review — 14 October 2026
 
@@ -85,7 +92,7 @@ sign-off remains pending. Keep the track in progress.
   files are not part of this commit and must be integrated by their owner.
 - Phase 1–5 technical tasks are locally verified. Every phase's human checkpoint
   remains pending; no automated test is recorded as human approval.
-- Phase 6 remains pending: separately authorised VUW setup, publishing/hosted
+- Historical 14 October snapshot: Phase 6 was pending separately authorised VUW setup, publishing/hosted
   Actions and SARIF, bot execution, approved live smoke tests and non-production
   checker/import/export/rollback, optional authorised pipeline verification,
   final cross-track evidence handoff and human approval.
