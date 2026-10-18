@@ -292,5 +292,5 @@ def align_traces(  # noqa: C901, PLR0911 -- Explicit isolated process failure st
             return AlignmentResult("backend_error")
         try:
             return _result(json.loads(reply_path.read_text(encoding="utf-8")), len(retained))
-        except ValueError, OSError:
+        except ValueError, OSError, RecursionError:
             return AlignmentResult("backend_error")

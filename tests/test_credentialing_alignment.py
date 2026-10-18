@@ -529,7 +529,7 @@ def test_unsafe_privacy_floor_rejected(floor: object) -> None:
 
 
 @pytest.mark.parametrize(
-    "failure", ["crash", "missing", "oversize", "malformed", "shape", "oserror"]
+    "failure", ["crash", "missing", "oversize", "malformed", "deep", "shape", "oserror"]
 )
 def test_backend_protocol_failures_are_explicit(
     failure: str, monkeypatch: pytest.MonkeyPatch
@@ -543,6 +543,8 @@ def test_backend_protocol_failures_are_explicit(
             Path(args[4]).write_text(" " * 32769, encoding="utf-8")
         elif failure == "malformed":
             Path(args[4]).write_text("{", encoding="utf-8")
+        elif failure == "deep":
+            Path(args[4]).write_text("[" * 16000 + "0" + "]" * 16000, encoding="utf-8")
         elif failure == "shape":
             Path(args[4]).write_text("[]", encoding="utf-8")
         return subprocess.CompletedProcess[bytes](args, 1 if failure == "crash" else 0)
