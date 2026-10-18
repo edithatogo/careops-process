@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Versioned human review for discovered process families."""
 
 from __future__ import annotations

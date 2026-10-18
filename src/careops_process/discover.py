@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Deterministic, privacy-safe process-family discovery primitives."""
 
 from __future__ import annotations

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Human-reviewed improvement experiments with no automatic mutations."""
 
 from __future__ import annotations

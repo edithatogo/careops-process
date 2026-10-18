@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Fail-closed information handling for live process-mining corpora."""
 
 from __future__ import annotations

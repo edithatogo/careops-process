@@ -1,0 +1,6 @@
+{
+  "track_id": "suite_ci_adoption_20261018",
+  "type": "maintenance",
+  "status": "in_progress",
+  "scope": "source CI, dependencies, canaries and release/interface qualification"
+}

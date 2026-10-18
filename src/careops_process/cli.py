@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Command-line smoke entry point for the synthetic CareOps pipeline."""
 
 from __future__ import annotations

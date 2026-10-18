@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Small, deterministic conformance primitives with an optional PM4Py seam."""
 
 from __future__ import annotations

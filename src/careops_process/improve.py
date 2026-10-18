@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Semantic process-health metrics and bounded improvement recommendations."""
 
 from __future__ import annotations

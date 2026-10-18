@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Versioned, privacy-preserving OCEL 2.0 contract primitives."""
 
 from __future__ import annotations

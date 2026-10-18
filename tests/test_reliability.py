@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic replay and failure-state tests."""
 
 from datetime import UTC, datetime, timedelta

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Build a privacy-screened standalone executive landscape from a local corpus."""
 
 from __future__ import annotations

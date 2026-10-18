@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Execute the governed synthetic-to-semantic process-mining pipeline."""
 
 from __future__ import annotations

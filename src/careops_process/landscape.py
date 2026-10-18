@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Empirical process-family landscape over object-centric traces."""
 
 from __future__ import annotations
@@ -130,9 +133,9 @@ def discover_process_landscape(
     for family in discovered:
         members = [traces[member_id] for member_id in family.member_ids]
         sequences = Counter(member.activities for member in members)
-        dominant_sequence, dominant_count = sorted(
+        dominant_sequence, dominant_count = min(
             sequences.items(), key=lambda item: (-item[1], item[0])
-        )[0]
+        )
         event_ids = {event_id for member in members for event_id in member.event_ids}
         source_by_event = {event.event_id: event.source_system for event in log.events}
         source_counts = Counter(source_by_event[event_id] for event_id in event_ids)

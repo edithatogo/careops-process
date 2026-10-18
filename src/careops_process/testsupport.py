@@ -1,3 +1,6 @@
+# Copyright (c) 2026 CareOps contributors
+# SPDX-License-Identifier: MIT
+
 """Synthetic fixtures shared by projection tests."""
 
 from datetime import UTC, datetime
