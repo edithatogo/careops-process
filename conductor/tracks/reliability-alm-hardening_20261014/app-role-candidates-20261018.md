@@ -23,16 +23,59 @@ matching display names alone. Raw source/target role and template identifiers,
 business-unit bindings and service responses remain ignored in
 `artifacts/alm/app-role-candidates-private-20261018.json`.
 
-## Operator decision still required
+## Access decision and remaining authority boundary
+
+Coordination recorded the delegated engineering decision on 18 October to retain
+the existing System Administrator/System Customizer template restrictions for
+bounded synthetic Developer/TEST preparation. This preserves the restricted
+audience; it does not approve new sharing or principal assignments. No additional
+local-plan approval is needed for retaining that restriction.
 
 These privileged templates describe the export's current app role mappings.
 They are not approval to assign those roles, share an app with ordinary users,
 infer clinical/operational authority, or reuse source role-record IDs in TEST.
-An accountable operator must decide whether the app should retain these access
-restrictions or adopt a separately approved least-privilege sharing design.
+Any later widening to a different audience requires a separately approved
+least-privilege sharing design and an authorized operator.
 Candidate existence does not establish the current user's right to perform that
 change. TEST deployment rights and actual import/runtime acceptance stay open.
 
 No role, principal assignment, app sharing, import, grant, authentication profile
 or validator rule was changed. Portable-source validation still refuses role maps;
 this target-specific fact sheet is not an automatic validation exception.
+
+## Target-scoped preflight proposal — design only
+
+Keep `validate_solution` and portable packaging strict by default. A separate
+preflight could assess a particular unchanged artifact against a particular
+authorized target without relabelling it portable or bypassing generic validation.
+Its result must be a distinct readiness report, not a reusable release-success flag.
+
+The minimum evidence binding is the artifact SHA-256, actual manifest identity and
+managed state, pinned target organization/environment, current authenticated
+principal, protocol/version and observation time. Recompute the artifact digest
+and retrieve actual service identity at evaluation; receipt-shaped caller JSON,
+boolean allow flags and display-name matches alone cannot establish evidence.
+
+For each declared dependency, read its exact identity/type and membership in the
+named installed solution, together with the observed solution/package version.
+Require an explicit version policy; a newer anchor alone does not prove complete
+compatibility. Refuse missing, duplicate, inaccessible or paginated-unresolved
+matches. For each app role mapping, resolve the exported stable template, exactly
+one intended root-business-unit role in the target, and the retained-restriction
+decision. Never create a role or infer a principal assignment from this lookup.
+
+Keep real target-specific settings and role-record bindings in a separate private
+sidecar tied to that artifact and target. Do not rewrite source XML or embed
+identifiers into a portable template. The preflight must surface unverified
+import rights, configuration/connection access and recovery limitations, and stop
+on identity drift, expired observations, changed artifact or changed role policy.
+An import execution gate would need its own explicit authorized operation and
+fresh revalidation; this design does not introduce one.
+
+Tests for any future implementation must reject cross-target receipt reuse,
+tampered artifacts, stale or caller-fabricated evidence, wrong component/template
+membership, duplicate root-role candidates and attempted access widening. Local
+mock tests cannot certify tenant compatibility. Actual import, job completion,
+app validation, post-state and bounded recovery remain separate service evidence.
+No preflight implementation, portable-validator exception or platform write was
+performed by this proposal.
