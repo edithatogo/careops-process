@@ -142,6 +142,30 @@ Do not claim that Git sync or pipeline creation proves data/connection portabili
 
 ## Verification limits
 
+### Bounded model-driven app source profile
+
+The offline validator also supports the PAC-unpacked `AppModules/*/AppModule.xml`
+and `AppModuleSiteMaps/*/AppModuleSiteMap.xml` profile observed in the actual
+Developer export. Root component 80 resolves an app and 62 resolves its navigation;
+both identities must match their source folders and each other. App entity,
+form (60), view (26) and navigation (62) references must resolve to the exported
+entity sources; form/view identifiers must match their files and belong to an
+entity included by the app. Missing, duplicate and unknown references fail closed.
+Navigation supports entity subareas only; external links require another adapter.
+
+Only the observed `AppChannel` app setting with numeric value `1` and a Boolean
+customizability flag is exempted from the generic bound-value scan, inside the
+validated app source context. Other values/settings and original XML comments
+remain scanned. This is not a general exemption for XML `value` elements.
+
+Declared `MissingDependencies` still prevent packaging. The inspected real export
+declares platform icon and AppChannel dependencies and contains app role mappings;
+those mappings require target-specific sharing review and are refused by this
+portable source profile. No dependency resolution, role reassignment, live
+navigation/UI behavior or managed promotion is inferred from offline validation.
+The actual exported package is unchanged and is not certified portable by adding
+this adapter. Synthetic fixtures contain no real role, tenant or app identifiers.
+
 Synthetic tests cover malformed versions/XML, missing components/dependencies,
 protected/bound content, tampering, private diagnostics, dry-run, interrupted writes,
 settings schemas and export-before-change preparation. Local PAC packing and settings

@@ -79,6 +79,149 @@ def fake_pac(command: list[str]) -> None:
         archive.write(source / "Other/Customizations.xml", "customizations.xml")
 
 
+@pytest.fixture
+def app_solution(solution: Path) -> Path:
+    """Build tenant-neutral PAC-shaped app, navigation, form and view sources."""
+    files = {
+        "Entities/cop_Intake/Entity.xml": "<Entity><Name>cop_intake</Name></Entity>",
+        "Entities/cop_Intake/FormXml/main/{11111111-1111-1111-1111-111111111111}.xml": (
+            "<forms><systemform><formid>{11111111-1111-1111-1111-111111111111}"
+            "</formid></systemform></forms>"
+        ),
+        "Entities/cop_Intake/SavedQueries/{22222222-2222-2222-2222-222222222222}.xml": (
+            "<savedqueries><savedquery><savedqueryid>{22222222-2222-2222-2222-222222222222}"
+            "</savedqueryid></savedquery></savedqueries>"
+        ),
+        "AppModules/cop_app/AppModule.xml": (
+            "<AppModule><UniqueName>cop_app</UniqueName><AppModuleComponents>"
+            '<AppModuleComponent type="1" schemaName="cop_intake"/>'
+            '<AppModuleComponent type="60" id="{11111111-1111-1111-1111-111111111111}"/>'
+            '<AppModuleComponent type="26" id="{22222222-2222-2222-2222-222222222222}"/>'
+            '<AppModuleComponent type="62" schemaName="cop_app"/>'
+            "</AppModuleComponents><AppModuleRoleMaps/><appsettings>"
+            '<appsetting settingdefinitionid.uniquename="AppChannel">'
+            "<iscustomizable>1</iscustomizable><value>1</value>"
+            "</appsetting></appsettings></AppModule>"
+        ),
+        "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml": (
+            "<AppModuleSiteMap><SiteMapUniqueName>cop_app</SiteMapUniqueName><SiteMap>"
+            '<Area Id="area"><Group Id="group"><SubArea Id="list" Entity="cop_intake"/>'
+            "</Group></Area></SiteMap></AppModuleSiteMap>"
+        ),
+    }
+    for name, content in files.items():
+        path = solution / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+    manifest = solution / "Other/Solution.xml"
+    manifest.write_text(
+        manifest.read_text().replace(
+            "<RootComponents/>",
+            '<RootComponents><RootComponent type="1" schemaName="cop_intake"/>'
+            '<RootComponent type="62" schemaName="cop_app"/>'
+            '<RootComponent type="80" schemaName="cop_app"/></RootComponents>',
+        )
+    )
+    return solution
+
+
+def test_pac_app_references_and_typed_setting(app_solution: Path) -> None:
+    """A minimal app with fully resolved portable references is supported."""
+    assert local_alm.validate_solution(app_solution).name == "fixture"
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "duplicate-root",
+        "duplicate-component",
+        "orphan-app",
+        "missing-form",
+        "duplicate-map",
+        "secret-comment",
+    ],
+)
+def test_app_duplicate_missing_and_secret_paths(app_solution: Path, mutation: str) -> None:
+    """Reject ambiguous identities, orphan components and secrets hidden in XML comments."""
+    app = app_solution / "AppModules/cop_app/AppModule.xml"
+    manifest = app_solution / "Other/Solution.xml"
+    if mutation == "duplicate-root":
+        manifest.write_text(
+            manifest.read_text().replace(
+                '<RootComponent type="80" schemaName="cop_app"/>',
+                '<RootComponent type="80" schemaName="cop_app"/>' * 2,
+            )
+        )
+    elif mutation == "duplicate-component":
+        app.write_text(
+            app.read_text().replace(
+                '<AppModuleComponent type="1" schemaName="cop_intake"/>',
+                '<AppModuleComponent type="1" schemaName="cop_intake"/>' * 2,
+            )
+        )
+    elif mutation == "orphan-app":
+        manifest.write_text(manifest.read_text().replace('type="80"', 'type="62"'))
+    elif mutation == "missing-form":
+        next((app_solution / "Entities").glob("*/FormXml/*/*.xml")).unlink()
+    elif mutation == "duplicate-map":
+        path = app_solution / "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml"
+        path.write_text(path.read_text().replace("</SiteMap>", "</SiteMap><SiteMap/>"))
+    else:
+        app.write_text(
+            app.read_text().replace("<UniqueName>", "<!-- Bearer synthetic-secret --><UniqueName>")
+        )
+    with pytest.raises(ValueError, match=r"[Dd]uplicate|[Mm]issing|references|portable|single"):
+        local_alm.validate_solution(app_solution)
+
+
+@pytest.mark.parametrize(
+    ("relative", "old", "new"),
+    [
+        ("Other/Solution.xml", 'type="80"', 'type="300"'),
+        ("Other/Solution.xml", '<RootComponent type="80" schemaName="cop_app"/>', ""),
+        ("AppModules/cop_app/AppModule.xml", "<UniqueName>cop_app", "<UniqueName>cop_wrong"),
+        ("AppModules/cop_app/AppModule.xml", 'type="26"', 'type="999"'),
+        ("AppModules/cop_app/AppModule.xml", 'id="{11111111', 'id="{99999999'),
+        ("AppModules/cop_app/AppModule.xml", 'schemaName="cop_intake"', 'schemaName="cop_missing"'),
+        (
+            "AppModules/cop_app/AppModule.xml",
+            "<AppModuleRoleMaps/>",
+            '<AppModuleRoleMaps><Role id="synthetic-role"/></AppModuleRoleMaps>',
+        ),
+        (
+            "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml",
+            'Entity="cop_intake"',
+            'Entity="cop_missing"',
+        ),
+        (
+            "AppModuleSiteMaps/cop_app/AppModuleSiteMap.xml",
+            'Entity="cop_intake"',
+            'Url="https://example.org"',
+        ),
+        ("AppModules/cop_app/AppModule.xml", "<value>1</value>", "<value>secret</value>"),
+        ("AppModules/cop_app/AppModule.xml", 'uniquename="AppChannel"', 'uniquename="Other"'),
+        (
+            "AppModules/cop_app/AppModule.xml",
+            "</appsettings>",
+            "<value>protected</value></appsettings>",
+        ),
+        (
+            "Other/Solution.xml",
+            "<MissingDependencies/>",
+            "<MissingDependencies><MissingDependency/></MissingDependencies>",
+        ),
+    ],
+)
+def test_app_rejects_unresolved_or_bound_components(
+    app_solution: Path, relative: str, old: str, new: str
+) -> None:
+    """Broken app references and sharing/settings/dependency gates fail closed."""
+    path = app_solution / relative
+    path.write_text(path.read_text().replace(old, new))
+    with pytest.raises(ValueError, match=r"app|App|component|navigation|portable|dependencies"):
+        local_alm.validate_solution(app_solution)
+
+
 def test_package_integrity_dry_run_and_failure(solution: Path, tmp_path: Path) -> None:
     """Publish only complete verified releases and preserve earlier releases on failure."""
     destination = tmp_path / "release"

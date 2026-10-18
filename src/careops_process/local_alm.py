@@ -17,12 +17,16 @@ import zipfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
+from uuid import UUID
 
 from defusedxml import ElementTree
 from defusedxml.common import DefusedXmlException
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    # Type annotation only; all runtime XML parsing uses defusedxml above.
+    from xml.etree.ElementTree import Element  # nosec B405
 
 _VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 _BOUND = re.compile(
@@ -44,6 +48,176 @@ class SolutionInfo:
     managed: bool
 
 
+def _app_scan_text(source: Path, path: Path, text: str) -> str:
+    """Exempt only the observed typed AppChannel setting from generic value scanning."""
+    if path.relative_to(source).parts[:1] != ("AppModules",) or path.name != "AppModule.xml":
+        return text
+    root = ElementTree.fromstring(text)
+    # Parsing drops XML comments: scan original bytes too so comments cannot hide secrets.
+    if any(match.group() != "<value>1" for match in _BOUND.finditer(text)):
+        msg = "Solution content is not portable; remove protected or bound values."
+        raise ValueError(msg)
+    settings = root.findall("appsettings/appsetting")
+    if len(settings) > 1:
+        msg = "Duplicate or unsupported app settings require review."
+        raise ValueError(msg)
+    for setting in settings:
+        values = setting.findall("value")
+        if (
+            root.tag != "AppModule"
+            or setting.attrib != {"settingdefinitionid.uniquename": "AppChannel"}
+            or len(values) != 1
+            or values[0].attrib
+            or len(values[0])
+            or values[0].text != "1"
+            or [child.tag for child in setting] != ["iscustomizable", "value"]
+            or setting.findtext("iscustomizable") not in {"0", "1"}
+        ):
+            msg = "Unsupported or bound app setting requires review."
+            raise ValueError(msg)
+        values[0].text = ""
+    return ElementTree.tostring(root, encoding="unicode")
+
+
+def _component_id(value: str) -> str:
+    try:
+        return str(UUID(value))
+    except ValueError:
+        msg = "Invalid app component identifier."
+        raise ValueError(msg) from None
+
+
+def _validate_app_sources(source: Path, app_names: set[str]) -> None:
+    for folder, filename, tag in (
+        ("AppModules", "AppModule.xml", "UniqueName"),
+        ("AppModuleSiteMaps", "AppModuleSiteMap.xml", "SiteMapUniqueName"),
+    ):
+        paths = list((source / folder).glob(f"*/{filename}"))
+        if {p.parent.name.casefold() for p in paths} != app_names or len(paths) != len(app_names):
+            msg = "Missing or duplicate app/navigation source."
+            raise ValueError(msg)
+        for path in paths:
+            root = ElementTree.parse(path).getroot()
+            if root is None or root.tag != filename.removesuffix(".xml"):
+                msg = "Invalid app/navigation source root."
+                raise ValueError(msg)
+            if len(root.findall(tag)) != 1 or root.findtext(tag) != path.parent.name:
+                msg = "App/navigation source identity mismatch."
+                raise ValueError(msg)
+
+
+def _app_references(source: Path) -> dict[tuple[str, str], str]:
+    references: dict[tuple[str, str], str] = {}
+    for kind, pattern, identifier in (
+        ("60", "*/FormXml/*/*.xml", "systemform/formid"),
+        ("26", "*/SavedQueries/*.xml", "savedquery/savedqueryid"),
+    ):
+        for path in (source / "Entities").glob(pattern):
+            root = ElementTree.parse(path).getroot()
+            if root is None:
+                msg = "Missing app form/view source."
+                raise ValueError(msg)
+            ids = root.findall(identifier)
+            if len(ids) != 1:
+                msg = "Missing or duplicate form/view identity."
+                raise ValueError(msg)
+            key = (kind, _component_id(ids[0].text or ""))
+            if key in references or _component_id(path.stem) != key[1]:
+                msg = "Duplicate or mismatched form/view identity."
+                raise ValueError(msg)
+            references[key] = path.relative_to(source / "Entities").parts[0].casefold()
+    return references
+
+
+def _component_tables(
+    app: Element,
+    name: str,
+    roots: dict[str, set[str]],
+    entities: set[str],
+    references: dict[tuple[str, str], str],
+) -> set[str]:
+    components = app.findall("AppModuleComponents/AppModuleComponent")
+    seen: set[tuple[str, str]] = set()
+    tables: set[str] = set()
+    for component in components:
+        kind = component.get("type", "")
+        if kind not in {"1", "26", "60", "62"}:
+            msg = "Unsupported app component requires an explicit adapter."
+            raise ValueError(msg)
+        identifier = (
+            _component_id(component.get("id", ""))
+            if kind in {"26", "60"}
+            else component.get("schemaName", "").casefold()
+        )
+        key = (kind, identifier)
+        if key in seen:
+            msg = "Duplicate app component reference."
+            raise ValueError(msg)
+        seen.add(key)
+        if kind == "1":
+            if identifier not in entities or identifier not in roots.get("1", set()):
+                msg = "App references missing entity source/root."
+                raise ValueError(msg)
+            tables.add(identifier)
+        elif kind == "62" and identifier != name:
+            msg = "App references missing navigation source."
+            raise ValueError(msg)
+        elif kind in {"26", "60"} and key not in references:
+            msg = "App references missing form/view source."
+            raise ValueError(msg)
+    if ("62", name) not in seen or not tables:
+        msg = "App requires entity and navigation references."
+        raise ValueError(msg)
+    if any(references[key] not in tables for key in seen if key[0] in {"26", "60"}):
+        msg = "App form/view belongs to an unreferenced entity."
+        raise ValueError(msg)
+    return tables
+
+
+def _validate_one_app(
+    source: Path,
+    name: str,
+    roots: dict[str, set[str]],
+    entities: set[str],
+    references: dict[tuple[str, str], str],
+) -> None:
+    app = ElementTree.parse(source / "AppModules" / name / "AppModule.xml").getroot()
+    navigation = ElementTree.parse(
+        source / "AppModuleSiteMaps" / name / "AppModuleSiteMap.xml"
+    ).getroot()
+    if app is None or navigation is None:
+        msg = "Missing app/navigation source."
+        raise ValueError(msg)
+    if app.findall("AppModuleRoleMaps/*"):
+        msg = "App role sharing mappings require target-specific review."
+        raise ValueError(msg)
+    tables = _component_tables(app, name, roots, entities, references)
+    maps = navigation.findall("SiteMap")
+    areas = navigation.findall("SiteMap/Area/Group/SubArea")
+    if len(maps) != 1 or not areas:
+        msg = "App navigation must contain a single entity map."
+        raise ValueError(msg)
+    for area in areas:
+        if set(area.attrib) != {"Id", "Entity"} or area.get("Entity", "").casefold() not in tables:
+            msg = "Unsupported or unresolved navigation target."
+            raise ValueError(msg)
+
+
+def _validate_apps(source: Path, roots: dict[str, set[str]], entities: set[str]) -> None:
+    """Resolve the observed PAC app profile without approving external dependencies."""
+    app_names = roots.get("80", set())
+    map_names = roots.get("62", set())
+    if app_names != map_names:
+        msg = "App and navigation root references must match."
+        raise ValueError(msg)
+    _validate_app_sources(source, app_names)
+    if not app_names:
+        return
+    references = _app_references(source)
+    for name in app_names:
+        _validate_one_app(source, name, roots, entities, references)
+
+
 def _validate_files(source: Path) -> None:
     for relative in ("Other/Solution.xml", "Other/Customizations.xml"):
         if not (source / relative).is_file():
@@ -59,7 +233,10 @@ def _validate_files(source: Path) -> None:
                     msg = "Unsupported solution file requires an explicit validation adapter."
                     raise ValueError(msg)
                 text = path.read_text(encoding="utf-8-sig")
-                if _BOUND.search(text):
+                scan_text = (
+                    _app_scan_text(source, path, text) if path.suffix.lower() == ".xml" else text
+                )
+                if _BOUND.search(scan_text):
                     msg = "Solution content is not portable; remove protected or bound values."
                     raise ValueError(msg)
                 if path.suffix.lower() in {".xml", ".resx"}:
@@ -106,13 +283,21 @@ def validate_solution(source: Path) -> SolutionInfo:
     entity_names = {
         path.parent.name.casefold() for path in (source / "Entities").glob("*/Entity.xml")
     }
+    roots: dict[str, set[str]] = {}
     for component in manifest.findall("RootComponents/RootComponent"):
-        if component.get("type") != "1":
+        kind = component.get("type", "")
+        name_reference = component.get("schemaName", "").casefold()
+        if kind not in {"1", "62", "80"}:
             msg = "Unsupported root component requires an explicit validation adapter."
             raise ValueError(msg)
-        if component.get("schemaName", "").casefold() not in entity_names:
+        if not name_reference or name_reference in roots.setdefault(kind, set()):
+            msg_0 = "Missing or duplicate root component identity."
+            raise ValueError(msg_0)
+        roots[kind].add(name_reference)
+        if kind == "1" and name_reference not in entity_names:
             msg = "Root component references missing entity source."
             raise ValueError(msg)
+    _validate_apps(source, roots, entity_names)
     return SolutionInfo(name, version, managed == "1")
 
 
