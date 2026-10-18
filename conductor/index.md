@@ -5,3 +5,5 @@
 - [Technology](tech-stack.md)
 - [Workflow](workflow.md)
 - [Tracks](tracks.md)
+
+- [Modular suite delivery and next useful improvements](suite-delivery.md)
