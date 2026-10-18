@@ -21,7 +21,8 @@ and `uv.lock`, with scheduled lock maintenance and prerelease proposals but no
 automatic merge. This uses Renovate's supported lock-maintenance integration:
 https://docs.renovatebot.com/modules/manager/pep621/ . Apply exact generated
 locks and require all current-head checks; never advance a module pin based only
-on commit distance. Required CI installs the committed frozen lock and does not
+on commit distance. Required CI first runs `uv lock --check` to reject stale declarations, then
+installs the committed frozen lock and does not
 perform an untracked pip upgrade after installation.
 
 The upgrade to Ruff 0.17.1 requires copyright notices. Source headers repeat the

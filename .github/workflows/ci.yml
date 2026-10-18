@@ -26,6 +26,8 @@ jobs:
           version: "0.13.1"
           enable-cache: false
           python-version: "3.14"
+      - name: Reject stale dependency declarations before frozen installation
+        run: uv lock --check
       - run: uv sync --frozen --group dev
       - run: uv run --no-sync ruff format --check --diff .
       - run: uv run --no-sync ruff check .
