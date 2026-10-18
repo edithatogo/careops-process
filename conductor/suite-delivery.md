@@ -42,3 +42,14 @@ Keep one writer per object and one owner per shared authentication repair. Tools
 are preferences, not exclusive leases. Send a completed deliverable or changed
 blocker once; no acknowledgement polling. Reuse passed evidence and run only
 checks affected by the change, with broad checks at an integration milestone.
+
+
+### Shared security and package policy adoption — 19 October 2026
+
+Align the source-security caller and package/SBOM helper checkout to immutable
+CareOps f0e8db252b181955d31185f1ccdd1e77dee1f5f9, qualified by all14PR checks
+and all6triggered main workflows. Process retains its frozen uv lock, Python
+compatibility matrix, analytics/privacy tests and existing package attestations.
+The shared policy brings its own hash-locked tools, including certifi2026.10.18.
+Current-head module checks remain required before normal merge; prior workflow
+refs provide rollback. No runtime/source-register or tenant operation changes.
