@@ -135,3 +135,14 @@ provider connection, idempotency and delivery reconciliation; app-aware ALM
 validation plus dependency/role binding and target import/restore verification.
 VUW-AI-TEST acceptance remains blocked by its rights constraints. No production,
 clinical workflow, source ingestion or real notification was enabled.
+
+## Receipt review
+
+Checkpoint commit: `ff6cb803f6346f57e89cb73c56d655436e557971`. A separate
+read-only local evidence review found no actionable issues. It independently
+verified the ZIP size/hash/CRC, embedded components, six declared roots, two
+dependencies and two app role-map entries, and checked the public claims against
+the retained schema/app/CAS receipts. It found no raw GUIDs or endpoint URLs in
+this note. That review performed no network, authentication or platform calls;
+it does not close the pending independent live service verification or UI gates.
+Conductor configuration validation and Git whitespace checks pass.
