@@ -1,5 +1,61 @@
 # Credentialing completion audit — 2026-10-14
 
+## Current-state checkpoint — 18 October 2026
+
+**The full track is not complete.** The sections below this checkpoint preserve
+the 14 October audit and its subsequent early integration notes. Their statements
+that workload, quality, persisted review and durable storage are unimplemented
+describe those earlier revisions; they are not the current capability assessment.
+Use the [current handover and original-outcome matrix](../../../docs/credentialing-acceptance-handover.md)
+and [implementation plan](plan.md) alongside this historical evidence.
+
+| Original requirement | Current local evidence | Remaining acceptance boundary |
+| --- | --- | --- |
+| 1–2. Versioned ontology and strict projection schema | Registry, runtime/schema contracts and rejection/normalization tests | Accepted real-source vocabulary and semantic mapping; structural validity does not authenticate facts |
+| 3–4. Stable safe references and prohibited-content boundary | Replay identity, bounded references, deep raw-field rejection and protected aggregates | Actual pseudonymisation/minimisation, source-local identity meaning and privacy approval |
+| 5. Observed/inferred separation | Ledger provenance and observed-only timing/model alignment; inference excluded from observed traces | Accepted actual inference runs and source truth; metadata syntax cannot prove either |
+| 6. Replay/deletion/watermark/dead-letter safety | [Local SQLite adapter](../../../docs/credentialing-store.md), durable tombstones, atomic state, restart/crash/concurrent-write tests | Deployment storage/security/retention and old-backup deletion/revocation reconciliation; passing hosted checks do not repair the original machine |
+| 7–8. Pathway/authority qualifiers and separate models | Generic renewal reference, source-linked separate-pathway comparator, BPMN/renderings and [optional canonical weighted-model alignment](../../../docs/credentialing-model-alignments.md) | Actual applicable clinical models, authority, branches, deadlines and register/roster mappings; generic references and PNML support do not approve operational models or prove BPMN conversion |
+| 9. Defined protected measurements | Effort/quality/submission/renewal/review/temporary/experience/capacity-observation contracts; case rates/variants; stage effort/calendar; model alignment; joint stage-time privacy repair `5661612` and core threshold repair `78ce07b` | Accepted source populations/windows, instruments, units, privacy/release policy, baselines and operational evaluation; causal released capacity remains unproved |
+| 10. Explainable human-reviewed hypotheses without mutation | Deterministic evidence-bound candidates and authenticated atomic measurement-review persistence in the local store | Actual accountable human dispositions, organisational identity/operational deployment and final governance acceptance; measurement review is not clinical or causal approval |
+
+The [authenticated local alignment route](../../../docs/credentialing-authenticated-alignment.md)
+is implemented in `1bce2b9` and accepted by the integration owner's independent
+review and published in `beaef80ec20221eb525eeb999d8c81730b5a8eb0`. The integration
+owner reports 1,718 full-suite tests passed without skips on that local profile.
+Hosted CI/CodeQL remain in progress at this checkpoint; hosted secret/workflow
+security checks have passed. It binds trusted completeness metadata to revision and a
+canonical retained-state digest, uses stored grants/policy, runs the worker
+outside the SQLite write lock, and reauthenticates/rechecks evidence before
+release. Its 53 focused tests and 80 store-integration tests pass; independent
+component review found no actionable findings. This does not stand in for that
+revision's remaining hosted checks, actual source/model/temporal-coverage
+approval or an anti-rollback recovery guarantee. No database migration or
+production identity-provider integration is implied.
+
+Two integration/grain limits also remain explicit. Quality evaluation currently
+reports independently adjudicated **case-level** FP/FN rates; it is not a general
+alert/requirement-level reporter for multiple units per case. The accepted
+evaluation grain and population must be resolved before claiming that broader
+outcome. Atomic stored human review covers improvement **measurement** proposals;
+protected capacity-attribution assessments still use a pure contract, whose
+trusted artifact-resolution/authenticated atomic-assessment adapter is not
+implemented by that proposal store. That integration must not be declared done
+from the existing review receipts. Additional adapter scope should be resolved
+against the accepted capacity evaluation package; storing another claim alone
+would not establish actual released capacity.
+
+The original acceptance criteria have local synthetic evidence in the current
+handover and component manuals. Full closure still needs the final revision's
+required checks, maintainer verification, approved sources and mappings,
+accepted baselines, approved retrospective cases, prospective silent mode,
+credible released-capacity evaluation and the named governance/privacy/security/
+records/architecture/support/continuity decisions. Later clinical pathway packs
+remain open where actual definitions or acceptance are absent. Neither this
+checkpoint nor an instruction to implement supplies those missing decisions.
+
+## Historical audit and early integration evidence
+
 ## Subsequent integration checkpoint
 
 Observed stage-time measurements are now implemented in
