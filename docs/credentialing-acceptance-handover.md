@@ -59,7 +59,7 @@ metrics. Existing minimum EVENT counters must not silently become case rates.
 | Request demand/pathway mix | Explicit granted-case population, missing classification and jointly suppressed case pathway mix in `credentialing_local_reporting` | Approved source-defined request population/window and classification mapping; case demand is not an arrival rate |
 | First submission, touches, elapsed percentiles and decision/register intervals | Submission, workload and stage-time public reporters | Real-source completeness, cohort/endpoint applicability and baseline acceptance |
 | Correction/further-information and deferral/exception rates by reason | Explicit case assessments, controlled process reasons, observed/population case and reason rates with missingness in `credentialing_local_reporting` | Approved criteria/reason vocabulary and complete source assessments; event absence is not a negative assessment |
-| Queue time, professional review and committee preparation work | Explicit queue/active/unknown case-calendar partition; source-mapped professional-review/committee-preparation worker minutes and touches in `credentialing_stage_effort` | Stage-specific queue attribution and actual source/span/stage mapping acceptance remain open; calendar active time is not worker effort and queue is never elapsed minus worker minutes |
+| Queue time, professional review and committee preparation work | Explicit queue/active/unknown case-calendar partition; source-mapped professional-review/committee-preparation worker minutes and touches in `credentialing_stage_effort`; explicit per-interval stage calendar allocation in `credentialing_stage_calendar` | Actual source/span/stage mapping acceptance remains open; calendar active time is not worker effort and queue is never elapsed minus worker minutes |
 | Temporary approval conversion/review/expiry; condition/supervision reviews; renewal overdue | Explicit episode/obligation snapshots and privacy-aware reporters | Approved deadline, extension, completion, censoring and complete obligation populations |
 | Duplicate/register reconciliation exceptions | Validated registered activities and failure/duplicate event counters | Approved reconciliation semantics and source linkage; roster reconciliation and unauthorized-practice conclusions are not established |
 | Conformance fitness and variant frequency | Per-case reference comparisons; local case-scoped observed administrative trace frequencies with joint-cell suppression | Generic positional/set scores are not model/token-replay fitness. Source adapter must resolve retained observed-only trace completeness/order, ambiguous timestamp ties and authority applicability; no clinical compliance certificate |
@@ -77,7 +77,9 @@ The subsequent [local reporting implementation and synthetic example](credential
 cover the four explicitly authorised local reporting outcomes. They use a separate
 source-assessment contract, not guessed clinical mappings or event-counter rates.
 The [local stage-effort reporter](credentialing-stage-effort.md) adds explicit
-professional/committee worker-effort granularity; stage-specific queue mapping,
+professional/committee worker-effort granularity. The
+[stage-calendar reporter](credentialing-stage-calendar.md) adds explicit local
+queue attribution and reconciled denominators. Actual source/stage mapping,
 causal capacity and every real-source/acceptance gate below remain open.
 The [local store adapter](credentialing-store.md) provides local durable state and
 authenticated atomic review, without claiming a deployed VUW identity/backend.

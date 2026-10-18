@@ -1,12 +1,23 @@
 # Implementation plan
 
-Current handover (17 October 2026): see
+Current handover (18 October 2026): see
 [synthetic acceptance, original-outcome audit and real-source checklist](../../../docs/credentialing-acceptance-handover.md).
 Historical receipts below retain their original verification scope. Local
 measurement contracts do not close remaining aggregation/decomposition work,
 source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 ## Repository tranche
+
+### Stage-specific calendar time — 18 October 2026
+
+- [x] Allocate queue/active/unknown intervals using explicit ordered source-stage assignments.
+- [x] Distinguish missing spans, observed zero and absent stages; reconcile both queue-mean denominators.
+- [x] Suppress the whole release for rare joint stage/state case groups.
+
+See [stage-calendar semantics and tests](../../../docs/credentialing-stage-calendar.md).
+Independent review passed 82 calendar/local-reporting tests; the coordinator also
+passed the 25 calendar tests with the ALM slice. These local results do not admit
+actual source mappings, close deployed acceptance or establish causal capacity.
 
 ### Stage-specific worker effort — 17 October 2026
 
@@ -16,7 +27,8 @@ source/authority/instrument acceptance, pilot/manual gates or causal capacity.
 
 See [stage-effort semantics and tests](../../../docs/credentialing-stage-effort.md).
 This adds local worker-effort granularity using existing work observations.
-Stage-specific queue attribution, actual source/stage definitions, causal capacity,
+The local stage-calendar reporter now supplies explicit queue attribution.
+Actual source/stage definitions, causal capacity,
 approved baselines/pilots and human/governance acceptance remain open.
 
 ### Local operational adapter follow-up — 17 October 2026
@@ -40,7 +52,8 @@ old-backup disaster recovery or final human/live acceptance gates.
 
 See [local reporting semantics and executable example](../../../docs/credentialing-local-reporting.md).
 These are local synthetic capabilities. Stage-specific professional/committee
-worker effort, true model fitness, causal capacity, approved source/authority
+worker effort and calendar reporting are implemented above. True model fitness,
+causal capacity, approved source/authority
 mapping, live integration and manual track acceptance remain open. Calendar active
 time is not worker effort. This update does not complete the original track.
 
