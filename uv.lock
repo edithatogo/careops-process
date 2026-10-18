@@ -90,7 +90,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pm4py", marker = "extra == 'mining'", specifier = "==2.7.23.8" },
+    { name = "pm4py", marker = "extra == 'mining'", specifier = "==2.7.23.11" },
     { name = "polars", specifier = ">=1.33" },
     { name = "pyarrow", specifier = ">=21" },
     { name = "pydantic", specifier = ">=2.11" },
@@ -1104,7 +1104,7 @@ wheels = [
 
 [[package]]
 name = "pm4py"
-version = "2.7.23.8"
+version = "2.7.23.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cvxopt", marker = "python_full_version < '3.15'" },
@@ -1118,9 +1118,9 @@ dependencies = [
     { name = "scipy" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b7/31/53888bf820d865e6e2f3cc21f95542a59affd5454f3a0cc44c06d698c6b8/pm4py-2.7.23.8.tar.gz", hash = "sha256:03984a775276c6999ca318efcb1faf0f3ff1d33954fb22f0580cb42dff30816c", size = 1186117, upload-time = "2026-09-01T11:53:24.774Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/80/fb508055900048c6210bfbb80c67d67d5df16564df243edd901a709e4d23/pm4py-2.7.23.11.tar.gz", hash = "sha256:daf30bb678aea4d716e1adf93bc7b91f762aea79dcf73be5553708776ad351df", size = 1189561, upload-time = "2026-10-15T11:04:11.622Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c8/36/51b41f1eefe070a3905cfff2a64ca33dbb17defb1d5caecaaa986cf5e65b/pm4py-2.7.23.8-py3-none-any.whl", hash = "sha256:e97f7845bc440859fe46e88824bb773162d8799f1278b34907d0eb4c7d4be502", size = 2666577, upload-time = "2026-09-01T11:53:18.355Z" },
+    { url = "https://files.pythonhosted.org/packages/20/66/ce324bebe4dc63538ecff0f4ed118d942e8bea8148dadb76bb551b48346f/pm4py-2.7.23.11-py3-none-any.whl", hash = "sha256:9b7fa53d5ab352b116d10dc9d9033239785be9ada420a8ff9d7da5fa85bad3c8", size = 2670932, upload-time = "2026-10-15T11:04:05.938Z" },
 ]
 
 [[package]]
