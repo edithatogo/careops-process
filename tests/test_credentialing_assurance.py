@@ -268,6 +268,23 @@ def test_reporting_suppresses_all_small_cohort_cells_and_identifiers() -> None:
     assert report == {"suppressed": True, "metrics": None}
 
 
+def test_reporting_rejects_numeric_subclass_that_bypasses_privacy_floor() -> None:
+    """The older aggregate boundary must reject overridden integer comparisons."""
+
+    class BypassingFloor(int):
+        def __lt__(self, _other: object, /) -> bool:
+            return False
+
+        def __gt__(self, _other: object, /) -> bool:
+            return False
+
+    projection = validate_credentialing_projection(renewal_payload())
+    with pytest.raises(CredentialingContractError, match="minimum"):
+        project_credentialing_report(
+            projection, role="report_reader", case_ids={"case-1"}, minimum_cases=BypassingFloor(2)
+        )
+
+
 def test_reporting_reconciles_counts_and_case_access_is_scoped() -> None:
     """An authorised analyst sees only explicitly granted case sequences."""
     payload = renewal_payload()

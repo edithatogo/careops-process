@@ -224,11 +224,7 @@ def project_credentialing_report(
     if role not in {"case_analyst", "report_reader"}:
         message = "Unknown reporting role"
         raise CredentialingContractError(message)
-    if (
-        not isinstance(minimum_cases, int)
-        or isinstance(minimum_cases, bool)
-        or minimum_cases < _MINIMUM_REPORT_CASES
-    ):
+    if type(minimum_cases) is not int or minimum_cases < _MINIMUM_REPORT_CASES:
         message = "Reporting minimum must be at least two distinct cases"
         raise CredentialingContractError(message)
     projection = validate_credentialing_projection(projection)
