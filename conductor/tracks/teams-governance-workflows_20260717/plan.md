@@ -1,5 +1,22 @@
 # Implementation Plan: IHG Governance and Executive Action Hub
 
+## Current reconciliation — 18 October 2026
+
+The [requirement/evidence matrix](../../../docs/ihg-hub-evidence-matrix-20261018.md)
+supersedes the environment-discovery and table-only ALM statements in the earlier
+checkpoints below. Those checkpoints retain their historical verification scope.
+Actual personal VUW Developer authoring, published synthetic intake shell,
+conditional ledger persistence and export now have evidence; fresh independent
+service readback passed in checkpoint `555f7d2`. Browser acceptance still awaits
+human federation sign-in. This is not the complete canonical solution or a
+multi-user IHG pilot. Existing unchecked live/pilot tasks remain unchecked.
+
+The next bounded implementation prerequisite is review and integration of the
+shared app-aware ALM validator against the actual exported format, preserving
+dependency and role-binding gates. Executable cloud flows and Teams, Approvals
+and Planner connections remain unimplemented integrations. No further platform
+writes, authentication or browser retries are part of this reconciliation.
+
 ## Implementation evidence — 14 October 2026
 
 - Capability contracts and read-only Windows probe runner are implemented with
