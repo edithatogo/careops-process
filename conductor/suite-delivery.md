@@ -53,3 +53,16 @@ compatibility matrix, analytics/privacy tests and existing package attestations.
 The shared policy brings its own hash-locked tools, including certifi2026.10.18.
 Current-head module checks remain required before normal merge; prior workflow
 refs provide rollback. No runtime/source-register or tenant operation changes.
+
+
+## Selective SharePoint library columns — 19 October 2026
+
+User-selected implementation direction: reuse library columns for artifact identity, provenance, filtering and routing where the output already belongs in SharePoint. Reuse existing columns/content types and exact internal names before adding fields. This extends the structured-document preference; it is not proof of automatic Word-body generation.
+
+Priority: Only for a future selected SharePoint-published human-readable report: describe run/scenario, source snapshot and report revision. Keep events, run manifests, machine-readable results, SBOMs and CI provenance in their existing formats; no SharePoint dependency for the core pipeline.
+
+Acceptance: map each property to its existing authoritative source and verify its actual type/internal name; read back the affected saved values and file identity. Update only changed values, guard modification-trigger loops and retries, and retain a recoverable preimage. Preserve human edits, original/issued history and exact reviewed revisions. Add no duplicate register, notifications, approval workflow, permission change, licence or runtime. Avoid putting private/internal-only values into properties that may travel inside a downloaded Office file.
+
+Metadata readback and visible body rendering are separate checks. The Clinical trial stored a changed property while Word for the web still displayed the old body value. Do not claim scalar body refresh, narrative/repeating sections or generated Word/PDF fidelity from metadata success. Qualify those behaviours only for the selected document shape; retain working/manual outputs on a specific gap. Record one result in existing evidence, not another readiness pack.
+
+Reference: https://learn.microsoft.com/sharepoint/dev/business-apps/power-automate/sharepoint-connector-actions-triggers
