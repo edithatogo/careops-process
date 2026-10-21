@@ -45,7 +45,22 @@ Fabric CLI, FlowAgent, or MCP servers. They do not grant environment permissions
 consent, licences or capacity. Some upstream skills assume other agent tool
 names; use available Codex equivalents and verify the actual prerequisite.
 
-VUW account setup is the next stage: establish the intended account and CLI
-profiles, confirm environment access, then verify each required live capability.
+For live work, reuse the existing qualified account/client/environment route and
+current target evidence. A skill installation or source update is not a reason
+to start a new login, replace a profile or infer new platform permissions.
+Verify only changed prerequisites for the selected operation.
 Keep credentials, tenant-specific configuration and live data outside public
 Git. Repository completion must not be reported as platform deployment.
+
+
+## Review submodule and manifest updates together
+
+A bot's gitlink-only update intentionally fails pinned-source validation until
+`.agents/skills-manifest.json` names the same reviewed commit. Check the selected
+upstream skill paths, supporting resources and licence at the old/new commits;
+retain unchanged local entrypoints when their content and mapping are unchanged.
+Update only that source's manifest commit, initialize its exact gitlink, and run
+`validate_conductor.py` plus the setup tests before fresh current-head CI. Keep
+other pending source updates separate. Do not bypass checkout/manifest/resource
+checks, regenerate aliases for unrelated sources, configure native tools or copy
+credentials as part of this source-only update.
