@@ -84,3 +84,16 @@ wheel. PM4Py inventory does not establish an accepted operational provider or li
 adoption. Main-only federated provenance/SPDX signatures bind the downloaded
 package to its exact source and workflow; independently verify them before
 acceptance. This creates Actions candidates, not a PyPI publication or deployment.
+
+
+## Squash-merge fingerprint reconciliation — 22 October 2026
+
+PR73 merged ascca6d0a after all applicable exact-head checks passed. Its main
+full-history scan returned four documentation matches because squash changed
+the commit identity and line positions of previously reviewed English lifecycle
+wording. Each redacted match was independently reconstructed against its actual
+source line and the exact prior reviewed phrase above; none is a credential.
+Retain the original five historical fingerprints and add only these four exact
+commit/path/rule/line fingerprints. The default generic detector, paths and
+full-history scope remain enabled. Main security remains failed until the
+corrective source passes fresh checks and native main readback.
