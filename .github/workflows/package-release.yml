@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/careops
-          ref: 6319d0c0c76ee672223c156abce9d4181c41aa9a
+          ref: d829db7aa46e3789eb1b339f1ab1ad7e5d780d49
           path: .careops-ci-tools
           persist-credentials: false
           submodules: false
