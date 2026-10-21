@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "careops-process"
 version = "0.1.0"
 description = "Privacy-preserving object-centric process intelligence for CareOps"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.14,<3.16"
 dependencies = [
   "defusedxml>=0.7.1",
   "polars>=1.33",
@@ -18,7 +18,7 @@ dependencies = [
 careops-process-smoke = "careops_process.cli:main"
 
 [project.optional-dependencies]
-mining = ["pm4py==2.7.23.8"]
+mining = ["pm4py==2.7.23.11"]
 
 [dependency-groups]
 build = [

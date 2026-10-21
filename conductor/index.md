@@ -20,3 +20,5 @@
 
 - [Repository skill installation](../docs/repository-skills.md)
 - [Skill manifest](../.agents/skills-manifest.json)
+
+- [Modular suite delivery and next useful improvements](suite-delivery.md)

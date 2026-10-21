@@ -52,7 +52,7 @@ reassign work, or implement a recommendation automatically.
 
 ## Architecture
 
-- Python 3.14 is the canonical runtime.
+- Python 3.15.0 is the canonical runtime; Python 3.14.8 remains supported. Both exact runtimes must pass quality, property, privacy and coverage gates before promotion.
 - Polars is the default dataframe engine.
 - OCEL 2.0 is the portable event contract.
 - PM4Py is an optional, licence-gated process-mining engine.

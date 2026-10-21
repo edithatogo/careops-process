@@ -14,9 +14,17 @@ concurrency:
 
 jobs:
   quality:
-    name: Python 3.14 quality and tests
+    name: Python ${{ matrix.label }} quality and tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: '3.14.8'
+            label: '3.14'
+          - python: '3.15.0'
+            label: '3.15'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,7 +34,7 @@ jobs:
         with:
           version: "0.13.1"
           enable-cache: false
-          python-version: "3.14"
+          python-version: ${{ matrix.python }}
       - name: Reject stale dependency declarations before frozen installation
         run: uv lock --check
       - run: uv sync --frozen --group dev

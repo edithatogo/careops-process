@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "module": "careops-process",
+  "sourceKind": "reusable-source",
+  "standards": "https://github.com/edithatogo/careops/blob/main/docs/development-and-delivery.md",
+  "integrationContract": "https://github.com/edithatogo/careops/blob/main/docs/standalone-module-contract.md",
+  "releasePolicy": "development-first-verified-promotion",
+  "localGuide": "conductor/suite-delivery.md",
+  "nativeQualification": "not-established-by-this-profile",
+  "nextTasks": [
+    {
+      "id": "runtime",
+      "status": "queued",
+      "lane": "existing implementation or platform lane",
+      "operation": "Retain qualified Python3.15.0 and3.14.8 compatibility with the frozen lock; qualify newer compatible runtime and native-wheel candidates in isolation before promotion.",
+      "tools": [
+        "uv",
+        "local Python"
+      ],
+      "success": "Frozen install and affected analytics/privacy checks pass; incompatibilities name the package and retry condition."
+    },
+    {
+      "id": "events",
+      "status": "queued",
+      "lane": "existing implementation or platform lane",
+      "operation": "Replay existing fictional OCEL fixtures with duplicate, late, missing-provider and tombstone cases.",
+      "tools": [
+        "local Python",
+        "existing fixtures"
+      ],
+      "success": "Stable event/object identities and minimised payloads survive replay without source writes."
+    },
+    {
+      "id": "managed",
+      "status": "queued",
+      "lane": "existing implementation or platform lane",
+      "operation": "Compare managed Process Intelligence on one fictional case only when its existing entitlement and route are available.",
+      "tools": [
+        "Process Intelligence",
+        "qualified Microsoft tools"
+      ],
+      "success": "Record time-to-result and required features against the existing portable implementation; no new service is required."
+    }
+  ]
+}

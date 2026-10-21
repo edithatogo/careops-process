@@ -21,7 +21,7 @@ jobs:
       - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
         with:
           version: '0.13.1'
-          python-version: '3.14.8'
+          python-version: '3.15.0'
           enable-cache: false
       - name: Install only the locked runtime and exact build backend
         run: |
@@ -37,7 +37,7 @@ jobs:
           uv export --frozen --no-dev --no-group build --all-extras --no-emit-project --format cyclonedx1.5 --output-file dist/resolved-dependencies.cdx.json > /dev/null
       - name: Exercise the installed wheel independently of source imports
         run: |
-          uv venv --python 3.14.8 "$RUNNER_TEMP/wheel-smoke"
+          uv venv --python 3.15.0 "$RUNNER_TEMP/wheel-smoke"
           uv export --frozen --no-dev --no-group build --no-emit-project --format requirements-txt --output-file "$RUNNER_TEMP/wheel-runtime.lock" > /dev/null
           uv pip sync --python "$RUNNER_TEMP/wheel-smoke/bin/python" --require-hashes "$RUNNER_TEMP/wheel-runtime.lock"
           uv pip install --python "$RUNNER_TEMP/wheel-smoke/bin/python" --no-deps dist/*.whl
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/careops
-          ref: 1373e971013724dfaa268e215a45505bb89300cd
+          ref: d829db7aa46e3789eb1b339f1ab1ad7e5d780d49
           path: .careops-ci-tools
           persist-credentials: false
           submodules: false
