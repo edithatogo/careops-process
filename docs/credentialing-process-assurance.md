@@ -2,6 +2,9 @@
 
 Status: blueprint; disconnected by default
 
+Repository reference implementation and manual verification instructions:
+[Routine-renewal reference evidence](credentialing-renewal-reference.md).
+
 ## Purpose
 
 This pack extends CareOps Process with an organisation-neutral credentialing and

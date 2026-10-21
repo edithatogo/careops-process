@@ -36,6 +36,9 @@ def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C90
             message = "each action must have a string id"
             raise TypeError(message)
         action_ids.append(action_id)
+    if len(action_ids) != len(set(action_ids)):
+        message = "flow action identifiers must be unique"
+        raise ValueError(message)
     if not all(action in action_ids for action in REQUIRED_ACTIONS):
         message = "required flow actions are missing"
         raise ValueError(message)
@@ -43,11 +46,13 @@ def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C90
     if positions["advance_checkpoint"] <= positions["write_projection"]:
         message = "checkpoint must advance after projection write"
         raise ValueError(message)
+    ordered_positions = [positions[action] for action in REQUIRED_ACTIONS]
+    if ordered_positions != sorted(ordered_positions):
+        message = "required flow actions must follow checkpoint-safe order"
+        raise ValueError(message)
     for raw_action in raw_actions:
-        action = raw_action
-        if not isinstance(action, Mapping):
-            message = "each action must be an object"
-            raise TypeError(message)
+        # Every action was checked before evaluating the execution sequence.
+        action = cast("Mapping[str, object]", raw_action)
         forbidden_inputs = cast("list[str]", action.get("forbidden_inputs", []))
         if not isinstance(action.get("forbidden_inputs", []), list):
             message = "forbidden_inputs must be a list"

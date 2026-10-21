@@ -1,15 +1,101 @@
 # Implementation Plan: IHG Governance and Executive Action Hub
 
+## Current reconciliation — 18 October 2026
+
+The [requirement/evidence matrix](../../../docs/ihg-hub-evidence-matrix-20261018.md)
+supersedes the environment-discovery and table-only ALM statements in the earlier
+checkpoints below. Those checkpoints retain their historical verification scope.
+Actual personal VUW Developer authoring, published synthetic intake shell,
+conditional ledger persistence and export now have evidence; fresh independent
+service readback passed in checkpoint `555f7d2`. Browser acceptance still awaits
+human federation sign-in. This is not the complete canonical solution or a
+multi-user IHG pilot. Existing unchecked live/pilot tasks remain unchecked.
+
+The next bounded implementation prerequisite is review and integration of the
+shared app-aware ALM validator against the actual exported format, preserving
+dependency and role-binding gates. Executable cloud flows and Teams, Approvals
+and Planner connections remain unimplemented integrations. No further platform
+writes, authentication or browser retries are part of this reconciliation.
+
+## Implementation evidence — 14 October 2026
+
+- Capability contracts and read-only Windows probe runner are implemented with
+  synthetic fixtures and fail-closed tests. See
+  [capability runbook](../../../docs/ihg-hub-capability-runbook.md).
+- Live unscoped discovery observed delegated PAC authentication and environment
+  discovery; Microsoft 365 CLI is logged out. Current environment resolution is
+  inconclusive. Selected-resource probing, effective sharing/write/audit controls,
+  licence/DLP, access and continuity remain unverified.
+- The user explicitly left operating-model confirmation pending. No pilot lane,
+  live approval, governance rules or production readiness are asserted.
+- Phase 1 live/owner gates remain open. Independent local contracts may proceed
+  using synthetic, configurable policies; they cannot activate a live pathway.
+
+## Synthetic core checkpoint
+
+Canonical schemas, version-pinned lifecycle/replay/dependency logic, collective
+policy enforcement at the common transition boundary, scoped triage/secretariat
+and executive portfolio/digest candidates are implemented locally. See
+[domain and decision contracts](../../../docs/ihg-hub-domain-contracts.md).
+Seven clinical/executive pathway identifiers remain unconfigured drafts; no
+IHG role, threshold, quorum or authority is inferred from them. JSON schemas
+require executable validation for cross-field and provenance rules.
+
+Important reviewer findings have failing reproductions followed by passing
+regressions. Remaining local work includes persistent template activation and
+migration/rollback, recovery/dead-letter and task-projection contracts, actual
+brief-source/agenda/minute orchestration, connector reconciliation and release
+assets. This checkpoint does not complete entire phases or live verification.
+
+## Catalog, projection, meeting, recovery and release checkpoint
+
+Local synthetic catalog activation/migration/rollback, bound approval/Planner
+projections, current-canonical meeting/brief/minute records, pinned later urgent
+ratification, minimal recoverable dead letters and read-only deployment dry run
+are implemented. See the
+[catalog/projection guide](../../../docs/ihg-hub-catalog-and-projections.md),
+[meeting guide](../../../docs/ihg-hub-meeting-records.md) and
+[remaining-local/external audit](../../../docs/ihg-hub-recovery-and-release.md).
+Completed subitems below refer to executable synthetic contracts, not real
+provider tasks, live approvals, shared Power Apps, or an approved pilot.
+
+The current shared ALM validator supports table exports; actual app/flow bundles
+need validation adapters. No callable Canvas authoring session or confirmed
+pilot target is available in this chat. Operating-model confirmation remains
+explicitly pending. Actual app/flow/connector authoring, persistent/authenticated
+adapters, pathway-specific policies, staged pilot and manual approval remain open.
+
+## Local verification checkpoint
+
+- Final owned hub test slice: 238 passed. Scoped and repository Ruff lint/format,
+  strict typing, Bandit, Conductor validation and owned secret-pattern checks pass.
+- Last clean full shared run: 650 passed, line coverage 96.97%, branch coverage
+  93.29%. Additional edge tests pass in the owned slice.
+- Later 655-test aggregate verification is unresolved: intermittent native Windows
+  failures and a credentialing tombstone/deep-copy TypeError were observed; its
+  isolated test passes. This is not recorded as a clean final aggregate run.
+- Actual app/flow authoring, live provider/resource rights, IHG model/lane approval,
+  multi-user pilot, production decision and manual verification remain incomplete.
+
+## Shared ALM dependency
+
+Reuse the solution validation, packaging, configuration templates and release
+controls from the
+[reliability and ALM hardening plan](../reliability-alm-hardening_20261014/plan.md).
+Canonical governance components, product-specific flows, deployment and pilot
+approval remain in this track; the shared hardening track does not implement the
+governance hub or approve its production use.
+
 ## Phase 1: IHG operating model and no-admin capability proof
 
-- [ ] Task: Define executable capability-probe contracts
-    - [ ] Add synthetic fixtures for environments, roles, Teams resources, connector availability, sharing and continuity outcomes.
-    - [ ] Test explicit outcomes for Dataverse lane, restricted existing-Team fallback and fail-closed state.
-    - [ ] Test that no Entra application, tenant-admin or service-principal prerequisite is introduced.
-- [ ] Task: Implement Windows-native user-scoped capability probes
+- [x] Task: Define executable capability-probe contracts
+    - [x] Add synthetic fixtures for environments, roles, Teams resources, connector availability, sharing and continuity outcomes.
+    - [x] Test explicit outcomes for Dataverse lane, restricted existing-Team fallback and fail-closed state.
+    - [x] Test that no Entra application, tenant-admin or service-principal prerequisite is introduced.
+- [~] Task: Implement Windows-native user-scoped capability probes
     - [ ] Inspect PAC environments, roles, solutions, tables, auditing and application-sharing capabilities.
     - [ ] Inspect existing IHG Team, SharePoint/List and Planner resources only through already-authorised delegated access.
-    - [ ] Produce a privacy-safe capability, sharing, continuity and tenant-gate report.
+    - [x] Produce a privacy-safe capability, sharing, continuity and tenant-gate report.
 - [ ] Task: Confirm the IHG Executive operating model
     - [ ] Record executive roles, secretariat, chair, advisers, information steward, decision owners, delegates and acting arrangements.
     - [ ] Record decision types, authority sources, quorum, conflict, out-of-session, ratification and district-escalation rules.
@@ -22,50 +108,50 @@
 
 ## Phase 2: Generic governance model and configurable pathways
 
-- [ ] Task: Define canonical schemas and lifecycle contracts
-    - [ ] Model governance matters, classification, authority, risk, pathway, consultation, decision, meeting, ratification, action, evidence and archive.
-    - [ ] Define stable identifiers, lifecycle transitions, replay keys, template versions and provenance.
-    - [ ] Add invalid, boundary, duplicate, stale, superseded and out-of-order transition tests.
-- [ ] Task: Define versioned workflow-template contracts
-    - [ ] Model roles, decision semantics, thresholds, escalation, notifications, records and closure rules as configuration.
-    - [ ] Add activation, migration, rollback and compatibility checks for template changes.
-    - [ ] Prevent silent changes to rules governing active matters.
-- [ ] Task: Implement connector-neutral workflow logic
-    - [ ] Implement the generic Governance Matter engine and linked-matter dependencies.
+- [x] Task: Define canonical schemas and lifecycle contracts
+    - [x] Model governance matters, classification, authority, risk, pathway, consultation, decision, meeting, ratification, action, evidence and archive.
+    - [x] Define stable identifiers, lifecycle transitions, replay keys, template versions and provenance.
+    - [x] Add invalid, boundary, duplicate, stale, superseded and out-of-order transition tests.
+- [x] Task: Define versioned workflow-template contracts
+    - [x] Model roles, decision semantics, thresholds, escalation, notifications, records and closure rules as configuration.
+    - [x] Add activation, migration, rollback and compatibility checks for template changes.
+    - [x] Prevent silent changes to rules governing active matters.
+- [~] Task: Implement connector-neutral workflow logic
+    - [x] Implement the generic Governance Matter engine and linked-matter dependencies.
     - [ ] Implement PRA/Pitstop and research-governance templates.
     - [ ] Implement executive decision, policy endorsement, operational exception, clinical-risk escalation and review-action templates.
-- [ ] Task: Implement privacy, authority and access validators
-    - [ ] Reject prohibited sensitive fields from collaboration projections and logs.
-    - [ ] Validate role, authority, classification, pathway and least-privilege compatibility.
-    - [ ] Add recoverable dead-letter records without sensitive payloads.
+- [~] Task: Implement privacy, authority and access validators
+    - [x] Reject prohibited sensitive fields from collaboration projections and logs.
+    - [~] Validate role, authority, classification, pathway and least-privilege compatibility.
+    - [x] Add recoverable dead-letter records without sensitive payloads.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Generic governance model and configurable pathways' (Protocol adapted from workflow.md)
 
 ## Phase 3: Executive decision, meeting and secretariat workflow
 
-- [ ] Task: Define collective-decision contract tests
-    - [ ] Cover consultation, recommendation, endorsement, approval, noting, ratification, decline and return-for-information.
-    - [ ] Cover quorum, conflict declaration, recusal, delegates, acting roles and chair confirmation.
-    - [ ] Prove that an individual approval cannot be represented as a collective decision without the configured rule being satisfied.
-- [ ] Task: Implement triage and executive-attention routing
-    - [ ] Route matters to operational delegation, scheduled agenda, urgent out-of-session, assurance/noting or district escalation.
+- [x] Task: Define collective-decision contract tests
+    - [x] Cover consultation, recommendation, endorsement, approval, noting, ratification, decline and return-for-information.
+    - [x] Cover quorum, conflict declaration, recusal, delegates, acting roles and chair confirmation.
+    - [x] Prove that an individual approval cannot be represented as a collective decision without the configured rule being satisfied.
+- [~] Task: Implement triage and executive-attention routing
+    - [x] Route matters to operational delegation, scheduled agenda, urgent out-of-session, assurance/noting or district escalation.
     - [ ] Implement materiality, cross-service, contest, urgency and escalation-threshold rules.
-    - [ ] Provide an exception-focused executive queue and secretariat work queue.
-- [ ] Task: Implement agenda, brief, minute and ratification records
-    - [ ] Generate a structured agenda entry and one-page decision brief.
-    - [ ] Record meeting, participants, conflicts, chair confirmation, outcome, minute reference and resulting actions.
-    - [ ] Implement out-of-session expiry and later ratification where required.
-- [ ] Task: Implement executive portfolio and digest views
-    - [ ] Show decisions required, material risk, overdue actions, cross-service dependencies, ratification gaps and assurance exceptions.
-    - [ ] Generate configurable weekly digests without requiring Power BI/Fabric.
-    - [ ] Measure and constrain notification volume.
+    - [x] Provide an exception-focused executive queue and secretariat work queue.
+- [~] Task: Implement agenda, brief, minute and ratification records
+    - [x] Generate a structured agenda entry and one-page decision brief.
+    - [~] Record meeting, participants, conflicts, chair confirmation, outcome, minute reference and resulting actions.
+    - [x] Implement out-of-session expiry and later ratification where required.
+- [~] Task: Implement executive portfolio and digest views
+    - [x] Show decisions required, material risk, overdue actions, cross-service dependencies, ratification gaps and assurance exceptions.
+    - [x] Generate configurable weekly digests without requiring Power BI/Fabric.
+    - [~] Measure and constrain notification volume.
 - [ ] Task: Conductor - Automated Review and Triangulated Verification 'Executive decision, meeting and secretariat workflow' (Protocol adapted from workflow.md)
 
 ## Phase 4: Power Platform solution and restricted fallback
 
-- [ ] Task: Create failing solution-packaging and deployment tests
+- [~] Task: Create failing solution-packaging and deployment tests
     - [ ] Validate solution structure, environment variables, connection references and versioning.
-    - [ ] Validate that deployment scripts are Windows-native, user-scoped and secret-free.
-    - [ ] Test dry-run, interrupted deployment, export-before-change and rollback behaviour.
+    - [~] Validate that deployment scripts are Windows-native, user-scoped and secret-free.
+    - [~] Test dry-run, interrupted deployment, export-before-change and rollback behaviour.
 - [ ] Task: Implement the preferred Dataverse and Power Apps solution
     - [ ] Add canonical tables, relationships, keys, least-privilege roles and auditing configuration.
     - [ ] Add Teams-accessible intake, triage, agenda, case, review, decision, action, assurance and archive experiences.
@@ -79,18 +165,18 @@
 
 ## Phase 5: Approvals, Planner and Teams interaction
 
-- [ ] Task: Define approval and task-projection contract tests
-    - [ ] Cover first response, collective response, rejection, cancellation, reassignment, timeout and ratification outcomes.
-    - [ ] Cover duplicate Planner creation, stale task updates, removed users and unavailable connections.
-    - [ ] Verify that all collaboration text is privacy minimised.
-- [ ] Task: Implement governed approval orchestration
+- [x] Task: Define approval and task-projection contract tests
+    - [x] Cover first response, collective response, rejection, cancellation, reassignment, timeout and ratification outcomes.
+    - [x] Cover duplicate Planner creation, stale task updates, removed users and unavailable connections.
+    - [x] Verify that all collaboration text is privacy minimised.
+- [~] Task: Implement governed approval orchestration
     - [ ] Route approvals to authorised individuals or existing groups supported by the selected lane.
     - [ ] Persist authority, participant, conflict, response, comments, timestamp, workflow version and ratification state.
     - [ ] Implement reminders, escalation, cancellation, return-for-information and recovery.
-- [ ] Task: Implement Planner action projection and reconciliation
-    - [ ] Create privacy-minimised tasks only after a governed action is assigned.
-    - [ ] Synchronise ownership, due date and completion without allowing Planner to alter decisions or closure evidence.
-    - [ ] Reconcile missing, deleted, duplicate and inaccessible tasks.
+- [~] Task: Implement Planner action projection and reconciliation
+    - [x] Create privacy-minimised tasks only after a governed action is assigned.
+    - [x] Synchronise ownership, due date and completion without allowing Planner to alter decisions or closure evidence.
+    - [x] Reconcile missing, deleted, duplicate and inaccessible tasks.
 - [ ] Task: Implement Teams notifications, digests and case links
     - [ ] Deliver authorised intake, decision, escalation, overdue, ratification and closure notifications.
     - [ ] Generate secretariat and executive digests with configurable frequency.

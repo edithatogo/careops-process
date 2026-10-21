@@ -35,7 +35,16 @@ def test_real_receipt_classifies_every_stage(
     step = workflow.split("      - name: Record actual qualification and lock integrity\n", 1)[1]
     step = step.split("      - name: Preserve candidate evidence", 1)[0]
     script = textwrap.dedent(step.split("        run: |\n", 1)[1])
-    script = script.replace("/usr/bin/python3", shlex.quote(sys.executable), 1)
+    if sys.platform == "win32":
+        # The workflow wrapper contains only this Python heredoc. Execute its
+        # unchanged body locally; Linux continues to check the actual Bash step.
+        opening = "/usr/bin/python3 - <<'PY'\n"
+        assert script.startswith(opening)
+        assert script.endswith("\nPY\n")
+        command = [sys.executable, "-c", script[len(opening) : -len("\nPY\n")]]
+    else:
+        script = script.replace("/usr/bin/python3", shlex.quote(sys.executable), 1)
+        command = ["/bin/bash", "-euc", script]
     names = ["source", "bootstrap", "prepare", "resolve", "install", "tests"]
     outcomes = dict.fromkeys(names, "success")
     if failed_stage:
@@ -53,7 +62,7 @@ def test_real_receipt_classifies_every_stage(
     )
     # Execute only the checked-in workflow receipt with an explicit no-credential environment.
     subprocess.run(  # noqa: S603 - fixed repository CI receipt; no caller command input
-        ["/bin/bash", "-euc", script],
+        command,
         check=True,
         env=environment,
         capture_output=True,
@@ -64,6 +73,11 @@ def test_real_receipt_classifies_every_stage(
     assert receipt["testsExecuted"] == (outcomes["tests"] in {"success", "failure"})
     assert receipt["promoted"] is False
     assert receipt["nativeWrites"] is False
+    assert receipt["optionalProviderScope"] == (
+        "synthetic alignment/store tests and dependency load; no production deployment"
+        if failed_stage is None
+        else "not qualified; inspect stage outcomes"
+    )
 
 
 @pytest.mark.parametrize(

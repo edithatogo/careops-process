@@ -128,7 +128,7 @@ jobs:
           uv run --directory "$CANARY_ROOT" --no-sync pytest
           uv run --directory "$CANARY_ROOT" --no-sync bandit -q -r src
           uv run --directory "$CANARY_ROOT" --no-sync pip-audit
-          uv run --directory "$CANARY_ROOT" --no-sync python -c 'import pm4py; print("Optional dependency load only; no production adapter invoked")'
+          uv run --directory "$CANARY_ROOT" --no-sync python -c 'import pm4py; print("Pinned optional dependency loaded; synthetic interface coverage is recorded by pytest.")'
       - name: Record actual qualification and lock integrity
         if: always()
         env:
@@ -159,7 +159,8 @@ jobs:
               state = 'cancelled'
           else:
               state = 'qualified-source-only' if outcome == 'success' else 'not-executed'
-          receipt = {'sourceCommit': os.environ['SOURCE_COMMIT'], 'python': os.environ['CANDIDATE_PYTHON'], 'state': state, 'resolveOutcome': os.environ['RESOLVE_OUTCOME'], 'installOutcome': os.environ['INSTALL_OUTCOME'], 'testOutcome': outcome, 'testsExecuted': outcome in ['success', 'failure'], 'promoted': False, 'nativeWrites': False, 'optionalProviderScope': 'dependency installation/load only; no production adapter'}
+          provider_scope = 'synthetic alignment/store tests and dependency load; no production deployment' if outcome == 'success' else 'not qualified; inspect stage outcomes'
+          receipt = {'sourceCommit': os.environ['SOURCE_COMMIT'], 'python': os.environ['CANDIDATE_PYTHON'], 'state': state, 'resolveOutcome': os.environ['RESOLVE_OUTCOME'], 'installOutcome': os.environ['INSTALL_OUTCOME'], 'testOutcome': outcome, 'testsExecuted': outcome in ['success', 'failure'], 'promoted': False, 'nativeWrites': False, 'optionalProviderScope': provider_scope}
           receipt['stages'] = stages
           receipt['failedStage'] = failed
           if lock.exists():

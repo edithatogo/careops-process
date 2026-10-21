@@ -63,6 +63,7 @@ name = "careops-process"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "defusedxml" },
     { name = "polars" },
     { name = "pyarrow" },
     { name = "pydantic" },
@@ -79,7 +80,6 @@ build = [
 ]
 dev = [
     { name = "bandit" },
-    { name = "defusedxml" },
     { name = "hypothesis" },
     { name = "pip-audit" },
     { name = "pyright" },
@@ -90,6 +90,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "defusedxml", specifier = ">=0.7.1" },
     { name = "pm4py", marker = "extra == 'mining'", specifier = "==2.7.23.11" },
     { name = "polars", specifier = ">=1.33" },
     { name = "pyarrow", specifier = ">=21" },
@@ -101,7 +102,6 @@ provides-extras = ["mining"]
 build = [{ name = "hatchling", specifier = "==1.32.4" }]
 dev = [
     { name = "bandit", specifier = ">=1.8" },
-    { name = "defusedxml", specifier = ">=0.7.1" },
     { name = "hypothesis", specifier = ">=6.135" },
     { name = "pip-audit", specifier = ">=2.9" },
     { name = "pyright", specifier = ">=1.1.403" },

@@ -1,0 +1,263 @@
+{
+  "$defs": {
+    "FrozenConfiguration": {
+      "additionalProperties": false,
+      "description": "Approved source inventory, observation and records controls.",
+      "properties": {
+        "authorised_source_partitions": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "title": "Authorised Source Partitions",
+          "type": "array"
+        },
+        "destination_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Destination Reference",
+          "type": "string"
+        },
+        "inventory_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Inventory Hash",
+          "type": "string"
+        },
+        "mapping_version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Mapping Version",
+          "type": "string"
+        },
+        "observation_end": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Observation End",
+          "type": "string"
+        },
+        "observation_start": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Observation Start",
+          "type": "string"
+        },
+        "retention_policy_version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Retention Policy Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "authorised_source_partitions",
+        "observation_start",
+        "observation_end",
+        "destination_reference",
+        "retention_policy_version",
+        "mapping_version",
+        "inventory_hash"
+      ],
+      "title": "FrozenConfiguration",
+      "type": "object"
+    },
+    "PartitionEvidence": {
+      "additionalProperties": false,
+      "description": "Record accounting and emitted-fact membership for one inventoried folder.",
+      "properties": {
+        "acquired_count": {
+          "minimum": 0,
+          "title": "Acquired Count",
+          "type": "integer"
+        },
+        "candidate_count": {
+          "minimum": 0,
+          "title": "Candidate Count",
+          "type": "integer"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "duplicate_count": {
+          "minimum": 0,
+          "title": "Duplicate Count",
+          "type": "integer"
+        },
+        "emitted_count": {
+          "minimum": 0,
+          "title": "Emitted Count",
+          "type": "integer"
+        },
+        "fact_ids": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "title": "Fact Ids",
+          "type": "array"
+        },
+        "filtered_count": {
+          "minimum": 0,
+          "title": "Filtered Count",
+          "type": "integer"
+        },
+        "next_link_exhausted": {
+          "title": "Next Link Exhausted",
+          "type": "boolean"
+        },
+        "pages_read": {
+          "minimum": 0,
+          "title": "Pages Read",
+          "type": "integer"
+        },
+        "partition_id": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Partition Id",
+          "type": "string"
+        },
+        "rejected_count": {
+          "minimum": 0,
+          "title": "Rejected Count",
+          "type": "integer"
+        },
+        "source_system": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "partition_id",
+        "source_system",
+        "pages_read",
+        "candidate_count",
+        "acquired_count",
+        "duplicate_count",
+        "rejected_count",
+        "filtered_count",
+        "emitted_count",
+        "fact_ids",
+        "content_hash",
+        "next_link_exhausted"
+      ],
+      "title": "PartitionEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Strict public shape of the v2 closed-run evidence envelope.",
+  "properties": {
+    "candidate_count": {
+      "minimum": 0,
+      "title": "Candidate Count",
+      "type": "integer"
+    },
+    "configuration": {
+      "$ref": "#/$defs/FrozenConfiguration"
+    },
+    "configuration_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Hash",
+      "type": "string"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "evidence_class": {
+      "enum": [
+        "synthetic",
+        "smoke_test",
+        "live_corpus"
+      ],
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "folder_count": {
+      "minimum": 0,
+      "title": "Folder Count",
+      "type": "integer"
+    },
+    "idempotency_replay_verified": {
+      "title": "Idempotency Replay Verified",
+      "type": "boolean"
+    },
+    "initial_reconciliation_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Initial Reconciliation Hash",
+      "type": "string"
+    },
+    "manifest_version": {
+      "const": "2.0.0",
+      "title": "Manifest Version",
+      "type": "string"
+    },
+    "no_raw_content_stored": {
+      "title": "No Raw Content Stored",
+      "type": "boolean"
+    },
+    "page_count": {
+      "minimum": 0,
+      "title": "Page Count",
+      "type": "integer"
+    },
+    "pagination_exhausted": {
+      "title": "Pagination Exhausted",
+      "type": "boolean"
+    },
+    "partitions": {
+      "items": {
+        "$ref": "#/$defs/PartitionEvidence"
+      },
+      "title": "Partitions",
+      "type": "array"
+    },
+    "reconciled": {
+      "title": "Reconciled",
+      "type": "boolean"
+    },
+    "replay_reconciliation_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Replay Reconciliation Hash",
+      "type": "string"
+    },
+    "run_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "const": "closed",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "manifest_version",
+    "evidence_class",
+    "run_id",
+    "status",
+    "folder_count",
+    "page_count",
+    "candidate_count",
+    "pagination_exhausted",
+    "reconciled",
+    "idempotency_replay_verified",
+    "no_raw_content_stored",
+    "configuration",
+    "configuration_hash",
+    "content_hash",
+    "partitions",
+    "initial_reconciliation_hash",
+    "replay_reconciliation_hash"
+  ],
+  "title": "BoundRunEvidence",
+  "type": "object"
+}

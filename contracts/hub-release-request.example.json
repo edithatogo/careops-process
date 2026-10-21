@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "mode": "dry_run_only",
+  "lane": "unselected",
+  "stage": "dev",
+  "classification": "unconfirmed",
+  "operating_model_ref": null,
+  "publisher_confirmation_ref": null,
+  "capability_verification_ref": null,
+  "lane_decision_ref": null,
+  "information_governance_ref": null,
+  "continuity_ref": null,
+  "resource_owner_approval_ref": null,
+  "fallback_configuration_export_ref": null,
+  "fallback_backup_ref": null
+}

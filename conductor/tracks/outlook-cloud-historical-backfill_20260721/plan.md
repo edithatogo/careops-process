@@ -1,5 +1,85 @@
 # Implementation Plan: Cloud-only complete historical Outlook mailbox backfill
 
+## Active scope — VUW only, 17 October 2026
+
+The operator has directed implementation and testing in VUW for now. Queensland
+Health work is deferred until a later instruction. The historical QH tasks below
+remain recorded requirements, not prerequisites for completing VUW sandbox work.
+
+- [x] Complete the bounded VUW Inbox test and unchanged replay (30 records).
+- [x] Independently review the managed Dataverse adapter through `a8daf72`;
+  81 focused adapter/notification/view tests pass, including watermark, Windows
+  runner and cleanup-error regressions. This is local scaffold evidence.
+- [x] Verify PAC lists the active `CareOps-VUW-TEST` profile for VUW-AI-TEST.
+- [ ] Verify current VUW organization identity and effective environment rights.
+- [ ] Complete the separate managed Dataverse CLI authentication for VUW.
+- [ ] Discover and bind the VUW destination schema and approved test configuration.
+- [ ] Implement and test VUW persistence, service readback and recovery with
+  synthetic data before extending mailbox collection.
+- [ ] Record actual VUW results, remaining limitations and exported components
+  in the repository; retain sensitive evidence outside Git.
+
+Developer follow-on receipt: Reliability verified authoring rights, imported and
+exported the isolated baseline and handed off the existing ingestion mapping.
+`db28356` implements the shared synthetic row-identity/codec contract;
+`6b24776` adds create/reconcile/replay interfaces and records the actual two-row
+SDK rehearsal. Both synthetic rows read back exactly; replay created zero new
+rows. M365 independently rechecked current service identity and both rows.
+Sixty-two focused destination/reconciliation tests and scoped static checks pass.
+Exact-key service cleanup subsequently deleted both synthetic rows and verified
+their absence after fresh identity/payload guards. The writer slot is released.
+Sixty-four focused tests now pass; independent review of the reusable writer
+remains with coordination. See [destination receipt](../../../docs/outlook-dataverse-destination.md).
+Developer results do not complete TEST acceptance or expand mailbox collection.
+
+The [VUW synthetic durable-resume design](vuw-durable-resume-design.md) defines
+the bounded next implementation checklist and actual table/worker prerequisites.
+It is documentation only; no checkpoint schema or cloud worker has been deployed
+by that design, and no additional mailbox acquisition is included.
+
+The earlier mailbox test's fixed scope and disposal schedule remain applicable.
+Additional mailbox collection needs an explicit frozen scope and retention record;
+general sandbox implementation is not evidence of a completed full-mailbox run.
+QH authentication, source collection, deployment and acceptance are deferred.
+
+Platform ownership: Reliability owns VUW authentication, effective rights,
+publisher/solution baseline and ALM. Governance owns the hub table/app after that
+baseline. This lane owns mailbox destination integration and readback after
+Reliability supplies the verified existing ingestion-table mapping; M365 owns
+the provenance verifier and discovery/report integration. VUW-AI-DEV is being
+assessed as an authoring option; DEV results cannot establish TEST acceptance.
+PAC organization discovery succeeded for VUW-AI-TEST, but this does not establish
+ingestion-table read/write rights. No additional mailbox reads are part of this
+handoff, and the original frozen evidence and disposal schedule are preserved.
+
+## Current local handover — 17 October 2026
+
+The authorized VUW bounded development test is complete: 30 minimized initial
+records, 30 independently read local destination records and 30 unchanged
+replay records. Its [receipt](test-connection-20261015.md) records limitations
+and scheduled disposal. Earlier pending VUW login/connection/retention notes
+below are historical; no additional source collection is authorized by this
+handover. Queensland Health remains the actual pilot target.
+
+- [x] Task: Review synthetic folder/pagination/reconciliation/restart readiness and verify the existing disposal schedule without repeating acquisition.
+- [x] Task: Reject contradictory inventory dispositions, included descendants of excluded folders and malformed source shapes with failing-then-passing regressions — `037cd90`.
+- [x] Task: Record the smallest actual-pilot input set and explicit absence of durable helper page-resume in the [readiness review](readiness-review-20261017.md).
+- [x] Task: Complete the coordinated destination-provenance repair `7f376db` and verify 112 targeted contract/evidence/reconciliation/integration/CLI/publication tests together.
+
+Full-folder QH acquisition, service-origin Dataverse readback, deployed durable
+checkpoint/resume, operational-owner/Executive decisions and manual Conductor
+checkpoints remain open. Local fixture results and the VUW smoke test do not
+fulfil those requirements.
+
+## Shared hardening prerequisite
+
+Before the next live mailbox run, complete the exporter privacy, date-window,
+replay and offline-test work in the
+[reliability and ALM hardening plan](../reliability-alm-hardening_20261014/plan.md).
+Existing completion markers are historical evidence, not proof that the current
+exporter satisfies these newly identified requirements. Full mailbox execution,
+reconciliation and owner approvals remain in this track.
+
 ## Phase 1: Contract and completeness gate — GitHub #31
 
 - [x] Task: Add test-first schema for folder inventory, backfill run and per-folder manifest.
@@ -28,10 +108,11 @@
 
 ## Phase 4: OCEL process discovery — GitHub #34
 
-- [x] Task: Build OCEL objects, events and relations from the closed Outlook run.
-- [x] Task: Generate empirical process families, variants, hand-offs, ageing and incomplete cases.
-- [x] Task: Generate coverage-honest executive visuals and review queue.
-- [x] Task: Preserve run-manifest lineage on every output.
+- [x] Task: Implement OCEL reconstruction from supplied closed-run evidence (repository capability; live execution pending).
+- [x] Task: Implement empirical process-family, variant, hand-off, ageing and incomplete-case outputs (synthetic verification).
+- [x] Task: Implement coverage-honest executive visuals and review queue (synthetic verification).
+- [x] Task: Implement run-manifest lineage preservation on generated outputs.
+- [ ] Task: Execute and validate these outputs over the actual reconciled authorised Outlook run after Phase 3.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
 
 ## Phase 5: Governance and executive validation — GitHub #35
@@ -45,5 +126,104 @@
 
 - [x] Task: Run repository quality, privacy, security and workflow checks.
 - [ ] Task: Reconcile Conductor, GitHub issues, live evidence and residual external gates.
-- [x] Task: Update the parent M365 corpus-discovery track with the closed Outlook lane status.
+- [x] Task: Update the parent M365 corpus-discovery track with repository capability status; live Outlook closure remains pending.
 - [ ] Task: Phase verification and manual Conductor checkpoint.
+
+## Verification evidence — 2026-10-14
+
+Phase 1 automated verification passed: Conductor validation; all 179 tests
+with 90.88% overall coverage; Ruff formatting and lint; Pyright (zero errors);
+and Bandit over `src`. The Phase 1 manual checkpoint remains pending.
+These checks establish repository behaviour only, not live mailbox completeness.
+
+Initial verification finding (superseded by the local repairs below):
+`scripts/Invoke-GraphMailboxBackfill.ps1` persisted subject, sender, recipient
+addresses and raw identifiers contrary to the privacy-minimised specification.
+That projection defect has been repaired and verified offline. Full-mailbox
+acceptance still requires frozen inventory, actual per-folder reads,
+destination reconciliation and unchanged replay evidence.
+
+Delegated consent, authorised mailbox scope and retention/destination approvals
+remain external gates. The July access-denial evidence is historical and does
+not establish the current tenant permission state. No live extraction was
+attempted during this verification.
+
+## Local repairs and review — 2026-10-14
+
+- [x] Task: Replace unsafe Graph projection with allowlisted keyed pseudonyms and sanitized diagnostics.
+- [x] Task: Verify encoded UTC windows, explicit timezones, bounded retries, safe pagination, duplicate/replay accounting and empty results offline.
+- [x] Task: Stage directory publication, protect a previous artifact, block concurrent writers and verify failed publication/recovery paths.
+- [x] Task: Add folder-scoped acquisition with measured page ledgers and scope-bound replay.
+- [x] Task: Add nested/hidden-folder inventory traversal, explicit inherited exclusions and drift/cycle checks through an approved-source adapter interface.
+- [x] Task: Reconcile supplied frozen inventory/page ledgers and canonical destination snapshots without inventing writes or approval.
+- [x] Task: Verify canonical partitions and initial/replay reconciliation against M365's closure interface using synthetic evidence only.
+- [x] Task: Enforce contract identity prohibitions, pseudonym domains and source metadata allowlisting with failing-then-passing regressions.
+- [x] Task: Document acquired evidence, operator preparation, VUW-first proposal, closure inputs and Queensland Health promotion gates.
+- [x] Task: Commit the verified local repairs as `1554aaf` and conduct the [scoped Conductor review](review-20261014.md).
+- [x] Task: Enforce pilot-entry approvals before token/source access, bind exact mailbox/folder/window/output scope and retain approval/configuration hashes in acquired evidence.
+- [x] Task: Provide an unapproved local preparation mode with no source/token access, false approval flags and no overwrite of an existing review record.
+- [ ] Task: Complete manual Conductor verification and actual authorised full-folder/source-to-Dataverse run, replay and governance decisions.
+
+Local evidence: 56 Outlook Python tests pass; scoped Python coverage is 97.89%
+lines and 90.00% branches. The offline PowerShell exporter suite passes,
+including cross-language pseudonym encoding, folder page ledgers, retries,
+concurrent writer rejection, publication rollback and a failed-recovery backup.
+Scoped Ruff, strict Pyright and Bandit pass. Installed dependencies have no known
+vulnerabilities in pip-audit (the local project itself is not a PyPI audit target).
+Conductor validation passes. These are repository checks, not tenant evidence.
+
+The shared suite passed an earlier 352-test snapshot. A later full-suite run
+was interrupted during collection by the concurrent Teams implementation's
+missing `apply_decision_transition` import in `tests/test_hub_decisions.py`.
+Shared final verification is coordinated separately; do not infer it from
+Outlook's scoped results.
+
+Latest subsequent shared snapshot: 537 passed, 7 failed in the concurrent Teams
+decision/domain implementation. The [review failure record](review-20261014.md)
+lists every failing test. No Outlook failure was observed in that run; the
+shared suite remains unverified until its owners finish and recheck.
+
+GitHub reconciliation: #30, #33, #34 and #35 remain open; #31 and #32 are closed
+for contract/blueprint work. Their closed state does not establish live
+completeness. No GitHub status or comments were changed during this work.
+
+The user confirmed that no approved pilot mailbox scope/destination currently
+exists and proposed VUW before Queensland Health, with a personal Azure account
+as another possible access check. Actual account access, consent, configuration
+approval, connection binding, retention/destination controls, full folder reads,
+destination writes and replay are still pending. No live acquisition or consent
+request was attempted. The sanctioned Power Automate route remains the production
+acceptance route; Graph/offline helpers do not replace its live verification.
+
+## Continuation audit — approval boundary
+
+Verified continuation implementation commit: `4039eac`.
+
+The completion audit found that the Graph exporter previously relied on the
+operator runbook rather than validating pilot approval before token acquisition.
+That local gap is now repaired: `-PilotEntryPath` is required for acquisition,
+with strict true approval/freeze flags and exact scope binding. The acquired
+manifest and replay bind the approval-file and approved configuration hashes.
+`-PreparePilotEntryPath` only creates an unapproved local proposal and neither
+requests a token nor reads a mailbox. It leaves approvals false and does not
+overwrite existing records. Tests use transient synthetic fixtures and mocked
+token/source functions, never tenant approval records.
+
+Verification: the expanded offline PowerShell suite passes approval denial,
+scope mismatch, primitive-type confusion, proposal preparation/no-overwrite,
+non-null UTC-window handling across PowerShell versions, and all earlier
+privacy/replay/recovery cases. The 62 Outlook/M365 contract, reconciliation and
+integration tests pass. Azure CLI 2.91.0 is now installed; VUW Azure/Graph
+identity and Power Automate environment access were subsequently verified.
+The operator authorized a VUW Inbox-only seven-day metadata development test
+and selected their Developer environment's existing Outlook connection route.
+Connection enumeration needs separate FlowAgent authentication, which remains
+incomplete. No mailbox extraction or connection identity verification occurred.
+VUW is testing only; Queensland Health is the actual pilot and requires its
+own approval, frozen configuration and destination records.
+
+The full objective remains unproven. Live consent, mailbox/folder scope,
+destination/retention approval, deployed connector verification, full-folder
+acquisition, destination reconciliation, unchanged live replay, process-owner
+validation, Executive decision and manual Conductor checkpoints remain pending.
+See the [requirement-level completion audit](completion-audit-20261014.md).

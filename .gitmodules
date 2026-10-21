@@ -3,3 +3,18 @@
 	url = https://github.com/gemini-cli-extensions/conductor.git
 	branch = main
 
+[submodule ".agents/plugins/dataverse-skills"]
+	path = .agents/plugins/dataverse-skills
+	url = https://github.com/microsoft/Dataverse-skills.git
+[submodule ".agents/plugins/power-platform-skills"]
+	path = .agents/plugins/power-platform-skills
+	url = https://github.com/microsoft/power-platform-skills.git
+[submodule ".agents/plugins/skills-for-fabric"]
+	path = .agents/plugins/skills-for-fabric
+	url = https://github.com/microsoft/skills-for-fabric.git
+[submodule ".agents/plugins/microsoft-skills"]
+	path = .agents/plugins/microsoft-skills
+	url = https://github.com/microsoft/skills.git
+[submodule ".agents/plugins/cli-microsoft365"]
+	path = .agents/plugins/cli-microsoft365
+	url = https://github.com/pnp/cli-microsoft365.git

@@ -65,15 +65,24 @@ reassign work, or implement a recommendation automatically.
 ## Bootstrap
 
 ```powershell
-uv sync --all-groups
+uv sync --locked --group dev
 uv run pytest
+uv run python scripts/check_coverage.py
 uv run ruff check .
 uv run pyright
+pwsh -NoProfile -File tests/powershell/test_graph_mailbox_backfill.ps1
+pwsh -NoProfile -File tests/powershell/test_planner_export.ps1
 ```
 
 See [Conductor](conductor/index.md), the
 [feasibility evidence](docs/feasibility.md), and the
 [live pilot runbook](docs/live-pilot.md).
+
+Current hardening runbooks cover [Planner exports](docs/planner-export-reliability.md),
+[independent mining/coverage assurance](docs/mining-assurance.md),
+[CI and dependency ownership](docs/dependency-and-ci-operations.md), and
+[local solution ALM](docs/local-alm.md). Local tests and packaging do not establish
+hosted CodeQL/SARIF execution, live tenant permissions, or promotion approval.
 
 ## Licence
 

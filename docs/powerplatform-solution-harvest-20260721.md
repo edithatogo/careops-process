@@ -1,5 +1,10 @@
 # Power Platform solution harvest — 2026-07-21
 
+Historical evidence is retained below. Current offline structure validation,
+PAC packaging, settings templates and promotion gates are documented in
+[Local ALM](local-alm.md), verified on 14 October 2026. Those local checks do not
+renew the historical account permissions or prove a live managed deployment.
+
 An authenticated PAC export from the PowerPagesDeveloper environment was
 inspected and unpacked into `powerplatform/solutions/CareOpsProcess`.
 

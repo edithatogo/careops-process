@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Privacy-preserving object-centric process intelligence for CareOps"
 requires-python = ">=3.14,<3.16"
 dependencies = [
+  "defusedxml>=0.7.1",
   "polars>=1.33",
   "pyarrow>=21",
   "pydantic>=2.11",
@@ -25,7 +26,6 @@ build = [
 ]
 dev = [
   "bandit>=1.8",
-  "defusedxml>=0.7.1",
   "hypothesis>=6.135",
   "pip-audit>=2.9",
   "pyright>=1.1.403",
@@ -45,6 +45,7 @@ pythonpath = ["src"]
 [tool.ruff]
 target-version = "py314"
 line-length = 100
+extend-exclude = [".agents/plugins/**"]
 
 [tool.ruff.lint]
 select = ["ALL"]

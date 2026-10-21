@@ -1,0 +1,95 @@
+{
+  "additionalProperties": false,
+  "description": "Expose review steps and fixed gap codes, not permission to import or publish.",
+  "properties": {
+    "mode": {
+      "const": "dry_run_only",
+      "default": "dry_run_only",
+      "title": "Mode",
+      "type": "string"
+    },
+    "deployment_authorized": {
+      "const": false,
+      "default": false,
+      "title": "Deployment Authorized",
+      "type": "boolean"
+    },
+    "artifact_prepared": {
+      "default": false,
+      "title": "Artifact Prepared",
+      "type": "boolean"
+    },
+    "gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Gaps",
+      "type": "array"
+    },
+    "stages": {
+      "default": [
+        "confirm_target_lane_publisher_and_operating_model",
+        "verify_access_sharing_dlp_licences_and_continuity",
+        "author_components_in_confirmed_environment",
+        "export_before_change_and_validate_supported_components",
+        "generate_neutral_settings_and_review_private_bindings",
+        "package_and_review_deployment_and_restore_evidence",
+        "perform_explicitly_approved_import_and_multi_user_pilot"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Stages",
+      "type": "array"
+    },
+    "logical_environment_variables": {
+      "default": [
+        "CanonicalStore",
+        "WorkflowTemplateRegistry",
+        "ProtectedEvidenceBase",
+        "NotificationInterval",
+        "PilotClassification"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Logical Environment Variables",
+      "type": "array"
+    },
+    "logical_connection_references": {
+      "default": [
+        "Teams",
+        "Approvals",
+        "Planner",
+        "SharePoint",
+        "DataverseWhenSelected"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Logical Connection References",
+      "type": "array"
+    },
+    "external_gates": {
+      "default": [
+        "target_and_publisher_confirmation",
+        "actual_component_authoring_and_exports",
+        "app_flow_validation_adapter",
+        "authenticated_resource_bindings",
+        "information_steward_and_ihg_policy_approval",
+        "multi_user_pilot",
+        "manual_verification_and_production_decision"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "External Gates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "gaps"
+  ],
+  "title": "HubReleasePlan",
+  "type": "object"
+}

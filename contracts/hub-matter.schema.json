@@ -1,0 +1,774 @@
+{
+  "$defs": {
+    "ActionRecord": {
+      "additionalProperties": false,
+      "description": "Retain canonical action accountability; Planner is only an optional projection.",
+      "properties": {
+        "action_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Action Id",
+          "type": "string"
+        },
+        "owner_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Owner Ref",
+          "type": "string"
+        },
+        "due_at": {
+          "format": "date-time",
+          "title": "Due At",
+          "type": "string"
+        },
+        "state": {
+          "default": "assigned",
+          "enum": [
+            "assigned",
+            "in_progress",
+            "completed",
+            "cancelled"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "closure_evidence_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Closure Evidence Ref"
+        },
+        "planner_projection_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Planner Projection Ref"
+        }
+      },
+      "required": [
+        "action_id",
+        "owner_ref",
+        "due_at"
+      ],
+      "title": "ActionRecord",
+      "type": "object"
+    },
+    "AuthorityRecord": {
+      "additionalProperties": false,
+      "description": "Reference an existing authority and its accountable owner or decision body.",
+      "properties": {
+        "authority_source_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Source Ref",
+          "type": "string"
+        },
+        "decision_owner_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Owner Ref",
+          "type": "string"
+        },
+        "decision_body_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision Body Ref"
+        },
+        "delegate_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegate Ref"
+        },
+        "acting_arrangement_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Acting Arrangement Ref"
+        }
+      },
+      "required": [
+        "authority_source_ref",
+        "decision_owner_ref"
+      ],
+      "title": "AuthorityRecord",
+      "type": "object"
+    },
+    "ConsultationRecord": {
+      "additionalProperties": false,
+      "description": "Preserve adviser input without converting consultation into a decision.",
+      "properties": {
+        "consultation_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Consultation Id",
+          "type": "string"
+        },
+        "adviser_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Adviser Ref",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Evidence Ref",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "consultation_id",
+        "adviser_ref",
+        "evidence_ref",
+        "recorded_at"
+      ],
+      "title": "ConsultationRecord",
+      "type": "object"
+    },
+    "DecisionRecord": {
+      "additionalProperties": false,
+      "description": "Preserve a provisional decision, authority and protected response reference.",
+      "properties": {
+        "decision_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "consultation",
+            "recommendation",
+            "endorsement",
+            "approval",
+            "noting",
+            "ratification",
+            "decline",
+            "return_for_further_work"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "authority": {
+          "$ref": "#/$defs/AuthorityRecord"
+        },
+        "participant_refs": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Participant Refs",
+          "type": "array"
+        },
+        "conflict_record_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Conflict Record Ref",
+          "type": "string"
+        },
+        "response_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Response Ref",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "review_cycle": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "decision_id",
+        "outcome",
+        "authority",
+        "participant_refs",
+        "conflict_record_ref",
+        "response_ref",
+        "recorded_at",
+        "template_version"
+      ],
+      "title": "DecisionRecord",
+      "type": "object"
+    },
+    "LinkedMatter": {
+      "additionalProperties": false,
+      "description": "Preserve provenance for related, dependent and superseding matters.",
+      "properties": {
+        "matter_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Matter Id",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "related",
+            "depends_on",
+            "supersedes",
+            "superseded_by",
+            "duplicate_of"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "provenance_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Provenance Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "matter_id",
+        "relation",
+        "provenance_ref"
+      ],
+      "title": "LinkedMatter",
+      "type": "object"
+    },
+    "MeetingRecord": {
+      "additionalProperties": false,
+      "description": "Reference agenda, participant, conflict, chair and minute records separately.",
+      "properties": {
+        "meeting_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "agenda_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Agenda Ref",
+          "type": "string"
+        },
+        "scheduled_at": {
+          "format": "date-time",
+          "title": "Scheduled At",
+          "type": "string"
+        },
+        "participant_refs": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Participant Refs",
+          "type": "array"
+        },
+        "conflicts_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Conflicts Ref",
+          "type": "string"
+        },
+        "chair_confirmation_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chair Confirmation Ref"
+        },
+        "minute_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minute Ref"
+        }
+      },
+      "required": [
+        "meeting_id",
+        "agenda_ref",
+        "scheduled_at",
+        "participant_refs",
+        "conflicts_ref"
+      ],
+      "title": "MeetingRecord",
+      "type": "object"
+    },
+    "RatificationRecord": {
+      "additionalProperties": false,
+      "description": "Link ratification evidence to a specific canonical decision.",
+      "properties": {
+        "decision_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "ratification_record_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Ratification Record Ref",
+          "type": "string"
+        },
+        "quorum_evidence_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Quorum Evidence Ref",
+          "type": "string"
+        },
+        "chair_confirmation_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Chair Confirmation Ref",
+          "type": "string"
+        },
+        "minute_or_out_of_session_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Minute Or Out Of Session Ref",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "review_cycle": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "decision_id",
+        "ratification_record_ref",
+        "quorum_evidence_ref",
+        "chair_confirmation_ref",
+        "minute_or_out_of_session_ref",
+        "recorded_at"
+      ],
+      "title": "RatificationRecord",
+      "type": "object"
+    },
+    "TransitionAudit": {
+      "additionalProperties": false,
+      "description": "Retain immutable transition provenance without narrative or approval comments.",
+      "properties": {
+        "event_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "replay_key": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Replay Key",
+          "type": "string"
+        },
+        "command_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Command Digest",
+          "type": "string"
+        },
+        "from_state": {
+          "enum": [
+            "draft",
+            "submitted",
+            "triaged",
+            "under_review",
+            "decision_required",
+            "provisionally_decided",
+            "ratified",
+            "actions_open",
+            "assurance_review",
+            "closed",
+            "archived",
+            "withdrawn",
+            "rejected",
+            "returned",
+            "cancelled",
+            "superseded",
+            "consolidated"
+          ],
+          "title": "From State",
+          "type": "string"
+        },
+        "to_state": {
+          "enum": [
+            "draft",
+            "submitted",
+            "triaged",
+            "under_review",
+            "decision_required",
+            "provisionally_decided",
+            "ratified",
+            "actions_open",
+            "assurance_review",
+            "closed",
+            "archived",
+            "withdrawn",
+            "rejected",
+            "returned",
+            "cancelled",
+            "superseded",
+            "consolidated"
+          ],
+          "title": "To State",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "actor_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Actor Ref",
+          "type": "string"
+        },
+        "authority_source_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Authority Source Ref",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "title": "Evidence Ref",
+          "type": "string"
+        },
+        "template_version": {
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "review_cycle": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Review Cycle",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event_id",
+        "replay_key",
+        "command_digest",
+        "from_state",
+        "to_state",
+        "revision",
+        "occurred_at",
+        "actor_ref",
+        "authority_source_ref",
+        "evidence_ref",
+        "template_version"
+      ],
+      "title": "TransitionAudit",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Canonical synthetic matter; no collaboration projection is authoritative.",
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "execution_mode": {
+      "const": "synthetic",
+      "default": "synthetic",
+      "title": "Execution Mode",
+      "type": "string"
+    },
+    "matter_id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Matter Id",
+      "type": "string"
+    },
+    "scope_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Scope Ref",
+      "type": "string"
+    },
+    "classification": {
+      "enum": [
+        "unconfirmed",
+        "low_sensitivity_metadata",
+        "protected"
+      ],
+      "title": "Classification",
+      "type": "string"
+    },
+    "source_ref": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "sponsor_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sponsor Ref"
+    },
+    "risk": {
+      "default": "unconfirmed",
+      "enum": [
+        "unconfirmed",
+        "routine",
+        "higher",
+        "material"
+      ],
+      "title": "Risk",
+      "type": "string"
+    },
+    "template_id": {
+      "enum": [
+        "pra_pitstop",
+        "research_governance",
+        "clinical_risk",
+        "executive_decision",
+        "policy_endorsement",
+        "operational_exception",
+        "review_action"
+      ],
+      "title": "Template Id",
+      "type": "string"
+    },
+    "template_version": {
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "template_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Template Digest",
+      "type": "string"
+    },
+    "state": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "submitted",
+        "triaged",
+        "under_review",
+        "decision_required",
+        "provisionally_decided",
+        "ratified",
+        "actions_open",
+        "assurance_review",
+        "closed",
+        "archived",
+        "withdrawn",
+        "rejected",
+        "returned",
+        "cancelled",
+        "superseded",
+        "consolidated"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "revision": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "review_cycle": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Review Cycle",
+      "type": "integer"
+    },
+    "authority": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AuthorityRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "consultations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ConsultationRecord"
+      },
+      "title": "Consultations",
+      "type": "array"
+    },
+    "decisions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DecisionRecord"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "meeting": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MeetingRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ratification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RatificationRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "past_ratifications": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RatificationRecord"
+      },
+      "title": "Past Ratifications",
+      "type": "array"
+    },
+    "actions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ActionRecord"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "evidence_refs": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "linked_matters": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/LinkedMatter"
+      },
+      "title": "Linked Matters",
+      "type": "array"
+    },
+    "closure_evidence_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Closure Evidence Ref"
+    },
+    "assurance_evidence_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Assurance Evidence Ref"
+    },
+    "archive_record_ref": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Archive Record Ref"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/TransitionAudit"
+      },
+      "title": "History",
+      "type": "array"
+    }
+  },
+  "required": [
+    "matter_id",
+    "scope_ref",
+    "classification",
+    "source_ref",
+    "template_id",
+    "template_version",
+    "template_digest"
+  ],
+  "title": "GovernanceMatter",
+  "type": "object"
+}

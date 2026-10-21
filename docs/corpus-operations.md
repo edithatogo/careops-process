@@ -1,5 +1,10 @@
 # Live corpus operating controls
 
+Current exporter safeguards and candidate/event count definitions are in
+[Planner export reliability](planner-export-reliability.md); CI and release gates
+are in [dependency and CI operations](dependency-and-ci-operations.md) and
+[local ALM](local-alm.md). Use PowerShell 7 and the locked Python environment.
+
 ## Preconditions
 
 Before a live run, the operator must record the approved source partitions,
@@ -14,7 +19,7 @@ default and requires explicit allow-listing in an approved policy.
 
 ## Planner full-snapshot validation
 
-Run from a Windows PowerShell session authenticated through Azure CLI:
+Run from a PowerShell 7 session authenticated through Azure CLI:
 
 ```powershell
 $env:CAREOPS_PSEUDONYM_KEY = '<retrieve from approved secret location>'

@@ -1,7 +1,7 @@
 # Copyright (c) 2026 CareOps contributors
 # SPDX-License-Identifier: MIT
 
-"""Small, deterministic conformance primitives with an optional PM4Py seam."""
+"""Deterministic sequence metrics; PM4Py integration is a separate OCEL boundary."""
 
 from __future__ import annotations
 
@@ -24,13 +24,20 @@ class ConformanceResult:
 
 
 def discover_variants(traces: Sequence[Sequence[str]]) -> list[tuple[tuple[str, ...], int]]:
-    """Return deterministic trace variants ordered by frequency then identity."""
+    """Return nonempty variants ordered by decreasing frequency then lexical identity."""
     counts = Counter(tuple(trace) for trace in traces if trace)
     return sorted(counts.items(), key=lambda item: (-item[1], item[0]))
 
 
 def conformance(traces: Sequence[Sequence[str]], *, reference: Sequence[str]) -> ConformanceResult:
-    """Compare traces to a reference path without mutating event facts."""
+    """Compare positional matches and activity sets without mutating event facts.
+
+    Fitness divides same-position matches by the sum of the longer path length
+    for each trace/reference pair. Precision is the fraction of unique observed
+    activities that occur in the reference. Empty traces count against fitness
+    and appear in deviations, but are excluded from observed variants. These
+    simple metrics are not token-replay fitness or model-based precision.
+    """
     if not reference:
         message = "reference must not be empty"
         raise ValueError(message)

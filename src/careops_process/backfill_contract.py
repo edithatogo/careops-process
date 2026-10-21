@@ -28,8 +28,36 @@ def validate_backfill_contract(contract: dict[str, Any]) -> None:
         _fail("historical backfill must not apply a date filter")
     projection = cast("dict[str, Any]", contract.get("projection") or {})
     forbidden = set(cast("list[str]", projection.get("forbidden_persistent_fields") or []))
-    if {"body", "subject", "attachments"} - forbidden:
+    raw_fields = {
+        "body",
+        "bodyPreview",
+        "subject",
+        "from",
+        "sender",
+        "to",
+        "cc",
+        "bcc",
+        "attachments",
+        "displayName",
+        "phone",
+    }
+    if raw_fields - forbidden:
         _fail("raw email fields are not forbidden")
+    pseudonyms = set(cast("list[str]", projection.get("pseudonymise") or []))
+    if {"id", "internetMessageId", "conversationId", "folder_id"} - pseudonyms:
+        _fail("source identity pseudonymisation is incomplete")
+    source_metadata = set(cast("list[str]", projection.get("allowed_source_metadata") or []))
+    allowed_metadata = {
+        "id",
+        "internetMessageId",
+        "receivedDateTime",
+        "conversationId",
+        "hasAttachments",
+        "importance",
+        "parentFolderId",
+    }
+    if not source_metadata or source_metadata - allowed_metadata:
+        _fail("source metadata is outside the minimized allowlist")
     operation = cast("dict[str, Any]", contract.get("operation") or {})
     if operation.get("never_store_raw_payload") is not True:
         _fail("raw payload storage must be disabled")

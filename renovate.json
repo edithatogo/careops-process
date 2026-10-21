@@ -4,7 +4,8 @@
     "local>edithatogo/renovate-config"
   ],
   "enabledManagers": [
-    "pep621"
+    "pep621",
+    "git-submodules"
   ],
   "ignoreUnstable": false,
   "schedule": [
@@ -17,12 +18,15 @@
       "before 6am on monday"
     ]
   },
+  "automerge": false,
+  "platformAutomerge": false,
   "packageRules": [
     {
       "matchPackageNames": [
         "*"
       ],
-      "automerge": false
+      "automerge": false,
+      "platformAutomerge": false
     }
   ]
 }

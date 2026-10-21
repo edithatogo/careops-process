@@ -1,5 +1,13 @@
 # Low-privilege Microsoft 365 and Dataverse ingestion
 
+Status: completed
+
+- [Specification](spec.md)
+- [Implementation plan](plan.md)
+- [Metadata](metadata.json)
+
+## Historical index
+
 - GitHub issue: https://github.com/edithatogo/careops-process/issues/3
 - GitHub Project: https://github.com/users/edithatogo/projects/26
 
