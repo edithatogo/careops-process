@@ -66,3 +66,14 @@ Acceptance: map each property to its existing authoritative source and verify it
 Metadata readback and visible body rendering are separate checks. The Clinical trial stored a changed property while Word for the web still displayed the old body value. Do not claim scalar body refresh, narrative/repeating sections or generated Word/PDF fidelity from metadata success. Qualify those behaviours only for the selected document shape; retain working/manual outputs on a specific gap. Record one result in existing evidence, not another readiness pack.
 
 Reference: https://learn.microsoft.com/sharepoint/dev/business-apps/power-automate/sharepoint-connector-actions-triggers
+
+### Reviewed skills update — 22 October 2026
+
+The Power Platform skills gitlink and `.agents/skills-manifest.json` must advance
+together after review; changing only the gitlink correctly fails the pinned-source
+validator. Candidate `c4305aaf7130bb1d805afebc5911f34450ad305d` adds mobile startup
+diagnostics, Tamagui input fixes and mobile-extension telemetry hooks. The selected
+Power Automate and Canvas skill directories are unchanged against the previous pin.
+This repository keeps these sources unconfigured: fetching a submodule and validating
+entrypoints does not install plugin hooks, execute telemetry or qualify native access.
+Do not invoke optional plugin hooks as part of dependency qualification.
