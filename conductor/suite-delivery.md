@@ -77,3 +77,11 @@ Power Automate and Canvas skill directories are unchanged against the previous p
 This repository keeps these sources unconfigured: fetching a submodule and validating
 entrypoints does not install plugin hooks, execute telemetry or qualify native access.
 Do not invoke optional plugin hooks as part of dependency qualification.
+
+Renovate now discovers the six manifest digests with a scoped custom regex manager
+and groups each with its matching gitlink by upstream URL. Sources remain separate
+review units; automatic merge stays disabled. The manifest follows upstream HEAD;
+the sole explicit submodule branch (`conductor`: `main`) currently matches its
+upstream default branch. If an explicit tracking branch changes, update the paired
+manager before promotion. Existing pinned-source validation still refuses divergent
+gitlinks, manifest digests or checked-out sources.

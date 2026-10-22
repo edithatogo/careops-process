@@ -5,7 +5,8 @@
   ],
   "enabledManagers": [
     "pep621",
-    "git-submodules"
+    "git-submodules",
+    "custom.regex"
   ],
   "ignoreUnstable": false,
   "schedule": [
@@ -27,6 +28,80 @@
       ],
       "automerge": false,
       "platformAutomerge": false
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/gemini-cli-extensions/conductor.git"
+      ],
+      "groupName": "Pinned skills source conductor"
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/microsoft/Dataverse-skills.git"
+      ],
+      "groupName": "Pinned skills source dataverse-skills"
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/microsoft/power-platform-skills.git"
+      ],
+      "groupName": "Pinned skills source power-platform-skills"
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/microsoft/skills-for-fabric.git"
+      ],
+      "groupName": "Pinned skills source skills-for-fabric"
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/microsoft/skills.git"
+      ],
+      "groupName": "Pinned skills source microsoft-skills"
+    },
+    {
+      "matchManagers": [
+        "git-submodules",
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "https://github.com/pnp/cli-microsoft365.git"
+      ],
+      "groupName": "Pinned skills source cli-microsoft365"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.agents/skills-manifest\\.json$/"
+      ],
+      "matchStrings": [
+        "\"path\":\\s*\"(?<depName>\\.agents/plugins/[^\"\\r\\n]+)\",\\s*\"url\":\\s*\"(?<packageName>https://github\\.com/[^\"\\r\\n]+\\.git)\",\\s*\"commit\":\\s*\"(?<currentDigest>[0-9a-f]{40})\""
+      ],
+      "datasourceTemplate": "git-refs",
+      "versioningTemplate": "git",
+      "currentValueTemplate": "HEAD"
     }
   ]
 }
