@@ -64,3 +64,20 @@ Update only that source's manifest commit, initialize its exact gitlink, and run
 other pending source updates separate. Do not bypass checkout/manifest/resource
 checks, regenerate aliases for unrelated sources, configure native tools or copy
 credentials as part of this source-only update.
+
+
+The reviewed Power Platform source at `e67e459ac316e9c0bc8b972d11c955a1d84c3097`
+changes one selected skill: Canvas MCP configuration recognises host-specific
+`connect` names and confirms configuration only after a successful connection.
+Its local discovery description now matches that upstream selection. The other
+11 selected Power Platform skill directories and upstream licence are unchanged.
+Unselected upstream runtime/server changes are not installed or qualified here.
+
+The upstream 404 recovery suggestions are generic. In this suite, a 404 alone
+does not identify the wrong account or authorize account/flow substitution.
+Preserve the user-selected VS Code provider, client, account, tenant, resource
+and current target; distinguish a missing object, expired session, transport
+failure and an actual policy denial before choosing a supported recovery.
+Do not force account selection, request consent or start a different login flow
+merely because a newly installed skill suggests it. Installation is source
+availability, not a connected Canvas session or deployment result.
