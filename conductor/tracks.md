@@ -45,3 +45,6 @@ Use [the ordered low-hanging-fruit queue](suite-delivery.md) for development-fir
 dependency alignment, optional interoperability and structured-document improvements.
 Preserve current work and historical completion evidence; these improvements do
 not reopen completed MVPs or establish native deployment/operational acceptance.
+
+- [~] **Track: Python 3.15 migration and qualification**
+  *Link: [./tracks/python315_qualification_20261023/index.md](./tracks/python315_qualification_20261023/index.md)*
