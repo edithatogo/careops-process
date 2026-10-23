@@ -20,3 +20,9 @@ After cloning on Windows, run `git -c core.longpaths=true submodule update --ini
 For user-level Codex installation and prerequisites, see
 [Repository skills](../docs/repository-skills.md).
 
+
+## Targeted test cadence
+
+Follow AGENTS.md targeted-test guidance during edits. Preserve full integration,
+coverage and release gates at coherent milestones. Cached or zero-test results
+are not complete acceptance evidence.
