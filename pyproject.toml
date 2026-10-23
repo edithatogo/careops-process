@@ -21,6 +21,9 @@ careops-process-smoke = "careops_process.cli:main"
 mining = ["pm4py==2.7.23.11"]
 
 [dependency-groups]
+test-diagnostics = [
+  "pytest-rerunfailures==16.7",
+]
 build = [
     "hatchling==1.32.4",
 ]
@@ -38,6 +41,7 @@ dev = [
 packages = ["src/careops_process"]
 
 [tool.pytest.ini_options]
+xfail_strict = true
 addopts = "--strict-config --strict-markers --cov=careops_process --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
 testpaths = ["tests"]
 pythonpath = ["src"]
