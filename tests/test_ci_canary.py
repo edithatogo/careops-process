@@ -38,12 +38,12 @@ def test_real_receipt_classifies_every_stage(
     if sys.platform == "win32":
         # The workflow wrapper contains only this Python heredoc. Execute its
         # unchanged body locally; Linux continues to check the actual Bash step.
-        opening = "/usr/bin/python3 - <<'PY'\n"
+        opening = "python - <<'PY'\n"
         assert script.startswith(opening)
         assert script.endswith("\nPY\n")
         command = [sys.executable, "-c", script[len(opening) : -len("\nPY\n")]]
     else:
-        script = script.replace("/usr/bin/python3", shlex.quote(sys.executable), 1)
+        script = script.replace("python", shlex.quote(sys.executable), 1)
         command = ["/bin/bash", "-euc", script]
     names = ["source", "bootstrap", "prepare", "resolve", "install", "tests"]
     outcomes = dict.fromkeys(names, "success")
@@ -57,7 +57,7 @@ def test_real_receipt_classifies_every_stage(
     environment.update(
         CANARY_ROOT=str(tmp_path / "evidence"),
         SOURCE_COMMIT="a" * 40,
-        CANDIDATE_PYTHON="3.15.0",
+        CANDIDATE_PYTHON="3.15.1",
         TEST_OUTCOME=outcomes["tests"],
     )
     # Execute only the checked-in workflow receipt with an explicit no-credential environment.
@@ -81,15 +81,16 @@ def test_real_receipt_classifies_every_stage(
 
 
 @pytest.mark.parametrize(
-    ("candidate", "upper"),
-    [("3.14.8", 16), ("3.15.0", 16), ("3.16.0a1", 17)],
+    ("candidate", "accepted"),
+    [("3.14.8", False), ("3.15.1", True), ("3.15.2rc1", True), ("3.16.0a1", False)],
 )
 def test_candidate_preparation_preserves_supported_runtime_range(
     tmp_path: Path,
     candidate: str,
-    upper: int,
+    *,
+    accepted: bool,
 ) -> None:
-    """Execute real preparation: older candidates cannot narrow supported Python."""
+    """Execute real preparation: candidates stay in the selected Python line."""
     workflow = Path(".github/workflows/development-canary.yml").read_text()
     step = workflow.split(
         "      - name: Prepare committed source in an isolated candidate workspace\n", 1
@@ -100,11 +101,12 @@ def test_candidate_preparation_preserves_supported_runtime_range(
     source = Path("pyproject.toml").read_text()
     target = tmp_path / "pyproject.toml"
     target.write_text(source)
-    subprocess.run(  # noqa: S603 - actual checked-in preparation with synthetic environment
+    result = subprocess.run(  # noqa: S603 - actual checked-in preparation with synthetic environment
         [sys.executable, "-c", script],
-        check=True,
+        check=False,
         env={"CANARY_ROOT": str(tmp_path), "CANDIDATE_PYTHON": candidate},
         capture_output=True,
     )
-    assert f'requires-python = ">=3.14,<3.{upper}"' in target.read_text()
+    assert (result.returncode == 0) is accepted
+    assert target.read_text() == source
     assert Path("pyproject.toml").read_text() == source

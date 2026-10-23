@@ -28,12 +28,12 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: edithatogo/careops
-          ref: 48dec86b0eb17f44f5c0a155b5d41453e3a842b9
+          ref: 30df4953ea87c8915b4a525fc671a4c9857c3f7f
           path: .local/ci-policy
           persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
-          python-version: '3.15.0'
+          python-version: '3.15.1'
       - name: Freeze upstream manifest and create exact candidate matrix
         id: discover
         env:
@@ -49,7 +49,7 @@ jobs:
           import json, os
           from pathlib import Path
           receipt = json.loads(Path('.local/runtime-canary/discovery.json').read_text())
-          versions = ['3.14.8', '3.15.0']
+          versions = ['3.15.1']
           if receipt['candidate']:
               version = receipt['candidate'].replace('-alpha.', 'a').replace('-beta.', 'b').replace('-rc.', 'rc')
               versions.append(version)
@@ -78,6 +78,9 @@ jobs:
       CANDIDATE_PYTHON: ${{ matrix.python }}
       SOURCE_COMMIT: ${{ github.sha }}
     steps:
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.15.1'
       - name: Initialize evidence before source or runtime setup
         run: |
           mkdir -p "$RUNNER_TEMP/process-canary"
@@ -87,9 +90,9 @@ jobs:
         with:
           persist-credentials: false
       - id: bootstrap
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
         with:
-          version: '0.13.1'
+          version: '0.13.5'
           python-version: ${{ matrix.python }}
           enable-cache: false
       - name: Prepare committed source in an isolated candidate workspace
@@ -104,13 +107,11 @@ jobs:
           from pathlib import Path
           path = Path(os.environ['CANARY_ROOT']) / 'pyproject.toml'
           source = path.read_text()
-          if tomllib.loads(source)['project']['requires-python'] != '>=3.14,<3.16':
+          if tomllib.loads(source)['project']['requires-python'] != '>=3.15,<3.16':
               raise SystemExit('Review the changed supported runtime range before preparing this canary.')
           match = re.fullmatch(r'3\.(\d+)\.\d+(?:a\d+|b\d+|rc\d+)?', os.environ['CANDIDATE_PYTHON'])
-          if match is None:
-              raise SystemExit('Unsupported exact candidate runtime.')
-          upper = max(16, int(match.group(1)) + 1)
-          path.write_text(source.replace('requires-python = ">=3.14,<3.16"', f'requires-python = ">=3.14,<3.{upper}"'))
+          if match is None or int(match.group(1)) != 15:
+              raise SystemExit('Candidate must remain in the required Python3.15 line.')
           PY
       - name: Resolve preview dependencies without changing the source lock
         id: resolve
@@ -139,7 +140,7 @@ jobs:
           INSTALL_OUTCOME: ${{ steps.install.outcome }}
           TEST_OUTCOME: ${{ steps.tests.outcome }}
         run: |
-          /usr/bin/python3 - <<'PY'
+          python - <<'PY'
           import hashlib, json, os, tomllib
           from pathlib import Path
           root = Path(os.environ['CANARY_ROOT'])

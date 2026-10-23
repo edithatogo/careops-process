@@ -25,10 +25,10 @@ def test_report_command_enforces_closed_inputs_and_safe_diagnostics(
     tmp_path: Path, mode: str
 ) -> None:
     """Only approved closed input replaces a report; failures never echo protected values."""
-    sentinel = "synthetic-protected-sentinel"
+    protected_value = "synthetic-protected-protected_value"
     facts = [dict(FACTS[0])]
     if mode == "invalid_timestamp":
-        facts[0]["timestamp_utc"] = sentinel
+        facts[0]["timestamp_utc"] = protected_value
     evidence = sealed_evidence(facts)
     if mode == "acquired":
         evidence["status"] = "acquired"
@@ -75,8 +75,8 @@ def test_report_command_enforces_closed_inputs_and_safe_diagnostics(
         assert report["corpus_quality"]["event_count"] == len(facts)
         return
     assert completed.returncode != 0
-    assert sentinel not in completed.stderr
-    assert sentinel not in completed.stdout
+    assert protected_value not in completed.stderr
+    assert protected_value not in completed.stdout
     assert "Traceback" not in completed.stderr
     assert output.read_text(encoding="utf-8") == "previous-valid-output"
     assert (tmp_path / "facts.json").read_text(encoding="utf-8") == facts_before
@@ -121,7 +121,7 @@ def test_interrupted_publication_preserves_report_and_sanitizes_error(
     )
     original_write = Path.write_text
     original_replace = Path.replace
-    sentinel = "synthetic-protected-disk-error"
+    protected_value = "synthetic-protected-disk-error"
 
     def failed_write(
         path: Path,
@@ -132,12 +132,12 @@ def test_interrupted_publication_preserves_report_and_sanitizes_error(
     ) -> int:
         if path == output:
             original_write(path, "partial-report", encoding="utf-8")
-            raise OSError(sentinel)
+            raise OSError(protected_value)
         return original_write(path, text, encoding=encoding, errors=errors, newline=newline)
 
     def failed_replace(path: Path, destination: Path) -> Path:
         if destination == output:
-            raise OSError(sentinel)
+            raise OSError(protected_value)
         return original_replace(path, destination)
 
     monkeypatch.setattr(Path, "write_text", failed_write)
@@ -145,5 +145,5 @@ def test_interrupted_publication_preserves_report_and_sanitizes_error(
     with pytest.raises(SystemExit):
         main()
     assert output.read_text(encoding="utf-8") == previous
-    assert sentinel not in capsys.readouterr().err
+    assert protected_value not in capsys.readouterr().err
     assert not list(tmp_path.glob(".careops-report-*"))

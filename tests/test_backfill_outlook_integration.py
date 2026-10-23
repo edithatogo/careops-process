@@ -86,13 +86,13 @@ def test_closure_configuration_errors_do_not_echo_supplied_values() -> None:
     """Closure diagnostics remain payload-free even before the report CLI boundary."""
     initial = reconcile_outlook_evidence(**inputs())
     frozen = configuration(initial)
-    sentinel = "synthetic-protected-value"
-    frozen["inventory_hash"] = sentinel
+    protected_value = "synthetic-protected-value"
+    frozen["inventory_hash"] = protected_value
     with pytest.raises(ValueError) as error:  # noqa: PT011
         close_reconciled_run(
             initial, initial, frozen, run_id="synthetic-run", evidence_class="synthetic"
         )
-    assert sentinel not in str(error.value)
+    assert protected_value not in str(error.value)
 
 
 def test_generic_destination_does_not_claim_dataverse_provenance() -> None:
