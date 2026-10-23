@@ -101,7 +101,7 @@
       ],
       "datasourceTemplate": "git-refs",
       "versioningTemplate": "git",
-      "currentValueTemplate": "HEAD"
+      "currentValueTemplate": "main"
     }
   ]
 }

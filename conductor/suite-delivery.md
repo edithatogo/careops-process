@@ -85,3 +85,15 @@ the sole explicit submodule branch (`conductor`: `main`) currently matches its
 upstream default branch. If an explicit tracking branch changes, update the paired
 manager before promotion. Existing pinned-source validation still refuses divergent
 gitlinks, manifest digests or checked-out sources.
+
+### Skills pin lookup correction — 23 October 2026
+
+Renovate git-refs resolves an explicit value against named heads/tags; literal
+`HEAD` does not resolve as the default branch. The manifest manager now follows
+`main`, matching all six explicitly declared submodule branches. Current upstream
+default refs and the installed resolver agree for all six sources. Engine checks
+cover lookup, paired grouping and actual manifest replacement; repository tests
+reject tracking drift. This corrects the repeated gitlink-only PR cause; the next
+hosted bot proposal must still demonstrate both files before automatic pairing
+is considered operationally proved. Existing pins and unconfigured runtimes stay
+unchanged.
