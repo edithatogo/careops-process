@@ -78,13 +78,14 @@ jobs:
       CANDIDATE_PYTHON: ${{ matrix.python }}
       SOURCE_COMMIT: ${{ github.sha }}
     steps:
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: '3.15.1'
       - name: Initialize evidence before source or runtime setup
         run: |
           mkdir -p "$RUNNER_TEMP/process-canary"
           echo "CANARY_ROOT=$RUNNER_TEMP/process-canary" >> "$GITHUB_ENV"
+      - id: python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.15.1'
       - id: source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -130,8 +131,12 @@ jobs:
           uv run --directory "$CANARY_ROOT" --no-sync bandit -q -r src
           uv run --directory "$CANARY_ROOT" --no-sync pip-audit
           uv run --directory "$CANARY_ROOT" --no-sync python -c 'import pm4py; print("Pinned optional dependency loaded; synthetic interface coverage is recorded by pytest.")'
+      - name: Retain setup failure without a fallback Python runtime
+        if: ${{ always() && steps.python.outcome != 'success' }}
+        run: |
+          printf '%s\n' '{"state":"setup-blocked","failedStage":"python","testsExecuted":false,"promoted":false,"nativeWrites":false}' > "$CANARY_ROOT/qualification.json"
       - name: Record actual qualification and lock integrity
-        if: always()
+        if: ${{ always() && steps.python.outcome == 'success' }}
         env:
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
           BOOTSTRAP_OUTCOME: ${{ steps.bootstrap.outcome }}

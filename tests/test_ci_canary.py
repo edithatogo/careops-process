@@ -110,3 +110,25 @@ def test_candidate_preparation_preserves_supported_runtime_range(
     assert (result.returncode == 0) is accepted
     assert target.read_text() == source
     assert Path("pyproject.toml").read_text() == source
+
+
+def test_runtime_setup_failure_retains_receipt_without_python(tmp_path: Path) -> None:
+    """Run the real shell fallback with no interpreter available in PATH."""
+    if sys.platform == "win32":
+        pytest.skip("The actual workflow fallback runs on Linux Bash")
+    workflow = Path(".github/workflows/development-canary.yml").read_text()
+    step = workflow.split(
+        "      - name: Retain setup failure without a fallback Python runtime\n", 1
+    )[1].split("      - name: Record actual qualification", 1)[0]
+    script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+    subprocess.run(  # noqa: S603 - exact repository fallback, fixed Bash, no user command
+        ["/bin/bash", "-euc", script],
+        env={"CANARY_ROOT": str(tmp_path), "PATH": "/not-an-interpreter-directory"},
+        check=True,
+        capture_output=True,
+    )
+    result = json.loads((tmp_path / "qualification.json").read_text())
+    assert result["state"] == "setup-blocked"
+    assert result["failedStage"] == "python"
+    assert result["testsExecuted"] is False
+    assert result["promoted"] is False
