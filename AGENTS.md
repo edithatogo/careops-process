@@ -8,3 +8,11 @@ qualification and low-hanging-fruit sequencing; this supersedes stable-only
 dependency wording for new candidates. Preserve working runtimes until verified
 promotion, private source boundaries, current native/file ownership and existing
 enterprise authority. Optional integrations never become new MVP closeout gates.
+
+## Required Python execution
+
+All active Python development, build, test, automation and CI execution uses
+Python3.15, currently exact patch3.15.1. Use an explicit repo-local interpreter,
+verify its version, and align constraints, locks and current setup instructions.
+Older runners are not compatibility defaults; preserve only historical evidence
+and intentional synthetic version tests. Do not replace a running environment.
