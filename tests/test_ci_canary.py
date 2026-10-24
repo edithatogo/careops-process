@@ -178,3 +178,11 @@ def test_canary_source_archive_receives_the_exact_offline_verifier(tmp_path: Pat
     assert (
         candidate / ".local/graph-tools/portfolio-scripts/dependency_snapshot.py"
     ).read_bytes() == helper.read_bytes()
+    owned = candidate / "owned.py"
+    owned.write_text("value = 1\n")
+    command = [sys.executable, "-m", "ruff", "format", "--check", "."]
+    accepted = subprocess.run(command, cwd=candidate, check=False, capture_output=True)  # noqa: S603
+    assert accepted.returncode == 0, accepted.stderr
+    owned.write_text("value=1\n")
+    refused = subprocess.run(command, cwd=candidate, check=False, capture_output=True)  # noqa: S603
+    assert refused.returncode != 0

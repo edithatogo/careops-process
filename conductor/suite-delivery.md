@@ -119,3 +119,12 @@ setup in the terminal stage receipt; failed setup cannot become candidate succes
 The archive-preparation regression executes the real shell preparation in a
 fictional Git repository and confirms byte-exact helper and source preservation.
 The new runtime stage does not replace the frozen source lock or relax any gate.
+
+
+The isolated archive lacks Git's ignore semantics, so Process Ruff must exclude
+only `.local/graph-tools/**` from its own style rules, as it already excludes
+upstream skill sources. Do not rewrite the pinned helper to match child style.
+Exact helper bytes and its functional checks remain mandatory. The real archive
+regression verifies upstream bytes survive, formatting accepts a valid owned
+file and still refuses a malformed owned file. No owned-source/security check is
+removed; the helper retains its independent parent qualification.
