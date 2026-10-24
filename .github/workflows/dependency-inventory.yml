@@ -1,0 +1,123 @@
+name: Frozen dependency graph
+on:
+  push:
+    branches: [main]
+    paths:
+      - uv.lock
+      - pyproject.toml
+      - .python-version
+      - .github/workflows/dependency-inventory.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: process-frozen-dependency-graph-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  inventory:
+    name: Submit and verify frozen public dependencies
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # Only this trusted main job submits dependency metadata.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: false
+      - name: Select immutable uv and Python
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: '0.13.5'
+          python-version: '3.15.1'
+          enable-cache: false
+      - name: Create and verify the isolated helper interpreter
+        run: |
+          if [ -e .local/graph-env ] || [ -L .local/graph-env ]; then
+            echo 'Refusing a pre-existing helper environment.' >&2
+            exit 1
+          fi
+          uv venv --python 3.15.1 --no-project .local/graph-env
+          .local/graph-env/bin/python -I - <<'PYCODE'
+          import pathlib, platform, sys
+          expected = pathlib.Path.cwd() / '.local/graph-env'
+          if platform.python_version() != '3.15.1' or pathlib.Path(sys.prefix).resolve() != expected.resolve() or sys.prefix == sys.base_prefix:
+              raise SystemExit('Expected the qualified repository-local helper interpreter.')
+          print('Verified repository-local Python', platform.python_version())
+          PYCODE
+          echo "$GITHUB_WORKSPACE/.local/graph-env/bin" >> "$GITHUB_PATH"
+      - name: Read the qualified immutable snapshot adapter
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: edithatogo/careops
+          ref: 233748d76e61d8e7c67131942c221cb96cdf2a32
+          path: .local/graph-tools
+          persist-credentials: false
+          submodules: false
+      - name: Export the complete frozen public dependency graph
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_REF: ${{ github.ref }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          mkdir -p .local/dependency-inventory
+          uv lock --check
+          uv export --frozen --all-extras --all-groups --format cyclonedx1.5 --output-file .local/dependency-inventory/dependencies.cdx.json > /dev/null
+          git diff --exit-code -- uv.lock pyproject.toml
+          python -I .local/graph-tools/portfolio-scripts/dependency_snapshot.py \
+            --sbom .local/dependency-inventory/dependencies.cdx.json \
+            --output .local/dependency-inventory/snapshot.json \
+            --sha "$SOURCE_SHA" --ref "$SOURCE_REF" \
+            --manifest uv.lock --job-id "$RUN_ID" \
+            --correlator process-frozen-uv-graph \
+            --scanned "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      - name: Submit once and require server acceptance
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          gh api --method POST "repos/$REPOSITORY/dependency-graph/snapshots" \
+            --input .local/dependency-inventory/snapshot.json \
+            > .local/dependency-inventory/submission.json
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('.local/dependency-inventory/submission.json').read_text())
+          if result.get('result') != 'SUCCESS' or not isinstance(result.get('id'), int):
+              raise SystemExit('Dependency snapshot not accepted; reconcile the response before retrying.')
+          print('Accepted dependency snapshot', result['id'])
+          PYCODE
+      - name: Read back the current dependency graph
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          gh api "repos/$REPOSITORY/dependency-graph/sbom" > .local/dependency-inventory/graph.json
+          python - <<'PYCODE'
+          import json
+          from pathlib import Path
+          base = Path('.local/dependency-inventory')
+          snapshot = json.loads((base / 'snapshot.json').read_text())
+          graph = json.loads((base / 'graph.json').read_text())['sbom']
+          expected = set(snapshot['manifests']['uv.lock']['resolved'])
+          actual = {reference['referenceLocator'] for package in graph['packages']
+                    for reference in package.get('externalRefs', [])
+                    if reference.get('referenceType') == 'purl'}
+          missing = sorted(expected - actual)
+          if missing:
+              raise SystemExit('Graph readback incomplete; retain accepted submission and reconcile without resubmitting: ' + ', '.join(missing))
+          print('Graph contains all', len(expected), 'submitted package identities; this does not prove extras or edges.')
+          PYCODE
+      - name: Retain sanitized submission and graph receipts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: process-frozen-dependency-graph
+          path: |
+            .local/dependency-inventory/snapshot.json
+            .local/dependency-inventory/submission.json
+            .local/dependency-inventory/graph.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14

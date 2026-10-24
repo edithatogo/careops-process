@@ -88,3 +88,21 @@ hosted CodeQL/SARIF execution, live tenant permissions, or promotion approval.
 
 Original material in this repository is licensed under the MIT License.
 Third-party dependencies retain their own terms.
+
+## Frozen dependency graph submission
+
+The main-only `Frozen dependency graph` workflow uses pinned uv 0.13.5 and a
+verified repo-local Python 3.15.1 helper. It exports the existing frozen lock with
+all declared groups and extras, then uses the immutable CareOps snapshot adapter.
+This includes optional mining and diagnostic dependencies as security inventory;
+it does not install, activate or licence-approve those providers, resolve a new
+lock, or change the application runtime.
+
+The trusted job submits once, requires GitHub's explicit acceptance and snapshot
+ID, and checks all exact package identities in the returned dependency graph.
+Retained payload edges describe the frozen export; package readback alone does
+not prove that GitHub reproduced every edge or active runtime scope. Submission
+and graph receipts are retained on failure. Reconcile an accepted ID before any
+manual retry; never resubmit solely because readback is temporarily incomplete.
+The existing automatic provider's Python-version limitation is separate from
+this supported explicit snapshot route; no security setting is changed.

@@ -31,3 +31,14 @@ licence adoption. No PyPI publication, native writes or operational processing.
 The prior bot proposal dropped3.14 while CI still selected it and the canary
 intentionally refused a changed range. Keep the canary's candidate-only widening
 review guard aligned with the supported range, including older supported runs.
+
+## Frozen graph provider qualification
+
+Use the existing CareOps immutable snapshot adapter for a main-only dependency
+submission from all frozen lock groups/extras. Preserve the Python 3.15.1 runtime,
+package pins, optional-provider boundaries and all existing source/security gates.
+Verify the actual 72-package/84-edge candidate payload locally, fail-closed
+acceptance/readback cases and current-head hosted checks, then verify one accepted
+main submission and package-identity graph readback. Do not equate exported edges
+with readback edges or optional declarations with installed runtime capabilities.
+Keep accepted handles for reconciliation; no automatic retry or tenant change.
