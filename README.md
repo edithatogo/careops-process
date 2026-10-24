@@ -86,7 +86,7 @@ hosted CodeQL/SARIF execution, live tenant permissions, or promotion approval.
 
 ## Licence
 
-Original material in this repository is licensed under the MIT License.
+Original material in this repository is licensed under Apache-2.0.
 Third-party dependencies retain their own terms.
 
 ## Frozen dependency graph submission
@@ -106,3 +106,5 @@ and graph receipts are retained on failure. Reconcile an accepted ID before any
 manual retry; never resubmit solely because readback is temporarily incomplete.
 The existing automatic provider's Python-version limitation is separate from
 this supported explicit snapshot route; no security setting is changed.
+
+Retain [LICENSE](LICENSE) and [NOTICE](NOTICE) with project-owned source distributions.

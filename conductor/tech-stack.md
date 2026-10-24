@@ -14,3 +14,7 @@
   no required Entra app registration, service principal, tenant-admin access,
   WSL, or Linux for the governance hub
 - pytest, Hypothesis, Ruff, Pyright, Bandit, pip-audit, CodeQL, Zizmor, and OSSF Scorecard
+
+Project-owned code uses Apache-2.0 under the user-selected portfolio standard.
+Preserve third-party terms, attribution, historical evidence and private-source
+rights; qualify source/package changes without changing native authority.
