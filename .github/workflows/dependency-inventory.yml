@@ -51,8 +51,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: edithatogo/careops
-          ref: 233748d76e61d8e7c67131942c221cb96cdf2a32
+          ref: 8080acfb3549849408c35295b9b939711c90775e
           path: .local/graph-tools
+          sparse-checkout: portfolio-scripts/dependency_snapshot.py
+          sparse-checkout-cone-mode: false
           persist-credentials: false
           submodules: false
       - name: Export the complete frozen public dependency graph
@@ -94,21 +96,10 @@ jobs:
           REPOSITORY: ${{ github.repository }}
         run: |
           gh api "repos/$REPOSITORY/dependency-graph/sbom" > .local/dependency-inventory/graph.json
-          python - <<'PYCODE'
-          import json
-          from pathlib import Path
-          base = Path('.local/dependency-inventory')
-          snapshot = json.loads((base / 'snapshot.json').read_text())
-          graph = json.loads((base / 'graph.json').read_text())['sbom']
-          expected = set(snapshot['manifests']['uv.lock']['resolved'])
-          actual = {reference['referenceLocator'] for package in graph['packages']
-                    for reference in package.get('externalRefs', [])
-                    if reference.get('referenceType') == 'purl'}
-          missing = sorted(expected - actual)
-          if missing:
-              raise SystemExit('Graph readback incomplete; retain accepted submission and reconcile without resubmitting: ' + ', '.join(missing))
-          print('Graph contains all', len(expected), 'submitted package identities; this does not prove extras or edges.')
-          PYCODE
+          python -I .local/graph-tools/portfolio-scripts/dependency_snapshot.py \
+            --snapshot .local/dependency-inventory/snapshot.json \
+            --graph .local/dependency-inventory/graph.json \
+            --output .local/dependency-inventory/readback.json
       - name: Retain sanitized submission and graph receipts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -118,6 +109,7 @@ jobs:
             .local/dependency-inventory/snapshot.json
             .local/dependency-inventory/submission.json
             .local/dependency-inventory/graph.json
+            .local/dependency-inventory/readback.json
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 14

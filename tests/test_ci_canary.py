@@ -4,6 +4,7 @@
 """Execute the real workflow receipt on bootstrap and compatibility failures."""
 
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -17,6 +18,7 @@ import pytest
     ("failed_stage", "expected_state"),
     [
         ("source", "setup-blocked"),
+        ("verifier", "setup-blocked"),
         ("bootstrap", "setup-blocked"),
         ("prepare", "preparation-failure"),
         ("resolve", "executed-failure"),
@@ -45,7 +47,7 @@ def test_real_receipt_classifies_every_stage(
     else:
         script = script.replace("python", shlex.quote(sys.executable), 1)
         command = ["/bin/bash", "-euc", script]
-    names = ["source", "bootstrap", "prepare", "resolve", "install", "tests"]
+    names = ["source", "verifier", "bootstrap", "prepare", "resolve", "install", "tests"]
     outcomes = dict.fromkeys(names, "success")
     if failed_stage:
         position = names.index(failed_stage)
@@ -132,3 +134,55 @@ def test_runtime_setup_failure_retains_receipt_without_python(tmp_path: Path) ->
     assert result["failedStage"] == "python"
     assert result["testsExecuted"] is False
     assert result["promoted"] is False
+
+
+def test_canary_source_archive_receives_the_exact_offline_verifier(tmp_path: Path) -> None:
+    """Execute archive preparation: ignored tooling must reach candidate tests."""
+    workflow = Path(".github/workflows/development-canary.yml").read_text()
+    step = workflow.split(
+        "      - name: Prepare committed source in an isolated candidate workspace\n", 1
+    )[1].split("      - name: Resolve preview dependencies", 1)[0]
+    script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "pyproject.toml").write_text(Path("pyproject.toml").read_text())
+    for arguments in (
+        ["init", "-q"],
+        ["add", "pyproject.toml"],
+        [
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-qm",
+            "Fictional source",
+        ],
+    ):
+        subprocess.run(["git", *arguments], cwd=source, check=True, capture_output=True)  # noqa: S603,S607
+    helper = Path(".local/graph-tools/portfolio-scripts/dependency_snapshot.py").resolve()
+    assert helper.is_file(), "Prepare the pinned verifier using README's offline-test setup."
+    environment = dict(
+        os.environ,
+        RUNNER_TEMP=str(tmp_path / "runner"),
+        GITHUB_WORKSPACE=str(Path.cwd()),
+        GITHUB_ENV=str(tmp_path / "env"),
+        CANDIDATE_PYTHON="3.15.1",
+    )
+    script = script.replace("python - <<", shlex.quote(sys.executable) + " - <<", 1)
+    subprocess.run(  # noqa: S603 - actual source preparation with fictional repository inputs
+        ["/bin/bash", "-euc", script], cwd=source, env=environment, check=True, capture_output=True
+    )
+    candidate = tmp_path / "runner/process-canary"
+    assert (candidate / "pyproject.toml").read_bytes() == (source / "pyproject.toml").read_bytes()
+    assert (
+        candidate / ".local/graph-tools/portfolio-scripts/dependency_snapshot.py"
+    ).read_bytes() == helper.read_bytes()
+    owned = candidate / "owned.py"
+    owned.write_text("value = 1\n")
+    command = [sys.executable, "-m", "ruff", "format", "--check", "."]
+    accepted = subprocess.run(command, cwd=candidate, check=False, capture_output=True)  # noqa: S603
+    assert accepted.returncode == 0, accepted.stderr
+    owned.write_text("value=1\n")
+    refused = subprocess.run(command, cwd=candidate, check=False, capture_output=True)  # noqa: S603
+    assert refused.returncode != 0

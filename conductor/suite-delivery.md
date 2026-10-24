@@ -97,3 +97,34 @@ reject tracking drift. This corrects the repeated gitlink-only PR cause; the nex
 hosted bot proposal must still demonstrate both files before automatic pairing
 is considered operationally proved. Existing pins and unconfigured runtimes stay
 unchanged.
+
+
+## Exact frozen-graph readback
+
+Adopt the already-qualified CareOps helper at
+`8080acfb3549849408c35295b9b939711c90775e` for both frozen snapshot preparation
+and offline package/relationship readback. Keep the existing lock, selected
+Python3.15.1, export groups/extras, main-only single submission and accepted-handle
+recovery. No automatic provider setting is changed and no dependency is resolved
+or activated by verification. Missing submitted relationships refuse success;
+aggregated unrelated manifests are allowed without claiming whole-graph equality.
+The actual workflow tests execute the exact hash-verified helper using fictional
+responses. Source/native acceptance and the automatic provider's runtime limitation
+remain separate from this supported explicit route.
+
+
+Canary qualification uses the same immutable verifier in its separate archived
+source workspace. Provision the exact helper before tests and include verifier
+setup in the terminal stage receipt; failed setup cannot become candidate success.
+The archive-preparation regression executes the real shell preparation in a
+fictional Git repository and confirms byte-exact helper and source preservation.
+The new runtime stage does not replace the frozen source lock or relax any gate.
+
+
+The isolated archive lacks Git's ignore semantics, so Process Ruff must exclude
+only `.local/graph-tools/**` from its own style rules, as it already excludes
+upstream skill sources. Do not rewrite the pinned helper to match child style.
+Exact helper bytes and its functional checks remain mandatory. The real archive
+regression verifies upstream bytes survive, formatting accepts a valid owned
+file and still refuses a malformed owned file. No owned-source/security check is
+removed; the helper retains its independent parent qualification.

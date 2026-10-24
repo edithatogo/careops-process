@@ -99,12 +99,36 @@ it does not install, activate or licence-approve those providers, resolve a new
 lock, or change the application runtime.
 
 The trusted job submits once, requires GitHub's explicit acceptance and snapshot
-ID, and checks all exact package identities in the returned dependency graph.
-Retained payload edges describe the frozen export; package readback alone does
-not prove that GitHub reproduced every edge or active runtime scope. Submission
-and graph receipts are retained on failure. Reconcile an accepted ID before any
+ID, and verifies every exact submitted package and package-to-package relationship
+in the returned dependency graph using the immutable shared verifier. SPDX
+DEPENDS_ON and inverse DEPENDENCY_OF are accepted; missing or reversed edges
+fail even when every package is present. This is submitted-snapshot inclusion,
+not extras, active runtime scope, source freshness or native acceptance. Submission,
+graph and scoped readback receipts are retained on failure. Reconcile an accepted ID before any
 manual retry; never resubmit solely because readback is temporarily incomplete.
 The existing automatic provider's Python-version limitation is separate from
 this supported explicit snapshot route; no security setting is changed.
 
 Retain [LICENSE](LICENSE) and [NOTICE](NOTICE) with project-owned source distributions.
+
+
+### Offline graph-workflow test setup
+
+CI checks out only the qualified shared verifier at immutable CareOps revision
+`8080acfb3549849408c35295b9b939711c90775e`. For local workflow tests, prepare
+that public development tool once in a fresh ignored path; it is not an application
+runtime or sibling-module requirement:
+
+```sh
+git clone --filter=blob:none --no-checkout https://github.com/edithatogo/careops.git .local/graph-tools
+git -C .local/graph-tools sparse-checkout set --no-cone /portfolio-scripts/dependency_snapshot.py
+git -C .local/graph-tools checkout --detach 8080acfb3549849408c35295b9b939711c90775e
+.venv/bin/python -m pytest tests/test_dependency_inventory.py --no-cov -q
+```
+
+Preserve an existing tool checkout instead of replacing it under a running test.
+The tests verify the helper's exact SHA256 before executing the actual workflow
+readback command, with its GitHub read replaced by fictional local graph bytes.
+Missing/wrong package versions, missing/reversed edges and absent success receipts
+are exercised without credentials or network writes. Full CI retains its coverage,
+security, package and native-source gates.
