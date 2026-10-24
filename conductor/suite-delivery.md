@@ -97,3 +97,17 @@ reject tracking drift. This corrects the repeated gitlink-only PR cause; the nex
 hosted bot proposal must still demonstrate both files before automatic pairing
 is considered operationally proved. Existing pins and unconfigured runtimes stay
 unchanged.
+
+
+## Exact frozen-graph readback
+
+Adopt the already-qualified CareOps helper at
+`8080acfb3549849408c35295b9b939711c90775e` for both frozen snapshot preparation
+and offline package/relationship readback. Keep the existing lock, selected
+Python3.15.1, export groups/extras, main-only single submission and accepted-handle
+recovery. No automatic provider setting is changed and no dependency is resolved
+or activated by verification. Missing submitted relationships refuse success;
+aggregated unrelated manifests are allowed without claiming whole-graph equality.
+The actual workflow tests execute the exact hash-verified helper using fictional
+responses. Source/native acceptance and the automatic provider's runtime limitation
+remain separate from this supported explicit route.

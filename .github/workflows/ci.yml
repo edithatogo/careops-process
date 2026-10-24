@@ -40,6 +40,16 @@ jobs:
       - run: uv run --no-sync ruff format --check --diff .
       - run: uv run --no-sync ruff check .
       - run: uv run --no-sync pyright
+      - name: Read the immutable graph verifier for offline workflow tests
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: edithatogo/careops
+          ref: 8080acfb3549849408c35295b9b939711c90775e
+          path: .local/graph-tools
+          sparse-checkout: portfolio-scripts/dependency_snapshot.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+          submodules: false
       - run: uv run --no-sync pytest
       - run: uv run --no-sync python scripts/check_coverage.py coverage.xml
       - name: Offline exporter and ALM regression checks
