@@ -90,6 +90,17 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Read the immutable graph verifier for the isolated candidate
+        id: verifier
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: edithatogo/careops
+          ref: 8080acfb3549849408c35295b9b939711c90775e
+          path: .local/graph-tools
+          sparse-checkout: portfolio-scripts/dependency_snapshot.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+          submodules: false
       - id: bootstrap
         uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
         with:
@@ -103,6 +114,9 @@ jobs:
           echo "CANARY_ROOT=$CANARY_ROOT" >> "$GITHUB_ENV"
           mkdir -p "$CANARY_ROOT"
           git archive HEAD | tar -x -C "$CANARY_ROOT"
+          mkdir -p "$CANARY_ROOT/.local/graph-tools/portfolio-scripts"
+          cp "$GITHUB_WORKSPACE/.local/graph-tools/portfolio-scripts/dependency_snapshot.py" \
+            "$CANARY_ROOT/.local/graph-tools/portfolio-scripts/dependency_snapshot.py"
           python - <<'PY'
           import os, re, tomllib
           from pathlib import Path
@@ -139,6 +153,7 @@ jobs:
         if: ${{ always() && steps.python.outcome == 'success' }}
         env:
           SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          VERIFIER_OUTCOME: ${{ steps.verifier.outcome }}
           BOOTSTRAP_OUTCOME: ${{ steps.bootstrap.outcome }}
           PREPARE_OUTCOME: ${{ steps.prepare.outcome }}
           RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
@@ -152,7 +167,7 @@ jobs:
           root.mkdir(parents=True, exist_ok=True)
           lock = root / 'uv.lock'
           outcome = os.environ['TEST_OUTCOME']
-          stages = {name: os.environ[name.upper() + '_OUTCOME'] for name in ['source', 'bootstrap', 'prepare', 'resolve', 'install']}
+          stages = {name: os.environ[name.upper() + '_OUTCOME'] for name in ['source', 'verifier', 'bootstrap', 'prepare', 'resolve', 'install']}
           stages['tests'] = outcome
           failed = next((name for name, value in stages.items() if value == 'failure'), None)
           if failed in ['resolve', 'install', 'tests']:

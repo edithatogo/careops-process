@@ -111,3 +111,11 @@ aggregated unrelated manifests are allowed without claiming whole-graph equality
 The actual workflow tests execute the exact hash-verified helper using fictional
 responses. Source/native acceptance and the automatic provider's runtime limitation
 remain separate from this supported explicit route.
+
+
+Canary qualification uses the same immutable verifier in its separate archived
+source workspace. Provision the exact helper before tests and include verifier
+setup in the terminal stage receipt; failed setup cannot become candidate success.
+The archive-preparation regression executes the real shell preparation in a
+fictional Git repository and confirms byte-exact helper and source preservation.
+The new runtime stage does not replace the frozen source lock or relax any gate.
