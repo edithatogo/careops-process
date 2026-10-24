@@ -1,5 +1,5 @@
 # Copyright (c) 2026 CareOps contributors
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 """Observed destination work and inferable joint-participation privacy."""
 

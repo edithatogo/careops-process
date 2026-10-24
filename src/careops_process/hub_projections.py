@@ -1,5 +1,5 @@
 # Copyright (c) 2026 CareOps contributors
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 """Bounded synthetic projections; no persistence, provider calls or canonical writes.
 

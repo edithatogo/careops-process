@@ -1,5 +1,5 @@
 # Copyright (c) 2026 CareOps contributors
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 """Supplied single-select instruments and privacy-gated aggregate experience evidence."""
 

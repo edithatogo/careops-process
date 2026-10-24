@@ -1,5 +1,5 @@
 # Copyright (c) 2026 CareOps contributors
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0
 
 """Build a privacy-screened standalone executive landscape from a local corpus."""
 

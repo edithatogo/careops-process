@@ -49,3 +49,10 @@ Use `make test-failed`, `make test-stepwise`, `make test-failed-first` and
 full modes retain the existing coverage threshold. The optional locked
 `test-diagnostics` group contains rerunfailures, excluded from default CI; use
 `--reruns 1 --fail-on-flaky` only for an explicitly selected eligible diagnostic.
+
+## Project-owned code licensing
+
+Use Apache-2.0 for project-owned source and active package metadata. Include the
+licence and notice in source distributions. Preserve third-party terms, notices
+and attribution, historical evidence and private/external source rights. This
+standard changes no publication, native, access or email authority.
