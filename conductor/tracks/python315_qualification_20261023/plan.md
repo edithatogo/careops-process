@@ -14,13 +14,16 @@
 
 ## Phase 3 — Integration
 
-- [ ] P3.1 Run affected structure/privacy checks and exact-head required checks; merge eligible work and verify main.
-- [ ] P3.2 Audit every acceptance requirement and explicit external blocker.
+- [x] P3.1 Run affected structure/privacy checks and exact-head required checks; merge eligible work and verify main.
+- [x] P3.2 Audit every acceptance requirement and explicit external blocker.
 - [ ] P3.3 Record actual goal-tool result; close only when full evidence supports completion.
 
 ## Current boundary
 
 A track or prompt is not an armed goal or completed runtime migration. Shared chat goal creation was rejected due to its unfinished goal.
+
+The current CareOps absorption goal is active, so P3.3 remains open for its
+final status record and requirement-by-requirement closure.
 
 The optional Dependabot uv graph updater rejects Python >=3.15,<3.16 because
 that provider supports only through 3.14. The supported replacement is already
@@ -44,3 +47,21 @@ after the exact nested plugin submodules were initialized. On source main, run
 and offline PowerShell steps; run `40095092121` passed exact frozen graph
 submission and readback. Those are exact-main receipts, not results from this
 documentation branch. This local checkpoint ran no tests.
+
+## Integration closeout evidence — 25 October 2026
+
+PR107 merged as `898a1157eed6aed187845421c6c6db44ad1f6ac9`. Its exact-head
+checks passed: Python 3.15 quality/tests, CodeQL, shared source security and
+reproducible wheel/content inventory. Exact-main runs `40168287869`,
+`40168287884`, `40168288083` and `40168287875` passed; optional PM4Py remained
+conditionally skipped. The updated setup, active-surface inventory and
+dated-evidence classifications are included in that merged commit.
+
+The acceptance audit found no remaining Python version/dependency/setup gap
+within this child source. Keep the pytest-difftest0.3.0 PyO3 ceiling and
+Dependabot uv graph updater's through-3.14 limit as explicit evidence-based
+exclusions; no override or downgrade was used. The frozen graph path passed
+exact submission/readback on the preceding selected main commit, with accepted
+snapshot `113632141`. These provider limitations do not prevent required
+Python 3.15.1 source qualification. P3.3 remains open because the overall
+CareOps absorption goal is active; native/runtime acceptance is separate.
