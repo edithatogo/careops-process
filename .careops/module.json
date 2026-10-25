@@ -12,12 +12,12 @@
       "id": "runtime",
       "status": "queued",
       "lane": "existing implementation or platform lane",
-      "operation": "Retain qualified Python3.15.0 and3.14.8 compatibility with the frozen lock; qualify newer compatible runtime and native-wheel candidates in isolation before promotion.",
+      "operation": "Use the exact repo-local Python 3.15.1 pin from .python-version for development, build, test and CI; qualify newer Python 3.15 patch and native-wheel candidates in isolation before promotion.",
       "tools": [
         "uv",
         "local Python"
       ],
-      "success": "Frozen install and affected analytics/privacy checks pass; incompatibilities name the package and retry condition."
+      "success": "Frozen install and affected analytics/privacy checks pass on the actual repo-local Python 3.15.1; newer candidates are promoted only after isolated qualification, with no older compatibility runners."
     },
     {
       "id": "events",
