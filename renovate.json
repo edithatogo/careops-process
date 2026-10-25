@@ -23,6 +23,13 @@
   "platformAutomerge": false,
   "packageRules": [
     {
+      "description": "Hold this range at stable releases until Renovate can safely rewrite its PEP 440 constraint for the available pre-release.",
+      "matchPackageNames": [
+        "defusedxml"
+      ],
+      "ignoreUnstable": true
+    },
+    {
       "description": "Keep the coordinated Python runtime contract aligned with the repository's exact Python pins and qualification workflow.",
       "matchManagers": [
         "pep621"
