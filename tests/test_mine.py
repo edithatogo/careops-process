@@ -28,6 +28,40 @@ def test_conformance_reports_deviation() -> None:
     assert result.deviations == ("received -> escalated",)
 
 
+def test_representative_fictional_case_log_qualifies_variants_and_findings() -> None:
+    """A fictional request cohort keeps its observed traces intact beside findings."""
+    observed = [
+        ("request_received", "assessment_started", "decision_recorded"),
+        ("request_received", "assessment_started", "decision_recorded"),
+        ("request_received", "assessment_started", "decision_recorded"),
+        ("request_received", "decision_recorded"),
+        ("request_received", "assessment_started", "senior_review", "decision_recorded"),
+        ("request_received", "decision_recorded", "assessment_started"),
+    ]
+    reference = ("request_received", "assessment_started", "decision_recorded")
+    observed_before_analysis = [tuple(trace) for trace in observed]
+
+    result = conformance(observed, reference=reference)
+
+    assert discover_variants(observed) == [
+        (reference, 3),
+        (("request_received", "assessment_started", "senior_review", "decision_recorded"), 1),
+        (("request_received", "decision_recorded"), 1),
+        (("request_received", "decision_recorded", "assessment_started"), 1),
+    ]
+    assert result.observed_variants == tuple(
+        variant for variant, _count in discover_variants(observed)
+    )
+    assert result.fitness == pytest.approx(13 / 19)
+    assert result.precision == pytest.approx(3 / 4)
+    assert result.deviations == (
+        "request_received -> decision_recorded",
+        "request_received -> assessment_started -> senior_review -> decision_recorded",
+        "request_received -> decision_recorded -> assessment_started",
+    )
+    assert observed == observed_before_analysis
+
+
 def test_empty_inputs_fail_closed() -> None:
     """A meaningless mining request is rejected."""
     with pytest.raises(ValueError, match="reference"):

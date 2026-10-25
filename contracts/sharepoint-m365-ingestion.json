@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edithatogo/careops-process/contracts/sharepoint-m365-ingestion.json",
+  "title": "CareOps standard-connector M365 ingestion bindings",
+  "contract_version": "1.0.0",
+  "status": "source-design-only-native-binding-unverified",
+  "connectors": {
+    "outlook": {"name": "Office 365 Outlook", "tier": "standard", "operations": ["Get emails (V3)"]},
+    "planner": {"name": "Planner", "tier": "standard", "operations": ["List tasks", "Get task details"]},
+    "sharepoint": {"name": "SharePoint", "tier": "standard", "operations": ["Get items", "Create item", "Update item", "Create file"]}
+  },
+  "lists": [
+    {
+      "name": "CareOps Process Checkpoints",
+      "purpose": "One bounded checkpoint per approved source partition",
+      "unique_keys": ["source_key"],
+      "lookup": "Get items with Filter Query source_key eq '<source_key>' and Top Count 2; create the empty revision-zero row when none exists, use the returned ID when exactly one exists, and stop if two rows are returned",
+      "source_key_format": "keyed lowercase hexadecimal reference without OData metacharacters",
+      "columns": {
+        "source_key": "single-line text, required, unique, keyed partition reference",
+        "watermark_utc": "date-time, nullable, UTC",
+        "last_success_utc": "date-time, nullable, UTC",
+        "last_error_code": "single-line text, nullable, fixed reason code",
+        "checkpoint_revision": "integer, required, monotonic",
+        "configuration_hash": "single-line text, required, lowercase SHA-256"
+      },
+      "access": "single configured flow-owner writer; authorized operators read as needed"
+    },
+    {
+      "name": "CareOps Process Event Queue",
+      "purpose": "Modest retry and identity ledger before portable event-file publication",
+      "unique_keys": ["fact_id"],
+      "columns": {
+        "fact_id": "single-line text, required, unique, existing keyed pseudonymous fact ID",
+        "activity": "single-line text, required, allowlisted event code",
+        "timestamp_utc": "date-time, required, UTC",
+        "source_system": "choice, Outlook or Planner",
+        "object_ids": "multi-line text, required, bounded JSON array of pseudonymous IDs",
+        "folder_ref": "single-line text, required for Outlook partitions, keyed pseudonymous folder reference",
+        "queue_state": "choice, Pending, Published, Tombstoned, Rejected",
+        "attempt_count": "integer, required, bounded",
+        "last_attempt_utc": "date-time, nullable, UTC"
+      },
+      "ordering": "timestamp_utc then fact_id",
+      "retention": "bounded by the approved replay horizon; preserve tombstoned identities until the horizon expires"
+    },
+    {
+      "name": "CareOps Process Dead Letters",
+      "purpose": "Minimized recovery evidence; never a source payload archive",
+      "unique_keys": ["dead_letter_key"],
+      "columns": {
+        "dead_letter_key": "single-line text, required, unique, deterministic keyed reference",
+        "fact_id": "single-line text, required, keyed pseudonymous fact ID",
+        "reason_code": "single-line text, required, fixed reason code",
+        "retryable": "yes/no, required",
+        "recorded_at_utc": "date-time, required, UTC"
+      },
+      "retention": "approved minimal audit and recovery period"
+    }
+  ],
+  "flow_safety": {
+    "max_concurrent_runs": 1,
+    "one_writer_per_partition": true,
+    "projection_allowlist": ["fact_id", "activity", "timestamp_utc", "source_system", "object_ids", "folder_ref"],
+    "prohibited_persistent_fields": ["body", "bodyPreview", "subject", "from", "sender", "to", "cc", "bcc", "attachments", "displayName", "phone"],
+    "write_order": ["read_checkpoint", "project_fact", "validate_identity_watermark_tombstone", "create_or_verify_queue_item", "publish_portable_event_file", "advance_checkpoint"],
+    "uncertain_create": "read back exact unique fact_id and compare all minimized fields before retry or watermark advancement",
+    "checkpoint_conflict": "stop; re-read and reconcile; never replace a newer revision",
+    "event_file": {
+      "contract": "existing Outlook mail-events.jsonl and manifest",
+      "map": {"fact_id": "id", "activity": "activity", "timestamp_utc": "timestamp_utc", "source_system": "source_system", "object_ids": "object_ids", "folder_ref": "folder_id"},
+      "ordering": ["id"],
+      "do_not_add": ["raw source IDs", "mail content", "Dataverse analytics destination"]
+    },
+    "pseudonymization": "reuse the existing HMAC-SHA256 keyed pseudonymization contract; until an exact supported standard-connector invocation is verified, do not write source facts or identifiers",
+    "planner_boundary": "use only selected standard Planner task metadata; defer unsupported plans, identities or pagination rather than request broader access",
+    "native_execution": "requires exact approved environment, site, list IDs, connection references, owner and readback evidence"
+  }
+}

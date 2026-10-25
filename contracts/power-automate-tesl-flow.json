@@ -1,27 +1,49 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/edithatogo/careops-process/contracts/power-automate-tesl-flow.json",
-  "title": "CareOps TESL low-privilege Power Automate flow contract",
+  "title": "CareOps TESL standard-connector Power Automate flow contract",
   "contract_version": "1.0.0",
   "privacy_mode": "minimized-facts-only",
   "trigger": {
     "connector": "Office 365 Outlook",
     "scope": "user-owned TESL source",
-    "select": ["id", "receivedDateTime", "internetMessageId"]
+    "select": ["id", "receivedDateTime", "internetMessageId"],
+    "unsupported_sources": [
+      "mailbox-wide historical backfill without an approved folder inventory and supported connector pagination",
+      "source deletion or tombstone discovery when the connector exposes no supported deletion signal",
+      "live processing until a supported route can invoke the existing keyed pseudonymization semantics without persisting raw identifiers"
+    ]
   },
   "actions": [
-    {"id": "read_checkpoint", "connector": "Microsoft Dataverse", "operation": "get-row", "table": "careops_process_checkpoint"},
+    {"id": "read_checkpoint", "connector": "SharePoint", "operation": "Get items", "list": "CareOps Process Checkpoints", "filter_query": "source_key eq '<source_key>'", "top_count": 2, "on_empty": "create_initial_checkpoint_with_empty_watermark_and_revision_zero", "on_one": "read_checkpoint_and_use_returned_ID_for_Update_item", "on_multiple": "stop_and_reconcile; never_select_first", "source_key_format": "keyed lowercase hexadecimal reference without OData metacharacters"},
     {"id": "project_fact", "connector": "Compose", "operation": "m365-fact-projection", "forbidden_inputs": ["body", "bodyPreview", "subject", "from", "to", "cc", "bcc"]},
     {"id": "validate_watermark", "connector": "Condition", "operation": "strictly-after-watermark"},
-    {"id": "write_projection", "connector": "Microsoft Dataverse", "operation": "create-row", "table": "careops_process_event"},
-    {"id": "advance_checkpoint", "connector": "Microsoft Dataverse", "operation": "update-row", "table": "careops_process_checkpoint", "after": "write_projection"},
-    {"id": "dead_letter", "connector": "Microsoft Dataverse", "operation": "create-row", "table": "careops_process_dead_letter", "stores": ["fact_id", "reason", "retryable", "recorded_at_utc"]}
+    {"id": "write_projection", "connector": "SharePoint", "operation": "Create item", "list": "CareOps Process Event Queue", "unique_key": "fact_id", "stores": ["fact_id", "activity", "timestamp_utc", "source_system", "object_ids", "queue_state"]},
+    {"id": "publish_analytics_file", "connector": "SharePoint", "operation": "Create file", "library": "CareOps Process Events", "format": "existing portable event-file contract", "after": "write_projection"},
+    {"id": "advance_checkpoint", "connector": "SharePoint", "operation": "Update item", "list": "CareOps Process Checkpoints", "after": "publish_analytics_file"},
+    {"id": "dead_letter", "connector": "SharePoint", "operation": "Create item", "list": "CareOps Process Dead Letters", "branch": "validation-or-retry-exhaustion", "never_advance_checkpoint": true, "stores": ["fact_id", "reason_code", "retryable", "recorded_at_utc"]}
   ],
+  "concurrency": {"flow_runs": 1, "writer_scope": "single configured owner connection", "reason": "SharePoint list update does not provide the Dataverse compare-and-swap contract used by the historical design"},
+  "identity_projection": {
+    "algorithm": "existing hmac-sha256-json-array-v1 with approved key reference",
+    "persist_only": ["fact_id", "conversation_ref", "folder_ref"],
+    "raw_source_ids": "transient inputs only; never persist in a List, output file, dead letter or run-manifest payload",
+    "native_readiness": "no standard-connector invocation of this keyed operation is qualified; stop before live writes until it is"
+  },
+  "identity_and_retention": {
+    "source_identity": "preserve the existing keyed pseudonymous fact identity",
+    "deduplication": "unique fact_id column plus exact readback after duplicate or uncertain Create item outcomes",
+    "ordering": "timestamp_utc then fact_id; watermark advances only after queue persistence is verified",
+    "tombstones": "retain in the bounded checkpoint/list identity ledger and exclude from replay",
+    "retention": "bounded queue and checkpoint horizon from the approved configuration; do not purge identities before replay and recovery windows expire"
+  },
   "failure_policy": {
     "retryable": ["429", "408", "5xx", "timeout"],
     "non_retryable": ["schema", "privacy", "duplicate", "tombstoned"],
     "never_advance_checkpoint_on_failure": true,
-    "never_store_raw_payload": true
+    "never_store_raw_payload": true,
+    "unknown_write_outcome": "read back by unique fact_id before retry; do not advance watermark until exact row equality is confirmed",
+    "checkpoint_write_conflict": "stop and reconcile; do not overwrite a newer checkpoint"
   },
   "approval_handoff": {
     "connector": "Microsoft Teams Approvals",

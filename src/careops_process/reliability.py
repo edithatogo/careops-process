@@ -24,7 +24,7 @@ class DeadLetter:
 
 @dataclass(slots=True)
 class IngestionCheckpoint:
-    """Mutable in-memory checkpoint model for a Dataverse-backed state row."""
+    """Mutable checkpoint model with bounded replay and tombstone identities."""
 
     watermark_utc: datetime | None = None
     accepted_fact_ids: set[str] = field(default_factory=set[str])

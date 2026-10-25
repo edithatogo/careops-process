@@ -22,12 +22,68 @@ def test_flow_contract_is_privacy_safe_and_ordered() -> None:
     validate_flow_contract(load_contract())
 
 
+def test_flow_contract_rejects_dataverse_and_premium_http() -> None:
+    """The selected ingestion contract cannot regress to premium destinations."""
+    for connector in ("Microsoft Dataverse", "HTTP with Microsoft Entra ID"):
+        contract = load_contract()
+        actions = cast("list[dict[str, object]]", contract["actions"])
+        actions[0]["connector"] = connector
+        with pytest.raises(ValueError, match="premium connector"):
+            validate_flow_contract(contract)
+
+
+def test_flow_contract_requires_keyed_sharepoint_checkpoint_lookup() -> None:
+    """Checkpoint lookup uses the documented filter action and detects duplicates."""
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    checkpoint = next(action for action in actions if action["id"] == "read_checkpoint")
+    checkpoint["operation"] = "Get item"
+    with pytest.raises(ValueError, match="Get items and fail closed"):
+        validate_flow_contract(contract)
+
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    checkpoint = next(action for action in actions if action["id"] == "read_checkpoint")
+    checkpoint["on_multiple"] = "select_first"
+    with pytest.raises(ValueError, match="Get items and fail closed"):
+        validate_flow_contract(contract)
+
+
+def test_flow_contract_requires_keyed_identity_and_transient_raw_ids() -> None:
+    """Plain hashes or persisted source identifiers cannot replace keyed pseudonyms."""
+    contract = load_contract()
+    identity = cast("dict[str, object]", contract["identity_projection"])
+    identity["algorithm"] = "sha256 without key"
+    with pytest.raises(ValueError, match="keyed pseudonyms"):
+        validate_flow_contract(contract)
+
+
+def test_flow_contract_rejects_raw_source_ids_in_persistent_stores() -> None:
+    """Raw identifiers may never leak into Lists, event files or dead letters."""
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    projection = next(action for action in actions if action["id"] == "write_projection")
+    cast("list[str]", projection["stores"]).append("internetMessageId")
+    with pytest.raises(ValueError, match="raw fields cannot be persisted"):
+        validate_flow_contract(contract)
+
+
+def test_flow_contract_rejects_non_string_persistent_fields() -> None:
+    """Persistence field names must be strings before applying privacy rules."""
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    projection = next(action for action in actions if action["id"] == "write_projection")
+    cast("list[object]", projection["stores"]).append({"field": "fact_id"})
+    with pytest.raises(TypeError, match="stores must be a list"):
+        validate_flow_contract(contract)
+
+
 def test_flow_contract_rejects_checkpoint_before_write() -> None:
     """Checkpoint advancement cannot precede projection persistence."""
     contract = load_contract()
     actions = contract["actions"]
     assert isinstance(actions, list)
-    actions[3], actions[4] = actions[4], actions[3]
+    actions[3], actions[5] = actions[5], actions[3]
     with pytest.raises(ValueError, match="after projection"):
         validate_flow_contract(contract)
 
@@ -66,6 +122,22 @@ def test_flow_contract_rejects_duplicate_action_identifiers() -> None:
     actions = cast("list[object]", contract["actions"])
     actions.append(actions[0])
     with pytest.raises(ValueError, match="unique"):
+        validate_flow_contract(contract)
+
+
+def test_flow_contract_requires_verified_publication_and_closed_dead_letter_branch() -> None:
+    """A failed publication cannot be hidden by advancing the source checkpoint."""
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    actions[4], actions[5] = actions[5], actions[4]
+    with pytest.raises(ValueError, match="checkpoint-safe order"):
+        validate_flow_contract(contract)
+
+    contract = load_contract()
+    actions = cast("list[dict[str, object]]", contract["actions"])
+    dead_letter = next(action for action in actions if action["id"] == "dead_letter")
+    dead_letter["never_advance_checkpoint"] = False
+    with pytest.raises(ValueError, match="dead-letter branch"):
         validate_flow_contract(contract)
 
 

@@ -14,11 +14,26 @@ REQUIRED_ACTIONS = (
     "project_fact",
     "validate_watermark",
     "write_projection",
+    "publish_analytics_file",
     "advance_checkpoint",
 )
+ALLOWED_CONNECTORS = frozenset(
+    {
+        "Office 365 Outlook",
+        "Planner",
+        "SharePoint",
+        "Compose",
+        "Condition",
+        "Microsoft Teams Approvals",
+    }
+)
+PROHIBITED_PERSISTED_FIELDS = FORBIDDEN_FIELDS | frozenset(
+    {"internetMessageId", "conversationId", "parentFolderId", "raw_source_id", "rawMessageId"}
+)
+CHECKPOINT_LOOKUP_TOP_COUNT = 2
 
 
-def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C901, PLR0912
+def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C901, PLR0912, PLR0915
     """Validate ordering, privacy, and checkpoint safety invariants."""
     actions = contract.get("actions")
     if not isinstance(actions, list):
@@ -50,9 +65,11 @@ def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C90
     if ordered_positions != sorted(ordered_positions):
         message = "required flow actions must follow checkpoint-safe order"
         raise ValueError(message)
+    by_id: dict[str, Mapping[str, object]] = {}
     for raw_action in raw_actions:
         # Every action was checked before evaluating the execution sequence.
         action = cast("Mapping[str, object]", raw_action)
+        by_id[cast("str", action["id"])] = action
         forbidden_inputs = cast("list[str]", action.get("forbidden_inputs", []))
         if not isinstance(action.get("forbidden_inputs", []), list):
             message = "forbidden_inputs must be a list"
@@ -61,6 +78,73 @@ def validate_flow_contract(contract: Mapping[str, object]) -> None:  # noqa: C90
         if unsafe:
             message = f"unrecognized raw fields in flow contract: {', '.join(sorted(unsafe))}"
             raise ValueError(message)
+        stores = action.get("stores", [])
+        if not isinstance(stores, list):
+            message = "stores must be a list of minimized persistent fields"
+            raise TypeError(message)
+        store_fields = cast("list[object]", stores)
+        if any(not isinstance(field, str) for field in store_fields):
+            message = "stores must be a list of minimized persistent fields"
+            raise TypeError(message)
+        persisted_unsafe = set(cast("list[str]", store_fields)) & PROHIBITED_PERSISTED_FIELDS
+        if persisted_unsafe:
+            message = f"raw fields cannot be persisted: {', '.join(sorted(persisted_unsafe))}"
+            raise ValueError(message)
+        connector = action.get("connector")
+        if connector not in ALLOWED_CONNECTORS:
+            message = f"unsupported or premium connector in ingestion contract: {connector}"
+            raise ValueError(message)
+    if (
+        by_id["read_checkpoint"].get("connector") != "SharePoint"
+        or by_id["read_checkpoint"].get("operation") != "Get items"
+        or by_id["read_checkpoint"].get("filter_query") != "source_key eq '<source_key>'"
+        or by_id["read_checkpoint"].get("top_count") != CHECKPOINT_LOOKUP_TOP_COUNT
+        or by_id["read_checkpoint"].get("on_empty")
+        != "create_initial_checkpoint_with_empty_watermark_and_revision_zero"
+        or by_id["read_checkpoint"].get("on_one")
+        != "read_checkpoint_and_use_returned_ID_for_Update_item"
+        or by_id["read_checkpoint"].get("on_multiple") != "stop_and_reconcile; never_select_first"
+    ):
+        message = "checkpoint lookup must filter uniquely with SharePoint Get items and fail closed"
+        raise ValueError(message)
+    if (
+        by_id["write_projection"].get("connector") != "SharePoint"
+        or by_id["write_projection"].get("unique_key") != "fact_id"
+    ):
+        message = "projection persistence must use SharePoint with a unique fact_id"
+        raise ValueError(message)
+    if (
+        by_id["publish_analytics_file"].get("connector") != "SharePoint"
+        or by_id["publish_analytics_file"].get("after") != "write_projection"
+    ):
+        message = "portable event file must publish after the SharePoint queue write"
+        raise ValueError(message)
+    if by_id["advance_checkpoint"].get("after") != "publish_analytics_file":
+        message = "checkpoint must advance only after event file publication"
+        raise ValueError(message)
+    if by_id["dead_letter"].get("never_advance_checkpoint") is not True:
+        message = "dead-letter branch must not advance the checkpoint"
+        raise ValueError(message)
+    identity_projection = contract.get("identity_projection")
+    if not isinstance(identity_projection, Mapping):
+        message = "flow contract must define keyed identity projection"
+        raise TypeError(message)
+    raw_source_policy = cast("object", identity_projection.get("raw_source_ids"))
+    if (
+        identity_projection.get("algorithm")
+        != "existing hmac-sha256-json-array-v1 with approved key reference"
+        or not isinstance(raw_source_policy, str)
+        or "never persist" not in raw_source_policy
+    ):
+        message = (
+            "flow contract must use approved keyed pseudonyms and prohibit "
+            "persisted raw identifiers"
+        )
+        raise ValueError(message)
+    concurrency = contract.get("concurrency")
+    if not isinstance(concurrency, Mapping) or concurrency.get("flow_runs") != 1:
+        message = "SharePoint checkpoint flow must serialize runs"
+        raise ValueError(message)
     failure_policy = contract.get("failure_policy")
     if not isinstance(failure_policy, Mapping):
         message = "failure_policy is required"

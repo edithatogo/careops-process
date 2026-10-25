@@ -1,5 +1,15 @@
 # Cloud-only Outlook historical backfill
 
+## Deferred historical acquisition design
+
+This Graph backfill design is retained for its earlier scope and evidence; it
+is not the selected standard-connector ingestion route. The current source
+design is documented in [`live-pilot.md`](live-pilot.md), with SharePoint Lists
+for modest queue/checkpoint state and the existing portable JSONL event-file
+contract for analytics. Full mailbox/folder inventory, unsupported connector
+pagination, and any Dataverse destination remain deferred until their exact
+source scope, supported operation and destination are independently authorized
+and verified. No broader permission is implied.
 ## Decision
 
 Use the existing TESL Office 365 Outlook connection in Power Automate. Do not
