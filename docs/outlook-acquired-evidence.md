@@ -4,6 +4,12 @@ Version: 2.0.0; verified offline on 14 October 2026. This interface belongs to
 the Graph message collector. It is distinct from the report consumer's
 `manifest_version: 2.0.0` closed-run interface.
 
+This Graph collector and its Dataverse-reconciliation closure gates are retained
+historical work and are not the selected standard-connector route. Reuse the
+documented minimized JSONL event shape for analytics where its source scope is
+authorized; the current connector/List route and its deferred full-mailbox
+acquisition boundary are in [`live-pilot.md`](live-pilot.md).
+
 ## Files and record mapping
 
 The exporter publishes a dedicated directory containing `mail-events.jsonl`

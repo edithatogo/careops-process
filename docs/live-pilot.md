@@ -1,28 +1,37 @@
 # Low-privilege M365 pilot runbook
 
-This runbook is intentionally connector-neutral. It is designed for a
-Power Automate flow using existing user-scoped Outlook, Teams Approvals, and
-Dataverse connections. It does not require an Entra application, tenant-wide
-mailbox export, Fabric workspace, or administrator role.
+This runbook describes the selected standard-connector source design. It uses
+the existing user-scoped Office 365 Outlook and SharePoint connector operations;
+Planner is available only for a specifically selected task source. It does not
+require an Entra application, tenant-wide mailbox export, Fabric workspace, or
+administrator role. Native bindings are not established by this source contract.
 
 ## Flow contract
 
-The machine-readable source of truth is
-`contracts/power-automate-tesl-flow.json`; the validator is
-`careops_process.flow_contract.validate_flow_contract`.
+The machine-readable flow contract is `contracts/power-automate-tesl-flow.json`
+and its List bindings are in `contracts/sharepoint-m365-ingestion.json`. The
+validator is `careops_process.flow_contract.validate_flow_contract`.
 
-1. Trigger on a narrow, user-owned source (for example, a TESL approval email
-   or Dataverse approval row).
+1. Trigger or poll only a narrow, explicitly authorized source. The selected
+   TESL path uses Outlook metadata; Planner task acquisition remains limited to
+   selected plans and supported standard connector operations.
 2. Select only `id`, activity classification, timestamp, source system, and
    pseudonymous object references. Do not pass body, subject, sender, or
    recipient fields to the process log.
-3. Read the single Dataverse checkpoint row described in
-   `contracts/dataverse-checkpoint.mapping.json`.
+3. Read the source partition checkpoint from the SharePoint List specified by
+   `contracts/sharepoint-m365-ingestion.json`.
 4. Discard facts at or before `watermark_utc`; reject duplicate or tombstoned
    IDs; write minimized dead-letter metadata for malformed or transient facts.
-5. Emit the contract in `contracts/m365-fact-projection.json` to the local/CI
-   adapter or an approved Dataverse destination.
-6. Advance the checkpoint only after the projection write succeeds.
+   Reuse the existing keyed HMAC pseudonymization contract for source identity
+   and folder/conversation references; raw IDs must remain transient. The
+   standard-connector invocation of that operation is not currently qualified,
+   so stop before any live write until it is.
+5. Create the uniquely keyed queue item. After an uncertain result, read it back
+   by exact `fact_id` and compare every minimized field before retrying.
+6. Publish the existing portable JSONL event-file contract, then advance the
+   checkpoint only after the queue/file outcome is verified. A single writer
+   per partition and serial flow runs are required because SharePoint List
+   updates do not provide the historical Dataverse compare-and-swap behavior.
 
 ## Pilot acceptance evidence
 
@@ -33,10 +42,14 @@ The machine-readable source of truth is
 - The checkpoint advances monotonically and only after successful output.
 - The flow run history contains no email body, subject, sender, or recipient
   values in its process-log action inputs or outputs.
+- Queue-item readback confirms identity and minimized fields after uncertain
+  creates; checkpoint conflicts stop for reconciliation.
 
 ## Tenant-gated steps
 
-The actual flow connection, mailbox scope, Dataverse table creation, and live
-pilot require the user to perform or approve the Power Automate actions in the
-tenant UI. The repository can validate the contract and synthetic behavior but
-cannot claim live operation without that run evidence.
+The actual environment, site, list IDs, connector references, mailbox or Planner
+scope, owner and retention policy must be read back from the authorized native
+target before execution. No native binding or run evidence is available in this
+source update. A supported keyed pseudonymization step is also required before
+native execution. The prior Dataverse checkpoint mapping remains as historical
+evidence and is not the selected route.

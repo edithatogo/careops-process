@@ -21,6 +21,52 @@ lengths, deterministic frequency ties, input preservation, exact replay and
 metric bounds using synthetic Hypothesis examples. These tests reproduced no
 mining defect, so the algorithm remains unchanged.
 
+## Selected default analytical scope
+
+The selected baseline answers four bounded questions from privacy-minimised,
+source-ordered event facts: which complete activity sequences occurred and how
+often; how each sequence compares positionally with a supplied reference; which
+sequence strings differ from that reference; and whether the analytical pass
+left the observed input facts untouched. These are descriptive cohort measures,
+not claims about why a difference occurred or whether a case was handled
+correctly. The raw OCEL log and derived `ConformanceResult` are separate fields
+of `PipelineResult`; derived findings are not appended as observed events.
+
+A fictional six-case request log qualifies the baseline against exact replay,
+an omitted step, an additional review step, and a reordered trace. It yields
+four variants with frequencies 3/1/1/1, positional fitness 13/19, set-based
+precision 3/4, and three deviations. The test also confirms the input traces
+remain unchanged. This exercises sequence counts and the documented metric
+semantics; it is not a live-source or production acceptance result.
+
+| Requirement | Baseline coverage | Limitation |
+| --- | --- | --- |
+| Deterministic full-trace variants and counts | Covered, including ties and repeats | Requires already minimised activity labels and case/object traces |
+| Compare to one supplied reference sequence | Covered with positional fitness and activity-set precision | No executable model, branching, concurrency, weighted costs, or alignment |
+| Preserve observed facts separately from findings | Covered by separate pipeline result fields and non-mutation qualification | Source completeness and correctness need independent evidence |
+| Microsoft paid mining service optional | No service dependency in core code or required dependencies | Service-specific dashboards and hosted analytics are not reproduced |
+
+## Optional engines and paid service
+
+The deterministic sequence implementation is the selected default. Power
+Automate Process Mining is an optional external service; neither source imports
+it nor the core dependency set requires its capacity. Microsoft describes
+Process Mining as a capacity add-on with Power Automate Premium as a qualifying
+prerequisite in its current [licensing guidance](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/add-ons).
+This project does not infer an entitlement from a tenant login or require that
+add-on for the selected scope.
+
+PM4Py is also not required for these baseline measures. Its additional Petri-net
+alignment capability is relevant only when a governed executable model and
+costed alignment are a selected requirement. The upstream public PM4Py package
+is [AGPL-3.0](https://github.com/process-intelligence-solutions/pm4py/blob/release/LICENSE)
+and its [maintainers describe a separate commercial licence](https://processintelligence.solutions/pm4py#licensing)
+for closed-source use. Since this project-owned source is Apache-2.0, keep
+PM4Py outside the default runtime and do not activate or distribute it for this
+use until licence compatibility is confirmed. The existing optional dependency
+and separate credentialing alignment lane remain explicitly gated; they are
+not evidence that the default process route needs PM4Py.
+
 ## Independent coverage checks
 
 Run `uv sync --locked --group dev`, `uv run --no-sync pytest`, then

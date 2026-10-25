@@ -15,7 +15,7 @@ tenant identifiers, production event logs, or generated operational findings.
 - replay-safe checkpoints, deduplication, tombstones, and minimized dead-letter
   records;
 - deterministic process-family and variant discovery;
-- conformance, delay, deviation, rework, and quality measures;
+- descriptive sequence conformance, delay, deviation, rework, and quality measures;
 - governed semantic projections; and
 - explainable, human-reviewable improvement recommendations.
 
@@ -55,10 +55,15 @@ reassign work, or implement a recommendation automatically.
 - Python 3.15.1 is required for active development, builds, tests and CI. Qualify newer patches within the 3.15 line before promotion.
 - Polars is the default dataframe engine.
 - OCEL 2.0 is the portable event contract.
-- PM4Py is an optional, licence-gated process-mining engine.
+- Local variant and sequence comparison is the default mining route.
+- PM4Py is an optional, licence-gated engine for separately selected model-based
+  capabilities.
+- Power Automate Process Mining is an optional paid service, not a core runtime
+  or analytical prerequisite.
 - Mojo is an experimental Linux/WSL acceleration lane and must pass parity
   tests against the Python implementation.
-- Power Automate and Dataverse provide the low-privilege ingestion path.
+- Power Automate can use user-scoped Outlook and SharePoint connectors for the
+  selected low-privilege ingestion design; Dataverse paths remain separate.
 - Fabric, OneLake, or another managed analytical target may be used only after
   deployment-specific access, governance, and security gates pass.
 

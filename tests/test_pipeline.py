@@ -39,7 +39,12 @@ def test_pipeline_connects_ingestion_discovery_conformance_and_projection() -> N
         minimum_cohort_size=1,
     )
     assert len(result.log.events) == EVENT_COUNT
+    assert [(event.event_type, event.observed_or_inferred) for event in result.log.events] == [
+        ("request_received", "observed"),
+        ("approval_decided", "observed"),
+    ]
     assert result.families
     assert result.conformance is not None
     assert result.conformance.fitness == 1.0
+    assert result.conformance.deviations == ()
     assert result.projection["quality"]["event_count"] == EVENT_COUNT  # type: ignore[index]
