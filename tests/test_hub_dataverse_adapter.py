@@ -194,6 +194,30 @@ def test_row_identity_ignores_scope_policy_and_history_origin() -> None:
     assert original != a.row_id(config(), replace(ledger(), recipient_ref="other"))
 
 
+def test_storage_identity_is_partitioned_by_organization_and_tenant() -> None:
+    """Distinct organizations and tenants cannot resolve to the same storage row."""
+    original = a.row_id(config(), ledger())
+    other_organization = replace(
+        config(),
+        organization_id="00000000-0000-0000-0000-000000000004",
+    )
+    other_tenant = replace(ledger(), tenant_ref="other-tenant")
+
+    assert a.row_id(other_organization, ledger()) != original
+    assert a.row_id(config(), other_tenant) != original
+
+
+def test_foreign_tenant_ledger_readback_is_rejected() -> None:
+    """A provider row with a different tenant binding cannot be accepted."""
+    foreign_ledger = replace(ledger(), tenant_ref="other-tenant")
+    cli = FakeCli([identity(), metadata(), row(foreign_ledger)])
+
+    with pytest.raises(a.AdapterError, match="ledger_binding_mismatch"):
+        a.DataverseLedgerStore(config(), cli).load(ledger())
+
+    assert len(cli.calls) == LOAD_CALLS
+
+
 def test_commit_cannot_rewind_persisted_evaluation_watermark() -> None:
     """Two individually valid histories must still preserve cross-revision freshness."""
     command = replace(reserve(), enabled=False, now=reserve().now + timedelta(hours=2))
