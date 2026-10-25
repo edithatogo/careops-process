@@ -6,7 +6,7 @@
 
 **Architecture:** New measurement modules consume the existing validated projection and trusted case grants. Frozen aggregate records contain no case/event IDs; frozen observation records validate explicit source measurements. The human-review module binds deterministic proposals to released evidence and permits measurement review only.
 
-**Tech Stack:** Python 3.14, existing uv lockfile, dataclasses, pytest, Hypothesis, Ruff and Pyright. No runtime/dependency changes.
+**Tech Stack:** Python 3.15.1, existing uv lockfile, dataclasses, pytest, Hypothesis, Ruff and Pyright. No runtime/dependency changes. Earlier Python 3.14 references in dated receipts remain historical.
 
 **Spec:** `docs/superpowers/specs/2026-10-14-credentialing-measurements.md`.
 

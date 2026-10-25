@@ -1,9 +1,9 @@
 # Technology Stack
 
-- Python 3.14 and `uv` lockfiles
+- Python 3.15.1 and `uv` lockfiles; newer 3.15 patches are qualified in isolation before promotion
 - Polars and Arrow for tabular processing
 - OCEL 2.0 for object-centric interchange
-- PM4Py 2.7.23.8 as an optional AGPL/licence-reviewed dependency
+- PM4Py 2.7.23.11 as an optional licence-gated dependency
 - Mojo nightly on Linux/WSL only for benchmarked acceleration experiments
 - Power Automate, Dataverse, Fabric/OneLake, and Power BI when permissions allow
 - Microsoft Teams and Power Apps as user-facing surfaces, with Dataverse as the

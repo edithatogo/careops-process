@@ -48,7 +48,17 @@ Recovered source checkpoint: `82ffccc870f6f4797d267b612bac35eafffdce6a` on `code
 
 ## Stable-host verification handoff
 
-On an authorized stable host with Git, uv and PowerShell available, copy the private bundle and verify its separately recorded SHA-256 before use. Clone it into a fresh directory, check out the exact checkpoint, and fetch the pinned submodules. Do not reuse this computer's virtual environment or caches. Use Python 3.14 and the committed lockfile.
+Historical 15 October 2026 checkpoint procedure: on an authorized stable host
+with Git, uv and PowerShell available, the recorded run copied the private
+bundle, verified its separately recorded SHA-256, checked out the exact
+checkpoint and fetched its pinned submodules. That checkpoint used Python 3.14
+and its then-committed lockfile.
+
+> Historical checkpoint reproduction only: the Python 3.14 commands below
+> preserve the exact dated procedure for this 15 October 2026 evidence snapshot.
+> They are superseded for current development and CI by the repository's
+> Python 3.15.1 requirement and `.python-version` pin. Do not use this historical
+> block to create a current environment.
 
 Run the existing CI quality commands without weakening gates:
 

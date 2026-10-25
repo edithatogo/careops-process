@@ -20,17 +20,23 @@ canary failure does not justify weakening supported Python or coverage contracts
 Resolved optional mining dependencies remain inventory, not provider adapter or
 licence adoption. No PyPI publication, native writes or operational processing.
 
-## Controlled Python runtime promotion — PR77
+## Historical Python runtime promotion — PR77 (reconciled 25 October 2026)
 
-- [~] Repair the existing Python3.15 proposal: preserve Python3.14 compatibility,
-  regenerate the lock without upgrading its package pins, run the full quality
-  and domain suite on exact3.14.8 and3.15.0, and qualify the installed wheel on3.15.0.
-- [ ] Verify all current-head checks and both canary matrices before normal merge;
-  no automatic runtime adoption or release acceptance is inferred from metadata.
+- [x] Reconcile PR77's historical Python3.14/3.15 compatibility candidate with
+  the portfolio's current exact Python3.15.1 requirement. PR77 merged as
+  `5436642c31510dbdee5e90c5aa0c697616a1689c`; its required PR checks passed and
+  its canary tested Python3.14.8 and3.15.0. These are historical receipts, not
+  current supported runtimes.
+- [x] Confirm current stable CI and package workflows use Python3.15.1, while
+  the isolated development canary limits discovered candidates to the 3.15
+  line. Preserve its review guard; do not execute older compatibility runners.
 
-The prior bot proposal dropped3.14 while CI still selected it and the canary
-intentionally refused a changed range. Keep the canary's candidate-only widening
-review guard aligned with the supported range, including older supported runs.
+The original PR77 rationale was that a bot proposal dropped3.14 while CI still
+selected it. That was the source-time decision record and is superseded by the
+user-selected Python3.15.1-only stable runtime policy. Keep the old receipts for
+provenance; any future candidate stays isolated and within the required 3.15
+line. See the active full-surface audit in
+`../python315_qualification_20261023/plan.md`.
 
 ## Frozen graph provider qualification
 
