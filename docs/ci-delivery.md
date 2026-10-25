@@ -1,7 +1,9 @@
 # CI delivery
 
 Keep immutable action commits and the complete `uv.lock` when updating tools or
-runtime dependencies. Qualification uses the supported Python 3.14 range, strict
+runtime dependencies. Active development, build, test, automation and stable CI
+use the repo-local Python 3.15.1 interpreter selected by `.python-version`.
+Qualify newer Python 3.15 patches only in the isolated candidate workflow. Use strict
 Ruff/Pyright, the existing property/privacy/domain tests, branch coverage at the
 existing 90 percent threshold, Bandit and dependency audit. Do not replace tests
 with a successful dependency resolution. The installed local project is not a
@@ -49,8 +51,9 @@ No source history was rewritten and no credential recovery was performed.
 
 Development qualification runs weekly/manually and for relevant CI dependency
 changes. It snapshots committed source into an isolated workspace and resolves
-all declared extras with prereleases allowed. Exact Python3.14.8 and3.15.0
-candidates run source formatting, lint, typing, pytest coverage and audit checks.
+all declared extras with prereleases allowed. The Python3.14.8 and3.15.0 canary
+receipts below are historical compatibility evidence from before the current
+3.15.1-only requirement; they are not active supported runtimes.
 Stable CI additionally checks Conductor/submodule pins, the independent coverage
 gate and offline PowerShell regressions. Newer
 published CPython previews are discovered through the frozen upstream manifest;
@@ -66,7 +69,8 @@ lxml7beta. This is source compatibility and dependency loading only; PM4Py's
 licence/adoption gate and absent production adapter remain explicit. Hosted
 qualification and downloaded receipt checks are required before any promotion.
 
-After integration at `ae2f234`, actual hosted Python3.14.8 and3.15.0 source canaries
+Historical receipts after integration at `ae2f234` recorded hosted Python3.14.8
+and3.15.0 source canaries
 each passed 1,724 tests with one intentionally absent-backend case skipped.
 The pinned backend's synthetic alignment/store tests executed. Successful receipts
 now name that scope; unsuccessful receipts explicitly remain unqualified. Receipt
