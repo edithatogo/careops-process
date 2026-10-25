@@ -106,3 +106,13 @@ Ruling: Keep track in progress and retain its folder because human checkpoints a
 Phase 6 are genuine uncompleted gates. Validate a stable scoped checkout while
 concurrent owners run RED/GREEN cycles; coordinator owns final shared integration.
 No test, packaging run, or local status substitutes for live/human approval.
+
+## Full-absorption update — 25 October 2026
+
+For the parent CareOps hardening successor, add focused synthetic multi-tenant
+storage checks before considering the wider CI gap closed. The tests bind
+Dataverse row identity to both configured organization and `tenant_ref`, and
+refuse a provider readback whose ledger belongs to a different tenant. They do
+not authenticate, read or write any real tenant. The reliability/ALM track stays
+in progress because its separate hosted, updater, non-production and human gates
+remain open.
