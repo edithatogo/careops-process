@@ -1,5 +1,10 @@
 # CareOps Process Conductor
 
+> **Work tracking moved to CareOps.** This Conductor registry and its track
+> folders preserve source history and transfer context. The checkboxes below
+> are not the current work queue. Follow [the CareOps absorption notice](careops-absorption.md)
+> and update the linked CareOps successor issue for active work.
+
 ## Definition
 
 - [Product](product.md)

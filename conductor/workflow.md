@@ -1,12 +1,16 @@
 # Workflow
 
-1. Implement one track at a time from `conductor/tracks.md`.
-2. Mark work in progress before changing code.
-3. Use synthetic fixtures and test-first implementation.
-4. Run formatting, lint, typing, unit, property, privacy, dependency, workflow,
-   and secret checks before completion.
-5. Separate repository evidence from live tenant evidence and external gates.
-6. Require manual verification at the end of every track.
+1. Read [CareOps absorption and work tracking](careops-absorption.md); the track
+   registry is a historical snapshot, not the active queue.
+2. Use the linked CareOps successor issue as the source of scope, owner, status
+   and acceptance. Do not create a replacement issue or track here.
+3. If that successor needs a source change before archival, keep the change in
+   this repository, cite the parent issue in the PR, and report the exact child
+   commit and checks back to the parent record.
+4. Use synthetic fixtures and test-first implementation. Run the checks required
+   by the applicable parent issue and this repository's contributor guidance.
+5. Separate repository evidence from live tenant evidence and external gates;
+   source PR checks do not qualify native or operational acceptance.
 
 ## Local setup validation
 
