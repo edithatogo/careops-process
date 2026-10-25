@@ -23,6 +23,16 @@
   "platformAutomerge": false,
   "packageRules": [
     {
+      "description": "Keep the coordinated Python runtime contract aligned with the repository's exact Python pins and qualification workflow.",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepTypes": [
+        "requires-python"
+      ],
+      "enabled": false
+    },
+    {
       "matchPackageNames": [
         "*"
       ],
