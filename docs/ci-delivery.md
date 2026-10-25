@@ -1,12 +1,13 @@
 # CI delivery
 
 Keep immutable action commits and the complete `uv.lock` when updating tools or
-runtime dependencies. Qualification uses the supported Python 3.14 range, strict
-Ruff/Pyright, the existing property/privacy/domain tests, branch coverage at the
-existing 90 percent threshold, Bandit and dependency audit. Do not replace tests
-with a successful dependency resolution. The installed local project is not a
-PyPI dependency and pip-audit explicitly skips its source; source tests, Bandit
-and CodeQL cover separate concerns.
+runtime dependencies. The current required Python runtime is the exact
+repository-local Python 3.15.1 pin. Qualification also uses strict Ruff/Pyright,
+the existing property/privacy/domain tests, branch coverage at the existing 90
+percent threshold, Bandit and dependency audit. Do not replace tests with a
+successful dependency resolution. The installed local project is not a PyPI
+dependency and pip-audit explicitly skips its source; source tests, Bandit and
+CodeQL cover separate concerns.
 
 The shared CareOps workflow at immutable revision
 3712b88f438b046e68fe37d8db2f4b6a4387b473 supplies full-history Gitleaks,
@@ -47,27 +48,26 @@ match values. `.gitleaksignore` records only those revision/file/rule/line
 fingerprints; no credential detector, path or history interval is disabled.
 No source history was rewritten and no credential recovery was performed.
 
-Development qualification runs weekly/manually and for relevant CI dependency
-changes. It snapshots committed source into an isolated workspace and resolves
-all declared extras with prereleases allowed. Exact Python3.14.8 and3.15.0
-candidates run source formatting, lint, typing, pytest coverage and audit checks.
-Stable CI additionally checks Conductor/submodule pins, the independent coverage
-gate and offline PowerShell regressions. Newer
-published CPython previews are discovered through the frozen upstream manifest;
-unavailable previews remain untested/skipped. The project's supported runtime
-range is widened only in the isolated candidate copy, never in the source lock
-or production declaration. Changed production range requires explicit review of
-the canary preparation contract. Each candidate retains exact package versions,
-source commit, lock digest and actual setup/test outcome without promotion.
+Development dependency qualification runs weekly/manually and for relevant CI
+dependency changes. It snapshots committed source into an isolated workspace,
+resolves declared extras with prereleases allowed, and executes under the pinned
+Python 3.15.1 runtime. The historic Python 3.14.8 and 3.15.0 candidate receipts
+below are retained as dated evidence; they do not define current runtime
+compatibility. Stable CI additionally checks Conductor/submodule pins, the
+independent coverage gate and offline PowerShell regressions. Newer published
+CPython previews are discovery data only and are not activated as runners.
+Each dependency candidate retains exact package versions, source commit, lock
+digest and actual setup/test outcome without automatic promotion.
 
-An earlier default-branch local Python3.15 receipt passed all156tests at90.88%coverage,
+Historical local Python3.15 receipt: it passed all156tests at90.88%coverage,
 strict Ruff/Pyright and the optional PM4Py dependency load with pandas3.1rc0 and
 lxml7beta. This is source compatibility and dependency loading only; PM4Py's
 licence/adoption gate and absent production adapter remain explicit. Hosted
 qualification and downloaded receipt checks are required before any promotion.
 
-After integration at `ae2f234`, actual hosted Python3.14.8 and3.15.0 source canaries
-each passed 1,724 tests with one intentionally absent-backend case skipped.
+Historical receipts after integration at `ae2f234`: hosted Python3.14.8 and
+3.15.0 source canaries each passed 1,724 tests with one intentionally
+absent-backend case skipped.
 The pinned backend's synthetic alignment/store tests executed. Successful receipts
 now name that scope; unsuccessful receipts explicitly remain unqualified. Receipt
 classification tests execute the unchanged Python body on Windows and the actual

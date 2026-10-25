@@ -20,17 +20,24 @@ canary failure does not justify weakening supported Python or coverage contracts
 Resolved optional mining dependencies remain inventory, not provider adapter or
 licence adoption. No PyPI publication, native writes or operational processing.
 
-## Controlled Python runtime promotion — PR77
+## Required Python runtime — PR96, 23 October 2026
 
-- [~] Repair the existing Python3.15 proposal: preserve Python3.14 compatibility,
-  regenerate the lock without upgrading its package pins, run the full quality
-  and domain suite on exact3.14.8 and3.15.0, and qualify the installed wheel on3.15.0.
-- [ ] Verify all current-head checks and both canary matrices before normal merge;
-  no automatic runtime adoption or release acceptance is inferred from metadata.
+- [x] Replace the historical Python3.14 compatibility proposal with the user's
+  required exact Python3.15.1 runtime for active development, build, test, and CI.
+- [x] Align `.python-version`, `pyproject.toml`, `uv.lock`, CI matrices, package
+  workflows, runtime-candidate workflow, and current setup instructions; keep
+  development dependency resolution isolated and do not promote a preview.
+- [x] Verify PR96 exact-head results and merged main at
+  `77c2e93c872ff4ddab445b2d0f14d06704f19f34`; its Python3.15 quality/tests,
+  CodeQL, shared source security, candidate discovery, and wheel checks passed.
+  Optional PM4Py qualification and main-only attestation were skipped by their
+  declared conditions.
 
-The prior bot proposal dropped3.14 while CI still selected it and the canary
-intentionally refused a changed range. Keep the canary's candidate-only widening
-review guard aligned with the supported range, including older supported runs.
+PR77's earlier Python3.14/3.15.0 candidate receipts are historical. The current
+main source is pinned to Python3.15.1. The separate Dependabot uv graph updater
+still fails before graph analysis because its provider supports only through
+Python3.14; the exact failure remains recorded and the required runtime is not
+downgraded. The module's frozen dependency graph workflow passed at current main.
 
 ## Frozen graph provider qualification
 

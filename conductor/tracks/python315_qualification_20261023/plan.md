@@ -2,14 +2,14 @@
 
 ## Phase 1 — Inventory
 
-- [ ] P1.1 Inventory every active Python surface and distinguish historical/version-test fixtures.
-- [ ] P1.2 Verify repo-local interpreter version and safe environment handover.
+- [x] P1.1 Inventory active Python surfaces: `.python-version`, `requires-python`, CI, package, dependency-inventory and development-canary runners all select or enforce Python3.15.1. Remaining older-version references are dated receipts/plans or deliberate synthetic version cases, not active defaults.
+- [x] P1.2 In the isolated selected-source checkout, create `.venv` from the previously qualified repo-local Python and verify `.venv/bin/python --version` reports Python3.15.1 before installing the locked development group. No active job or environment was replaced.
 - [ ] P1.3 Review phase evidence and checkpoint under the repo workflow.
 
 ## Phase 2 — Qualification
 
 - [x] P2.1 Reuse [merged migration](https://github.com/edithatogo/careops-process/pull/96) without repeating unchanged tests.
-- [ ] P2.2 Close remaining runtime, lock, dependency and current setup-document gaps with focused checks.
+- [x] P2.2 Align current setup and runtime documentation to Python3.15.1. The exact-main frozen dependency graph workflow passed on selected source `5c2cc222cc4cbb97e1f34bcf9f8c28404fdee8c5` (`40095092121`); the separate Dependabot uv graph updater failure (`40095095610`) remains a provider limitation and is not bypassed or represented as success.
 - [ ] P2.3 Verify phase evidence and checkpoint.
 
 ## Phase 3 — Integration

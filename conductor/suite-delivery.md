@@ -16,8 +16,8 @@ A completed MVP is not reopened by this queue: optional improvements follow the
 selected slice and remain optional. Keep detailed progress in the existing track.
 Do not create another track, chat, acceptance pack or status ledger for alignment.
 
-1. **runtime** — Retain qualified Python3.15.0 and3.14.8 compatibility with the frozen lock; qualify newer compatible runtime and native-wheel candidates in isolation before promotion.
-   Done when: Frozen install and affected analytics/privacy checks pass; incompatibilities name the package and retry condition.
+1. **runtime** — Keep active Python development, builds, tests and CI on the exact Python3.15.1 repository pin; qualify dependency and native-wheel candidates in isolation before promotion.
+   Done when: The repo-local interpreter is verified at3.15.1, the frozen install and affected analytics/privacy checks pass, and incompatibilities name the package and retry condition. Older-version receipts remain historical evidence.
 2. **events** — Replay existing fictional OCEL fixtures with duplicate, late, missing-provider and tombstone cases.
    Done when: Stable event/object identities and minimised payloads survive replay without source writes.
 3. **managed** — Compare managed Process Intelligence on one fictional case only when its existing entitlement and route are available.

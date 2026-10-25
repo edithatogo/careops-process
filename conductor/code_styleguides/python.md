@@ -60,4 +60,4 @@ Style Guide.
 
 The checked-in Ruff and strict Pyright configuration is authoritative. Preserve
 existing import conventions and docstring rules when this upstream summary
-differs from the project. Use Python 3.14 and synthetic test fixtures.
+differs from the project. Use Python 3.15.1 and synthetic test fixtures.

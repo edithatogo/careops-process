@@ -25,10 +25,11 @@ resolver. Keep the repository secret scan and online solution check as separate 
 
 ## Offline operator commands
 
-Install Python 3.14 and Microsoft Power Platform CLI on the workstation, then run
-`uv sync --locked --group dev`. PAC is an external prerequisite; it is not installed
-or authenticated automatically. Installed PAC `2.13.1` was used for local packing
-and settings generation. Its `pac solution pack help` confirms these flags.
+Use the repository-local Python 3.15.1 environment and Microsoft Power Platform
+CLI on the workstation, then run `uv sync --locked --group dev`. PAC is an external
+prerequisite; it is not installed or authenticated automatically. Installed PAC
+`2.13.1` was used for local packing and settings generation. Its
+`pac solution pack help` confirms these flags.
 
 ```powershell
 uv run python -m careops_process.local_alm validate powerplatform/solutions/CareOpsProcess
