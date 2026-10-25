@@ -74,9 +74,7 @@ pwsh -NoProfile -File tests/powershell/test_graph_mailbox_backfill.ps1
 pwsh -NoProfile -File tests/powershell/test_planner_export.ps1
 ```
 
-See [Conductor](conductor/index.md), the
-[feasibility evidence](docs/feasibility.md), and the
-[live pilot runbook](docs/live-pilot.md).
+See the [historical Conductor record and CareOps work-tracking handoff](conductor/careops-absorption.md), the [feasibility evidence](docs/feasibility.md), and the [live pilot runbook](docs/live-pilot.md).
 
 Current hardening runbooks cover [Planner exports](docs/planner-export-reliability.md),
 [independent mining/coverage assurance](docs/mining-assurance.md),

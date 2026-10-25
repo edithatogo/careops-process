@@ -1,5 +1,15 @@
 # Agent instructions
 
+## CareOps absorption and active work tracking
+
+This repository is a pinned source submodule of CareOps. Current work tracking,
+Conductor status and acceptance live in the CareOps parent repository. Preserve
+the child Conductor register as historical evidence; do not open new child issues
+or tracks. Follow [the transfer notice](conductor/careops-absorption.md). Make
+source changes in this repository only when they are tied to a CareOps successor
+issue, and record the exact source commit and checks in that parent issue.
+
+
 ## Modular suite delivery — 18 October 2026
 
 Follow [the suite delivery queue](conductor/suite-delivery.md) and

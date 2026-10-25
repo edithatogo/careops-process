@@ -1,5 +1,9 @@
 # Tracks
 
+> Historical status snapshot. In-progress tracks were unfinished at transfer;
+> their active successors are tracked in CareOps. See
+> [CareOps absorption and work tracking](careops-absorption.md).
+
 - [x] **Track: Conductor and Microsoft skills local setup**
   *Link: [./tracks/conductor-local-repair_20261013/index.md](./tracks/conductor-local-repair_20261013/index.md)*
 
