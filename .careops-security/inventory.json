@@ -47,6 +47,7 @@
     ".agents/skills/careops-spark-cli/SKILL.md",
     ".agents/skills/careops-teams-app-developer/SKILL.md",
     ".agents/skills/careops-variable-library-cli/SKILL.md",
+    ".careops-security/.gitattributes",
     ".careops-security/.gitignore",
     ".careops-security/LICENSE",
     ".careops-security/NOTICE",
