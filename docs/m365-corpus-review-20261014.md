@@ -50,7 +50,7 @@ and pip-audit passed; the local unpublished project is skipped by the PyPI audit
 All captured overlay hashes still matched the shared files after verification.
 
 Private reproducibility artifacts are at
-`C:/Users/doughnut/Documents/Codex/2026-10-14/c/work/m365-verification-22305927`:
+`<private-verification-directory>`:
 `snapshot-evidence.json` records the baseline, overlay file hashes and exclusions;
 `verification-result.json` records observations and `coverage.xml` hashes/counts.
 No shared `.coverage` or aggregate report was overwritten.

@@ -24,11 +24,11 @@ container, and exactly one AppModuleRoleMaps container per included app. Unknown
 dependency/app/role children and malformed or duplicate containers are rejected,
 rather than silently counted as zero requirements.
 
-Existing Azure CLI delegated authentication must already work. Set the isolated
-VUW configuration directory on the calling process, never globally:
+Existing Azure CLI delegated authentication must already work. Set the existing approved private configuration directory on the calling process,
+never globally. Supply its location locally:
 
 ```powershell
-$env:AZURE_CONFIG_DIR = 'C:/Users/doughnut/.codex/auth/vuw-azure'
+$env:AZURE_CONFIG_DIR = $env:CAREOPS_AZURE_CONFIG_DIR
 ```
 
 The module attempts no login and stores no credentials. It uses the existing
