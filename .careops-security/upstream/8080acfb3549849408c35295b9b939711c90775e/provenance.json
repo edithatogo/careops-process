@@ -1,0 +1,10 @@
+{
+  "sourceRepository": "edithatogo/careops",
+  "sourceCommit": "8080acfb3549849408c35295b9b939711c90775e",
+  "files": {
+    "LICENSE": "e07f25dad276931f0af9e60c787e9d858282397b7a28ad6f198b92c6c7b496a4",
+    "requirements-ci.txt": "7806741dc780161e4e9c8a1abd786033fd0b8c9bf64f12de2ec62125879c2090",
+    "requirements-ci.lock": "b55f25a0c3a0bdaa6867427d637943a8be54e24a1c13a900b6c6f9347d68955e",
+    "portfolio-scripts/dependency_snapshot.py": "80768b650d8f5b9a1cb32b8eeace3e5cf8478f90349e964284b322c2149defa3"
+  }
+}

@@ -51,13 +51,15 @@ jobs:
           assert main(['--log-id', 'fictional-wheel-qualification']) == 0
           PYCODE
       - name: Read immutable qualified artifact tooling
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: edithatogo/careops
-          ref: 30df4953ea87c8915b4a525fc671a4c9857c3f7f
-          path: .careops-ci-tools
-          persist-credentials: false
-          submodules: false
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Exact source edithatogo/careops@30df4953ea87c8915b4a525fc671a4c9857c3f7f; inherited licence retained.
+          test ! -e "$GITHUB_WORKSPACE/.careops-ci-tools"
+          cd "$GITHUB_WORKSPACE/.careops-security/upstream/30df4953ea87c8915b4a525fc671a4c9857c3f7f"
+          sha256sum --check SHA256SUMS
+          mkdir -p "$GITHUB_WORKSPACE/.careops-ci-tools"
+          cp -R . "$GITHUB_WORKSPACE/.careops-ci-tools/"
       - name: Inventory actual wheel bytes
         env:
           SOURCE_COMMIT: ${{ github.sha }}

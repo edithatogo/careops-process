@@ -51,7 +51,7 @@ pythonpath = ["src"]
 [tool.ruff]
 target-version = "py315"
 line-length = 100
-extend-exclude = [".agents/plugins/**", ".local/graph-tools/**"]
+extend-exclude = [".agents/plugins/**", ".local/graph-tools/**", ".careops-security/shared/**", ".careops-security/upstream/**"]
 
 [tool.ruff.lint]
 select = ["ALL"]

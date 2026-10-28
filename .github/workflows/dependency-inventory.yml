@@ -48,15 +48,15 @@ jobs:
           PYCODE
           echo "$GITHUB_WORKSPACE/.local/graph-env/bin" >> "$GITHUB_PATH"
       - name: Read the qualified immutable snapshot adapter
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: edithatogo/careops
-          ref: 8080acfb3549849408c35295b9b939711c90775e
-          path: .local/graph-tools
-          sparse-checkout: portfolio-scripts/dependency_snapshot.py
-          sparse-checkout-cone-mode: false
-          persist-credentials: false
-          submodules: false
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Exact source edithatogo/careops@8080acfb3549849408c35295b9b939711c90775e; inherited licence retained.
+          test ! -e "$GITHUB_WORKSPACE/.local/graph-tools"
+          cd "$GITHUB_WORKSPACE/.careops-security/upstream/8080acfb3549849408c35295b9b939711c90775e"
+          sha256sum --check SHA256SUMS
+          mkdir -p "$GITHUB_WORKSPACE/.local/graph-tools"
+          cp -R . "$GITHUB_WORKSPACE/.local/graph-tools/"
       - name: Export the complete frozen public dependency graph
         env:
           SOURCE_SHA: ${{ github.sha }}
