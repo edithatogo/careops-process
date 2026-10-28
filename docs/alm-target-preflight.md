@@ -28,6 +28,10 @@ Existing Azure CLI delegated authentication must already work. Set the existing 
 never globally. Supply its location locally:
 
 ```powershell
+if ([string]::IsNullOrWhiteSpace($env:CAREOPS_AZURE_CONFIG_DIR) -or
+    -not (Test-Path -LiteralPath $env:CAREOPS_AZURE_CONFIG_DIR -PathType Container)) {
+    throw 'Set CAREOPS_AZURE_CONFIG_DIR to the existing approved private profile directory.'
+}
 $env:AZURE_CONFIG_DIR = $env:CAREOPS_AZURE_CONFIG_DIR
 ```
 
