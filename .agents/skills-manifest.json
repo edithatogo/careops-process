@@ -14,7 +14,7 @@
       "id": "dataverse-skills",
       "path": ".agents/plugins/dataverse-skills",
       "url": "https://github.com/microsoft/Dataverse-skills.git",
-      "commit": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
+      "commit": "108370ef5d61358835af476c22c555dadefc55d0",
       "license": "MIT",
       "maintainer": "Microsoft",
       "live_status": "unconfigured"
