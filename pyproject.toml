@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling==1.32.4"]
+requires = ["hatchling==1.33.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -27,7 +27,7 @@ test-diagnostics = [
   "pytest-rerunfailures==16.7",
 ]
 build = [
-    "hatchling==1.32.4",
+    "hatchling==1.33.0",
 ]
 dev = [
   "bandit>=1.8",
