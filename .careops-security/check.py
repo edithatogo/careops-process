@@ -17,6 +17,9 @@ from pathlib import Path, PurePosixPath
 GIT = shutil.which("git")
 
 RULES = {
+    "windows-machine-path": re.compile(
+        rb"(?i)\b[a-z]:\\+(?:Users|Documents and Settings)\\+[^\\\s\"\x27]+\\+"
+    ),
     "organisation-email": re.compile(
         rb"(?i)[a-z0-9._%+\-]{1,64}@(?:[a-z0-9-]{1,63}\.){0,5}health\.[a-z.]+\.gov\.au"
     ),

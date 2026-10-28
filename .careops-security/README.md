@@ -58,3 +58,5 @@ still follows the caller commit. Other workflow audits remain enabled.
 
 The directory-local Git attributes retain LF for text and detect binaries, so
 Windows checkout preserves the exact qualified helper bytes and checksums.
+
+The profile-path guard also checks Windows drive paths, including JSON-escaped forms. Use portable/private-home placeholders in reusable documentation. Fictional regression cases verify both rejection and ordinary system-path acceptance.

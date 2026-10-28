@@ -279,5 +279,27 @@ class PushSelectionTests(unittest.TestCase):
                 self.assertIn(oid, calls)
 
 
+class WindowsPathTests(unittest.TestCase):
+    """Protect Windows profile paths without exempting JSON strings."""
+
+    def test_windows_and_json_profiles(self) -> None:
+        """Reject ordinary and JSON-escaped profile paths."""
+        slash = bytes([92])
+        home = b"C:" + slash + b"Users" + slash + b"fictional" + slash + b"data.csv"
+        escaped = json.dumps({"source": home.decode()}).encode()
+        for blob in (home, escaped):
+            with self.subTest(blob=blob):
+                self.assertIn("windows-machine-path", privacy.findings("sample.txt", blob, {}))
+
+    def test_portable_and_system_paths(self) -> None:
+        """Allow portable inputs and ordinary system install paths."""
+        slash = bytes([92])
+        for blob in (
+            b"${PRIVATE_HOME}/data.csv",
+            b"C:" + slash + b"Program Files" + slash + b"CareOps",
+        ):
+            self.assertNotIn("windows-machine-path", privacy.findings("sample.txt", blob, {}))
+
+
 if __name__ == "__main__":
     unittest.main()
