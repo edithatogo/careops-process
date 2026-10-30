@@ -23,7 +23,7 @@
       "id": "power-platform-skills",
       "path": ".agents/plugins/power-platform-skills",
       "url": "https://github.com/microsoft/power-platform-skills.git",
-      "commit": "aed70bfca39805db167e6bf08364d8bf55c49592",
+      "commit": "0a55a88fa2855404029d1e5450faf92878baf763",
       "license": "MIT",
       "maintainer": "Microsoft",
       "live_status": "unconfigured"
