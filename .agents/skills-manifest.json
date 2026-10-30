@@ -41,7 +41,7 @@
       "id": "microsoft-skills",
       "path": ".agents/plugins/microsoft-skills",
       "url": "https://github.com/microsoft/skills.git",
-      "commit": "2130750147dee0311215099ddf36647ba1e0f006",
+      "commit": "3f5b461b2314e01c400564051e92469114c5b68f",
       "license": "MIT",
       "maintainer": "Microsoft",
       "live_status": "unconfigured"
