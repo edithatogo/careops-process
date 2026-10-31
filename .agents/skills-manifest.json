@@ -50,7 +50,7 @@
       "id": "cli-microsoft365",
       "path": ".agents/plugins/cli-microsoft365",
       "url": "https://github.com/pnp/cli-microsoft365.git",
-      "commit": "41515e723c0ce7dafb33245178681a037ee30e32",
+      "commit": "9bbc6692508d908634ec68e4751578719a2439b1",
       "license": "MIT",
       "maintainer": "PnP community",
       "live_status": "unconfigured"
